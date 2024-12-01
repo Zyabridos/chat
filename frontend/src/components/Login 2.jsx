@@ -1,11 +1,7 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import avatarLogo from '../assets/avatar-DIE1AEpS.jpg'
-import { Formik, Form, Field, useFormik } from 'formik';
+import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
-// import { AccountContext } from './context.js'
-// import { FormGroup } from 'react-bootstrap';
-// import { Input } from 'react-bootstrap'
-// import { Button } from 'react-bootstrap';
 
 const LoginSchema = Yup.object().shape({
   username: Yup.string()
@@ -32,7 +28,8 @@ const LoginPicture = () => {
     </div>
     </>
   )
-};
+}
+
 
 const ValidationSchemaExample = () => (
   <div>
@@ -75,20 +72,20 @@ const ValidationSchemaExample = () => (
 );
 
 
-export default ValidationSchemaExample;
 
-// export default function LoginForm () {
-//   return (
-//         <form className="flex flex-col gap-4">
-//           <h1 style={{color: 'blue'}}>Login</h1>
-//           <label htmlFor="username">Username</label>
-//           <input type="text" id="username"/>
 
-//           <label htmlFor="password">Password</label>
-//           <input type="password" id="password"/>
+export default function LoginForm () {
+  return (
+        // <form className="flex flex-col gap-4">
+        //   <h1 style={{color: 'blue'}}>Login</h1>
+        //   <label htmlFor="username">Username</label>
+        //   <input type="text" id="username"/>
 
-//           <button className="mt-2">Login</button>
-//           <ValidationSchemaExample />
-//         </form>
-//   );
-// }
+        //   <label htmlFor="password">Password</label>
+        //   <input type="password" id="password"/>
+
+        //   <button className="mt-2">Login</button>
+        // </form>
+        ValidationSchemaExample()
+  );
+}
