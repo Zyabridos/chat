@@ -1,10 +1,10 @@
 import React, { useContext, useState } from 'react';
-import { Formik, Form, Field, useFormik } from 'formik';
+import { useFormik } from 'formik';
 import * as yup from 'yup';
 import axios from 'axios';
 // import { AccountContext } from './context.js'
-import { FieldContainer, FieldError, FormSuccess } from './common.jsx';
-import { Button } from 'react-bootstrap';
+import { FieldContainer, FieldError, FormSuccess } from './Login/styles.jsx';
+import { Button, Form } from 'react-bootstrap';
 
 const PASSWORD_REGEX = /^[a-zA-Z]/;
 
@@ -20,26 +20,38 @@ const validationSchema = yup.object({
 
 const SignUpForm = (props) => {
   // const { switchToSignIn } = useContext(AccountContext)
-  const [success, setSuccess] = useState(null);
+   const [success, setSuccess] = useState(null);
+  const [error, setError] = useState(null);
 
   const onSubmit = async (formikValues) => {
     // alert(JSON.stringify(formikValues));
 
     const { confirmPassword, ...data } = formikValues
 
-    const response = axios.post("http://localhost:5002/api/v1/register", data).catch((err) => {
-      if (err && err.response)
-        console.log('axios error: ', err);
-    });
+    //  curl -X POST -H "Content-Type: application/json" -d '{"username":"admin","password":"admin"}' http://localhost:5002/api/v1/signup
+
+    const response = await axios
+      // .post("http://localhost:5002/api/v1/signup", data)
+      .post('/api/v1/signup', { username: 'newuser', password: '123456' }).then((response) => {
+      console.log(response.data); // => { token: ..., username: 'newuser' }
+})
+      .catch((err) => {
+        console.log(data)
+        if (err && err.response) setError(err.response.data.message);
+        setSuccess(null);
+      });
 
     if (response && response.data) {
-      setSuccess(response.data.message)
+      setError(null);
+      setSuccess(response.data.message);
+      formik.resetForm();
     }
   };
 
   const formik = useFormik({ initialValues: { fullName: '', email: '', password: '', confirmPassword: ''},
     validateOnBlur: true,
-    onSubmit,
+    // onSubmit,
+    onSubmit: values => console.log(values),
     validationSchema: validationSchema,
   });
   
@@ -49,9 +61,10 @@ const SignUpForm = (props) => {
     <div className="container-fluid">
       <div className="row justify-content-center pt-5">
         <div className="col-sm-4">
-          <form onSubmit={formik.handleSubmit} className="p-3">
+          {/* <form onSubmit={formik.handleSubmit} className="p-3"> */}
+          <Form onSubmit={formik.handleSubmit} className="p-3">
             <FormSuccess>{success ? success : ''}</FormSuccess>
-            <FieldContainer>
+            {/* <FieldContainer>
                 <input 
                   name="fullName" 
                   placeholder="Full name" 
@@ -60,7 +73,19 @@ const SignUpForm = (props) => {
                   onBlur={formik.handleBlur}
                 />
               <FieldError>{formik.touched.fullName && formik.errors.fullName ? formik.errors.fullName : ""}</FieldError>
-            </FieldContainer>
+            </FieldContainer> */}
+            <Form.Group>
+              <Form.Label htmlFor="username">First name</Form.Label>
+              {/* <Form.Control>
+              </Form.Control> */}
+              <Form.Control
+                  name="fullName" 
+                  placeholder="Full name" 
+                  value={formik.values.fullName} 
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+            </Form.Group>
             <FieldContainer>
                 <input 
                   name="email" 
@@ -94,7 +119,7 @@ const SignUpForm = (props) => {
                 <FieldError>{formik.touched.confirmPassword && formik.errors.confirmPassword ? formik.errors.confirmPassword : ""}</FieldError>
                 </FieldContainer>
               <Button type="submit" variant="outline-primary">Submit</Button>
-          </form>
+          </Form>
         </div>
       </div>
     </div>
