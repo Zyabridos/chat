@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios'
 import { Formik, Form, Field  } from 'formik';
 import * as Yup from 'yup';
@@ -7,7 +7,16 @@ import LoginNavbar from './LoginNavbar.jsx';
 import { LoginButton } from './LoginButtons.jsx';
 import { LoginPicture } from './LoginAttachments.jsx';
 import { FieldError } from './styles.jsx';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../../hooks/index.js';
+import routes from '../../routes.js';
+
+// curl http://localhost:5001/api/v1/channels
+// curl http://localhost:5002/api/v1/channels
+
+// nina@Ninas-MacBook-Pro frontend %  npx start-server -s ./frontend/dist
+// {"level":40,"time":1733136102820,"pid":69853,"hostname":"Ninas-MacBook-Pro.local","msg":"\"root\" path \"/Users/nina/Documents/Reprositories/Hexlet Projects/slack_chat/frontend/frontend/dist\" must exist"}
+// {"level":30,"time":1733136102974,"pid":69853,"hostname":"Ninas-MacBook-Pro.local","msg":"Server listening at http://0.0.0.0:5001"}
 
 const validationLoginSchema = Yup.object().shape({
   username: Yup.string()
@@ -20,38 +29,35 @@ const validationLoginSchema = Yup.object().shape({
     .required('Обязательное поле'),
 });
 
-// const handleSubmit = async (formikValues) => {
-//   console.log(formikValues)
-//     const response = await axios
-//       // .post("http://localhost:5002/api/v1/login", data)
-//       axios.post('/api/v1/login', { username: 'admin', password: 'admin' }).then((response) => {
-//       console.log(response.data); // => { token: ..., username: 'admin' }
-// })
-//       .catch((err) => {
-//         console.log(err)
-// // //         // if (err && err.response) setError(err.response.data.message);
-//       });
-//   };
-
 const LoginForm = () => {
-  const [hasError, setHasError] = useState(false);
+  const auth = useAuth();
+  const [authFailed, setAuthFailed] = useState(false);
+  const location = useLocation();
   const navigate = useNavigate();
+  // const inputRef = useRef();
+  // useEffect(() => {
+  //   inputRef.current.focus();
+  // }, []);
   
   const handleSubmit = async (formikValues) => {
-    console.log(formikValues)
-      const response = await
-        // axios.post("http://localhost:5002/api/v1/login", { username: 'admin', password: 'admin' })
-        axios.post('/api/v1/login', { username: 'admin', password: 'admin' })
+    setAuthFailed(false);
+      const response = axios.post(routes.loginPath(), formikValues)
         .then((response) => {
-        setHasError(false);
-        navigate('/');
-        console.log(response.data); // => { token: ..., username: 'admin' }
+          localStorage.setItem('token', response.data.token); 
+          localStorage.setItem('userId', JSON.stringify({ ...response.data, username: formikValues.username }));
+          auth.logIn({ username: formikValues.username });
+          navigate('/');
+          console.log(response.data);
   })
         .catch((err) => {
-          setHasError(true);
+          if (err.isAxiosError && err.response.status === 401) {
+          setAuthFailed(true);
+          inputRef.current.select();
           navigate('/login');
           console.log(err);
-        });
+          return;
+        }
+      });
     };
   return (
     <div>

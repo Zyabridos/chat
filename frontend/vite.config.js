@@ -8,11 +8,11 @@ export default defineConfig({
     proxy: {
       // Проксируем запросы к API
       '/api': {
-        target: 'http://localhost:5001',
+        target: 'http://localhost:5002',
       },
       // Проксируем WebSocket соединения
       '/socket.io': {
-        target: 'ws://localhost:5001',
+        target: 'ws://localhost:5002',
         ws: true,
         rewriteWsOrigin: true,
       },
