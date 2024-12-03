@@ -27,14 +27,18 @@ const LoginForm = () => {
         .then((response) => {
           localStorage.setItem('token', response.data.token); 
           localStorage.setItem('userId', JSON.stringify({ ...response.data, username: formikValues.username }));
-          auth.logIn({ username: formikValues.username });
+          console.log(formikValues.username)
+          auth.logIn();
+          // auth.logIn({ username: formikValues.username });
+          // auth.logIn({ username: formikValues.username, password: formikValues.password });
           navigate('/');
           console.log(response.data);
   })
         .catch((err) => {
+          formik.setSubmitting(false)
           // if (err.isAxiosError && err.response.status === 401) {
           setAuthFailed(true);
-          // inputRef.current.select();
+          inputRef.current.select();
           navigate('/login');
           console.log(err);
           return;
@@ -84,7 +88,7 @@ const LoginForm = () => {
                 <Form.Label htmlFor="password" className="form-label">Пароль</Form.Label>
                 <Form.Control
                   className="form-control" 
-                  type="current-password" 
+                  type="password" 
                   name="password" 
                   autoComplete="current-password" 
                   id="password" 
