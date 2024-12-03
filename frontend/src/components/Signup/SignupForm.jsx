@@ -8,9 +8,6 @@ import { PasswordLabel, UsernameLabel, ConfirmPasswordLabel } from './Labels.jsx
 import Navbar from '../Navbar.jsx'
 import validationSignupSchema from '../../validationSchemas/validationSignupSchema.jsx';
 
-console.log(validationSignupSchema)
-
-
 const initialValues = {
   username: "",
   password: "",

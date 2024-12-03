@@ -1,33 +1,32 @@
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios'
-import { Formik, Form, Field  } from 'formik';
-import * as Yup from 'yup';
-import LoginFooter from './LoginFooter.jsx'
-import LoginNavbar from './LoginNavbar.jsx';
-import { LoginButton } from './LoginButtons.jsx';
-import { LoginPicture } from './LoginAttachments.jsx';
+import { Form } from 'react-bootstrap'
+import { Formik, Field, useFormik  } from 'formik';
+import LoginFooter from './Footer.jsx'
+import Navbar from '../Navbar.jsx';
+import { LoginButton } from './Buttons.jsx';
+import { LoginPicture } from './Attachments.jsx';
 import { FieldError } from './styles.jsx';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/index.js';
 import routes from '../../routes.js';
+import { UsernameLabel, PasswordLabel } from './Labels.jsx';
+// import validationLoginSchema from '../../validationSchemas/validationLoginSchema.jsx'
+import * as yup from 'yup';
 
-// curl http://localhost:5001/api/v1/channels
-// curl http://localhost:5002/api/v1/channels
-
-// nina@Ninas-MacBook-Pro frontend %  npx start-server -s ./frontend/dist
-// {"level":40,"time":1733136102820,"pid":69853,"hostname":"Ninas-MacBook-Pro.local","msg":"\"root\" path \"/Users/nina/Documents/Reprositories/Hexlet Projects/slack_chat/frontend/frontend/dist\" must exist"}
-// {"level":30,"time":1733136102974,"pid":69853,"hostname":"Ninas-MacBook-Pro.local","msg":"Server listening at http://0.0.0.0:5001"}
-
-const validationLoginSchema = Yup.object().shape({
-  username: Yup.string()
+const validationLoginSchema = yup.object().shape({
+  username: yup.string()
     .min(4, 'Минимум 4 символа')
     .max(50, 'Максимум 50 символов')
     .required('Обязательное поле'),
-  password: Yup.string()
+  password: yup.string()
     .min(4, 'Минимум 4 символа')
     .max(50, 'Максимум 50 символов')
     .required('Обязательное поле'),
 });
+
+// curl http://localhost:5001/api/v1/channels
+// curl http://localhost:5002/api/v1/channels
 
 const LoginForm = () => {
   const auth = useAuth();
@@ -38,8 +37,8 @@ const LoginForm = () => {
   // useEffect(() => {
   //   inputRef.current.focus();
   // }, []);
-  
   const handleSubmit = async (formikValues) => {
+    console.log(formikValues)
     setAuthFailed(false);
       const response = axios.post(routes.loginPath(), formikValues)
         .then((response) => {
@@ -60,33 +59,30 @@ const LoginForm = () => {
       });
     };
 
+  const formik = useFormik({ initialValues: { username: '', password: ''},
+    validateOnBlur: false,
+    onSubmit,
+    validationSchema: validationSchema,
+  });
+
   return (
     <div>
-    <Formik
-      initialValues={{
-        username: '',
-        password: '',
-      }}
-      validateOnChange={false}
-      validateOnBlur={false}
-      validationSchema={validationLoginSchema}
-      onSubmit = { (formikValues) => handleSubmit(formikValues)}
-    >
       {({ errors }) => (
       <div className='card-body row p-5'>
-        <LoginNavbar />
+        <Navbar />
         <LoginPicture />
-        <Form className="col-12 col-md-6 mt-3 mt-md-0">
+        <Form onSubmit={formik.handleSubmit}  className="col-12 col-md-6 mt-3 mt-md-0">
           <h1>Войти</h1>
           <div className="form-floating mb-4">
-          <label htmlFor="username">Ваш ник</label>
-          <Field
+          <UsernameLabel />
+          <input
             className="form-control" 
             type="text" 
             name="username" 
             autoComplete="username" 
             id="username" 
             placeholder="Ваш ник"
+            value={formik.values.username}
             />
             {/* тут позже добавить зеленую рамку, если валидный ник, и красную, если нет (класс invalid feedback/is-valid) */}
             {errors.username ?
@@ -97,7 +93,7 @@ const LoginForm = () => {
           </div>
 
           <div className="form-floating mb-4">
-          <label htmlFor="password">Пароль</label>
+          <PasswordLabel />
           <Field 
             className="form-control" 
             type="current-password" 
@@ -105,15 +101,15 @@ const LoginForm = () => {
             autoComplete="current-password" 
             id="password" 
             placeholder="password"
+            value={formik.values.password}
           />
           {errors.password ? ( <FieldError className="invalid feedback">{errors.password}</FieldError>) : ""}
           </div>
-          <LoginButton></LoginButton>
+          <LoginButton />
         </Form>
         <LoginFooter /> 
       </div>
       )}
-      </Formik>
       </div>
   )
 }

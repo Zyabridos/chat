@@ -2,7 +2,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import React from 'react';
 import './App.css'
-import LoginForm from './components/Login/Login.jsx'
+import LoginForm from './components/Login/LoginForm.jsx'
 import RootLayout from './components/RootLayout.jsx'
 import NotFound from './components/NotFound.jsx';
 import SignUpForm from './components/Signup/SignupForm.jsx';
