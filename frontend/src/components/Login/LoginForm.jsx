@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useFormik } from 'formik';
 import { Form } from 'react-bootstrap';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../hooks/index.js';
+import { useAuth } from '../../hooks/index.jsx';
 import routes from '../../routes.js';
 import LoginFooter from './Footer.jsx'
 import Navbar from '../Navbar.jsx';
