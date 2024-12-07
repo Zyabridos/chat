@@ -11,6 +11,7 @@ import { LoginPicture } from './Attachments.jsx';
 import { LoginButton } from './Buttons.jsx';
 
 const LoginForm = () => {
+  document.body.classList.add('h-100', 'bg-light')
   const auth = useAuth();
   const [authFailed, setAuthFailed] = useState(false);
   const inputRef = useRef();

@@ -6,8 +6,9 @@ import LoginForm from './components/Login/LoginForm.jsx'
 import RootLayout from './components/RootLayout.jsx'
 import NotFound from './components/NotFound.jsx';
 import SignUpForm from './components/Signup/SignupForm.jsx';
+import Chat from './components/Chat/Chat.jsx';
+import EnterMessageForm from './components/Chat/EnterMessageForm/EnterMessageForm.jsx'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Test from './components/test.jsx';
 
 export default function App() {
   return (
@@ -16,7 +17,8 @@ export default function App() {
         <Route path="/" element={< RootLayout />} />
         <Route path="login" element={< LoginForm />} />
         <Route path="signup" element={< SignUpForm />} />
-        <Route path="test" element={< Test />} />
+        {/* <Route path="channels" element={< Chat />} /> */}
+        <Route path="channels" element={< EnterMessageForm />} />
         <Route path="*" element={< NotFound />} />
       </Routes>
     </BrowserRouter>
