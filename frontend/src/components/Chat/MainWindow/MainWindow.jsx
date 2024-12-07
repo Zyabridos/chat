@@ -1,5 +1,4 @@
 import Header from './Header.jsx';
-import MessageBox from './MessageBox.jsx';
 import EnterMessageForm from '../EnterMessageForm/EnterMessageForm.jsx';
 
 const messageBox = document.querySelector('#messages-box')
@@ -9,7 +8,6 @@ const MainWindow = () => {
     <div className="col p-0 h-100">
       <div className="d-flex flex-column h-100">
         <Header />
-        <MessageBox />
         <div className="mt-auto px-5 py-3">
           <EnterMessageForm />
         </div>
