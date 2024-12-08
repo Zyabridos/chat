@@ -12,7 +12,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import {useAuth} from '../src/hooks/index.jsx';
 import { AuthContext } from './contexts/index.jsx';
 
-// Провайдер контекста авторизации
 const AuthProvider = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState(false);
 
@@ -31,7 +30,6 @@ const AuthProvider = ({ children }) => {
   );
 };
 
-// Приватный маршрут
 const PrivateRoute = ({ children }) => {
   const auth = useAuth();
   const location = useLocation();
