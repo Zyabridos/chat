@@ -49,7 +49,6 @@ export default function App() {
         <Route path="/" element={< RootLayout />} />
         <Route path="login" element={< LoginForm />} />
         <Route path="signup" element={< SignUpForm />} />
-        <Route path="channels" element={< Chat />} />
         {/* <Route path="channels" element={< EnterMessageForm />} /> */}
         <Route path="*" element={< NotFound />} />
       </Routes>

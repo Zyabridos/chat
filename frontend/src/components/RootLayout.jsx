@@ -1,8 +1,10 @@
 import React from 'react'
+import Chat from './Chat/Chat.jsx'
+
 export default function RootLayout () {
   return (
     <div>
-      <h1>Here will be chat</h1>
+      <Chat />
     </div>
   )
 }

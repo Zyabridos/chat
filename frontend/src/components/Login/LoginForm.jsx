@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import { useFormik } from 'formik';
-import { Form } from 'react-bootstrap';
+import { Form, Col, Card, Row } from 'react-bootstrap';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/index.jsx';
 import routes from '../../routes.js';
@@ -9,6 +9,8 @@ import LoginFooter from './Footer.jsx'
 import Navbar from '../Navbar.jsx';
 import { LoginPicture } from './Attachments.jsx';
 import { LoginButton } from './Buttons.jsx';
+import validationLoginSchema from '../../validationSchemas/validationLoginSchema.jsx';
+import { FieldError } from './styles.jsx'
 
 const LoginForm = () => {
   document.body.classList.add('h-100', 'bg-light')
@@ -31,7 +33,6 @@ const LoginForm = () => {
           console.log(formikValues.username)
           auth.logIn({ username: formikValues.username, password: formikValues.password });
           navigate('/');
-          console.log(response.data);
   })
         .catch((err) => {
           formik.setSubmitting(false)
@@ -50,7 +51,10 @@ const LoginForm = () => {
       username: '',
       password: '',
     },
-    onSubmit: async (formikValues) => handleSubmit(formikValues)
+    validationSchema: validationLoginSchema,
+    onSubmit: async (formikValues) => handleSubmit(formikValues),
+    // validateOnChange: false,
+    // validateOnBlur: false,
   });
 
   return (
@@ -59,10 +63,10 @@ const LoginForm = () => {
       <div className="d-flex flex-column h-100">
       <Navbar />
       <div className="container-fluid h-100">
-      <div className="row justify-content-center align-content-center h-100">
-      <div className="col-12 col-md-8 col-xxl-6">
-      <div className="card shadow-sm">
-      <div className='card-body row p-5'>
+      <Row className="row justify-content-center align-content-center h-100">
+      <Col className="col-12 col-md-8 col-xxl-6">
+      <Card className="card shadow-sm">
+      <Card.Body className='card-body row p-5'>
         <LoginPicture />
           <Form onSubmit={formik.handleSubmit} className="col-12 col-md-6 mt-3 mt-md-0">
             <h1>Войти</h1>
@@ -82,6 +86,7 @@ const LoginForm = () => {
                   required
                   ref={inputRef}
                 />
+                {formik.touched.username && formik.errors.username ? (<FieldError>{formik.errors.username}</FieldError>) : null}
               </Form.Group>
               <Form.Group>
                 <Form.Label htmlFor="password" className="form-label">Пароль</Form.Label>
@@ -97,16 +102,17 @@ const LoginForm = () => {
                   isInvalid={authFailed}
                   required
                 />
+                {formik.touched.password && formik.errors.password ? (<FieldError>{formik.errors.password}</FieldError>) : null}
                 <Form.Control.Feedback type="invalid">Неверные имя пользователя или пароль</Form.Control.Feedback>
               </Form.Group>
               <LoginButton />
             </fieldset>
           </Form>
           <LoginFooter /> 
-    </div>
-    </div>
-    </div>
-    </div>
+          </Card.Body>
+    </Card>
+    </Col>
+    </Row>
     </div>
     </div>
         </div>
