@@ -14,7 +14,7 @@ const LoginForm = () => {
   document.body.classList.add('h-100', 'bg-light')
   const auth = useAuth();
   const [authFailed, setAuthFailed] = useState(false);
-  const inputRef = useRef();
+  const inputRef = useRef(null);
   const location = useLocation();
   const navigate = useNavigate();
   useEffect(() => {
@@ -29,21 +29,19 @@ const LoginForm = () => {
           localStorage.setItem('token', response.data.token); 
           localStorage.setItem('userId', JSON.stringify({ ...response.data, username: formikValues.username }));
           console.log(formikValues.username)
-          auth.logIn();
-          // auth.logIn({ username: formikValues.username });
-          // auth.logIn({ username: formikValues.username, password: formikValues.password });
+          auth.logIn({ username: formikValues.username, password: formikValues.password });
           navigate('/');
           console.log(response.data);
   })
         .catch((err) => {
           formik.setSubmitting(false)
-          // if (err.isAxiosError && err.response.status === 401) {
+          if (err.isAxiosError && err.response.status === 401) {
           setAuthFailed(true);
           inputRef.current.select();
           navigate('/login');
           console.log(err);
           return;
-        // }
+        }
       });
   }
 
@@ -68,7 +66,7 @@ const LoginForm = () => {
         <LoginPicture />
           <Form onSubmit={formik.handleSubmit} className="col-12 col-md-6 mt-3 mt-md-0">
             <h1>Войти</h1>
-            <fieldset>
+            <fieldset disabled={formik.isSubmitting}>
               <Form.Group>
                 <Form.Label className="form-label" htmlFor="username">Ваш ник</Form.Label>
                 <Form.Control

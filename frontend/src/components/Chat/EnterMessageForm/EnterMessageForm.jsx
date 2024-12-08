@@ -1,5 +1,6 @@
 import { SendButton } from './Buttons.jsx';
 import _ from 'lodash';
+import React, { useRef, useState } from "react";
 // import { updateMessagesArray } from '../utils.js';
 
 const state = {
@@ -34,20 +35,29 @@ const children = state.messages.map((message) => (
   </div>
 ));
 
-const handleSubmit = (e, messagesArray) => {
+
+
+const EnterMessageForm = () => {
+  const containerRef = useRef(null);
+
+  const handleSubmit = (e, messagesArray) => {
+  const [input] = e.target.children;
+
   messagesArray = state.messages;
   e.preventDefault();
   updateMessagesArray(e);
 
-  console.log(messagesArray)
-};
+  const messageNode = document.createElement('li');
+  messageNode.classList.add('nav-item', 'w-100');
+  messageNode.innerText = input.value;
 
-const EnterMessageForm = () => {
+  containerRef.current.appendChild(messageNode); 
+
+  input.value = "";
+};
   return (
     <>
-    <div id="messages-box" class="chat-messages overflow-auto px-5 ">
-      {test}
-      {/* {children} */}
+    <div id="messages-box" ref={containerRef} class="chat-messages overflow-auto px-5 ">
     </div>
     <form noValidate="" className="py-1 border rounded-2" onSubmit={handleSubmit}>
       <input name="body" aria-label="Новое сообщение" placeholder="Введите сообщение..." className="border-0 p-0 ps-2 form-control"/>

@@ -1,8 +1,7 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import addSymbol from '../../assets/add-symbol.png'
 import Container from 'react-bootstrap/Container';
 import ListGroup from 'react-bootstrap/ListGroup';
-import { useState } from 'react';
 import c from "classnames";
 
 const testarray = [

@@ -1,8 +1,8 @@
 develop:
-	npm run dev
+	npm run dev -s ./frontend
 
 build:
-	npm run build
+	npm run build -s ./frontend
 
 start:
 npx start-server -s ./frontend/dist
