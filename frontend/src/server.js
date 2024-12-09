@@ -1,39 +1,59 @@
-import { Server } from 'socket.io';
-import { createServer } from 'http';
-import express from 'express';
-import routes from './routes.js'
+import { Server } from "socket.io";
+import { createServer } from "http";
+import express from "express";
+import routes from "./routes.js";
 
 const app = express();
 const server = createServer(app); 
-const io = new Server(server);
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:3000", // Allow your frontend to connect
+    methods: ["GET", "POST"],
+  },
+});
 
-// тут будет нормальная БД, но пока так
+// Dummy message storage
 let messages = [];
 
-// коннектимся... 
+// Middleware to check the token (for simplicity, this is just an example)
+const checkToken = (token) => {
+  // Simulating token validation logic
+  return token === "valid-token";
+};
+
 io.on("connection", (socket) => {
-  console.log("Есть контакт!");
+  console.log("User connected");
 
-  // получение сообщений с сервера
-  socket.emit("messages", messages);
-
-  socket.on("sendMessage", (message) => {
-    messages.push(message);
-    // показать сообщение всем юзерам
-    io.emit("message", message);
+  // Event to fetch messages
+  socket.on("getMessages", (token) => {
+    if (checkToken(token)) {
+      // Send messages to the client if the token is valid
+      socket.emit("messages", messages);
+    } else {
+      socket.emit("error", "Invalid token");
+    }
   });
 
-  // Расконнектились
+  // Event to send a new message
+  socket.on("sendMessage", (data) => {
+    const { message, token } = data;
+    if (checkToken(token)) {
+      // Store message in memory (could be a database in a real app)
+      messages.push(message);
+      
+      // Broadcast the message to all connected clients
+      io.emit("messageSent", message);
+    } else {
+      socket.emit("error", "Invalid token");
+    }
+  });
+
   socket.on("disconnect", () => {
-    console.log("юзер вышел");
+    console.log("User disconnected");
   });
 });
 
-app.get(routes.messagesPath(), (req, response) => {
-  console.log(json.stringify(response))
-  response.json(messages);
-});
-
+// Start the server
 const PORT = 5002;
 server.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
