@@ -11,6 +11,7 @@ import EnterMessageForm from './components/Chat/EnterMessageForm/EnterMessageFor
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import {useAuth} from '../src/hooks/index.jsx';
 import { AuthContext } from './contexts/index.jsx';
+import { useNavigate } from "react-router-dom";
 
 const AuthProvider = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState(false);

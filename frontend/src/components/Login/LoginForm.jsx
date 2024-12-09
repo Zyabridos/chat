@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import { useFormik } from 'formik';
 import { Form, Col, Card, Row } from 'react-bootstrap';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/index.jsx';
 import routes from '../../routes.js';
 import LoginFooter from './Footer.jsx'
@@ -17,7 +17,6 @@ const LoginForm = () => {
   const auth = useAuth();
   const [authFailed, setAuthFailed] = useState(false);
   const inputRef = useRef(null);
-  const location = useLocation();
   const navigate = useNavigate();
   useEffect(() => {
     inputRef.current.focus();

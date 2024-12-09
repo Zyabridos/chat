@@ -21,13 +21,6 @@ const MessageComponent = ({ userName, message }) => {
   );
 };
 
-
-const messagesTest = [
-  { id: 1, message: 'one'},
-  { id: 2, message: 'two'},
-  { id: 3, message: 'three'},
-];
-
 const EnterMessageForm = () => {
   const [index, setIndex] = useState(0);
   const [components, setComponents] = useState([]);
