@@ -12,6 +12,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import {useAuth} from '../src/hooks/index.jsx';
 import { AuthContext } from './contexts/index.jsx';
 import { useNavigate } from "react-router-dom";
+import i18n from './i18n/i18n.js';
 
 const AuthProvider = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState(false);

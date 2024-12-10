@@ -3,8 +3,8 @@ import { useFormik } from "formik";
 import { Form } from 'react-bootstrap';
 import axios from 'axios';
 import { FieldContainer, FieldError, FormSuccess } from '../Login/styles.jsx';
-import { SignupButton } from './Buttons.jsx';
-import { SugnupPicture } from './Attachments.jsx'
+import { SignupButton } from '.././Buttons.jsx';
+import { SugnupPicture } from '../Attachments.jsx'
 import { PasswordLabel, UsernameLabel, ConfirmPasswordLabel } from './Labels.jsx';
 import Navbar from '../Navbar.jsx'
 // import validationSignupSchema from '../../validationSchemas/validationSignupSchema.jsx';
@@ -49,7 +49,6 @@ const SignUpForm = () => {
           <Form onSubmit={formik.handleSubmit} className="w-50">
             <h1 className="text-center mb-4">Регистрация</h1>
             <fieldset>
-
               <Form.Group className="form-floating mb-3">
                 <Form.Label className="form-label" htmlFor="username">Ваш ник</Form.Label>
                 <Form.Control

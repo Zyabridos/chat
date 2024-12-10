@@ -7,10 +7,11 @@ import { useAuth } from '../../hooks/index.jsx';
 import routes from '../../routes.js';
 import LoginFooter from './Footer.jsx'
 import Navbar from '../Navbar.jsx';
-import { LoginPicture } from './Attachments.jsx';
-import { LoginButton } from './Buttons.jsx';
+import { LoginPicture } from './../Attachments.jsx';
+import { LoginButton } from '.././Buttons.jsx';
 import validationLoginSchema from '../../validationSchemas/validationLoginSchema.jsx';
 import { FieldError } from './styles.jsx'
+import { useTranslation } from 'react-i18next';
 
 const LoginForm = () => {
   document.body.classList.add('h-100', 'bg-light')
@@ -18,6 +19,8 @@ const LoginForm = () => {
   const [authFailed, setAuthFailed] = useState(false);
   const inputRef = useRef(null);
   const navigate = useNavigate();
+  const { t } = useTranslation();
+
   useEffect(() => {
     inputRef.current.focus();
   }, []);
@@ -68,14 +71,15 @@ const LoginForm = () => {
       <Card.Body className='card-body row p-5'>
         <LoginPicture />
           <Form onSubmit={formik.handleSubmit} className="col-12 col-md-6 mt-3 mt-md-0">
-            <h1>Войти</h1>
+             <h1>{t('login.title')}</h1> {/* Перевод заголовка */}
             <fieldset disabled={formik.isSubmitting}>
               <Form.Group>
                 <Form.Label className="form-label" htmlFor="username">Ваш ник</Form.Label>
                 <Form.Control
                   className="form-control" 
                   type="text" 
-                  placeholder="Ваш ник"
+                  placeholder={t('login.usernamePlaceholder')}
+                  // placeholder="login.usernameLabel"
                   name="username"
                   id="username"
                   autoComplete="username"
@@ -102,7 +106,8 @@ const LoginForm = () => {
                   required
                 />
                 {formik.touched.password && formik.errors.password ? (<FieldError>{formik.errors.password}</FieldError>) : null}
-                <Form.Control.Feedback type="invalid">Неверные имя пользователя или пароль</Form.Control.Feedback>
+                {/* <Form.Control.Feedback type="invalid">Неверные имя пользователя или пароль</Form.Control.Feedback> */}
+                <Form.Control.Feedback type="invalid"> {t('login.wrongEmailOrPassword')}</Form.Control.Feedback>
               </Form.Group>
               <LoginButton />
             </fieldset>

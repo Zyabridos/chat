@@ -2,6 +2,8 @@ import { SendButton } from './Buttons.jsx';
 import _ from 'lodash';
 import React, { useRef, useState, useEffect } from "react";
 import { io } from "socket.io-client";
+// import io from "hexlet/chat-server";
+import { getMessages } from '../../../API/messages.js';
 
 const MessageComponent = ({ userName, message }) => {
   return (
@@ -17,11 +19,13 @@ const EnterMessageForm = () => {
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    const socket = io("http://localhost:5002");
+    // const socket = io("http://localhost:5002");
+    const socket = io();
     setSocket(socket);
 
     
     socket.on("messages", (msgs) => {
+      console.log(msgs)
       setMessages(msgs);
     });
 

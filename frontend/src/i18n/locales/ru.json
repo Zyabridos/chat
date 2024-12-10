@@ -1,0 +1,10 @@
+{
+  "login": {
+    "title": "Вход",
+    "usernameLabel": "Ваш ник",
+    "usernamePlaceholder": "Введите ваш ник",
+    "passwordLabel": "Пароль",
+    "passwordPlaceholder": "Введите пароль",
+    "wrongEmailOrPassword": "Неверные имя пользователя или пароль"
+  }
+}
