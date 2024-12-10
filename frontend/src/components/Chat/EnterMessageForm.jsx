@@ -1,9 +1,9 @@
-import { SendButton } from './Buttons.jsx';
+import { SendMessageButton } from '../Buttons.jsx';
 import _ from 'lodash';
 import React, { useRef, useState, useEffect } from "react";
 import { io } from "socket.io-client";
 // import io from "hexlet/chat-server";
-import { getMessages } from '../../../API/messages.js';
+import { getMessages } from '../../API/messages.js';
 
 const MessageComponent = ({ userName, message }) => {
   return (
@@ -63,7 +63,7 @@ const EnterMessageForm = () => {
         value={newMessage}
         onChange={(e) => setNewMessage(e.target.value)}
       />
-      <SendButton />
+      <SendMessageButton />
     </form>
     </>
   )

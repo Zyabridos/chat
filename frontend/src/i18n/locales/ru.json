@@ -1,10 +1,24 @@
 {
+  "language": {
+    "changeToEnglish": "Переключиться на английский",
+    "changeToRussian": "Переключиться на русский"
+  },
   "login": {
     "title": "Вход",
     "usernameLabel": "Ваш ник",
     "usernamePlaceholder": "Введите ваш ник",
     "passwordLabel": "Пароль",
     "passwordPlaceholder": "Введите пароль",
+    "loginButton": "Вход",
+    "wrongEmailOrPassword": "Неверные имя пользователя или пароль"
+  },
+  "signup": {
+    "title": "Вход",
+    "usernameLabel": "Ваш ник",
+    "usernamePlaceholder": "Введите ваш ник",
+    "passwordLabel": "Пароль",
+    "passwordPlaceholder": "Введите пароль",
+    "signupButton": "Зарегестрироваться",
     "wrongEmailOrPassword": "Неверные имя пользователя или пароль"
   }
 }

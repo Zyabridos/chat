@@ -1,7 +1,6 @@
 import Header from './Header.jsx';
-import EnterMessageForm from '../EnterMessageForm/EnterMessageForm.jsx';
+import EnterMessageForm from '../EnterMessageForm.jsx';
 import React, { useState } from 'react';
-import state from '../state.js'
 
 const MainWindow = () => {
   return (

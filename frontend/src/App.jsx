@@ -1,13 +1,10 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import React, { useState, useMemo } from 'react';
-import './App.css'
 import LoginForm from './components/Login/LoginForm.jsx'
-import RootLayout from './components/RootLayout.jsx'
 import NotFound from './components/NotFound.jsx';
 import SignUpForm from './components/Signup/SignupForm.jsx';
 import Chat from './components/Chat/Chat.jsx';
-import EnterMessageForm from './components/Chat/EnterMessageForm/EnterMessageForm.jsx'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import {useAuth} from '../src/hooks/index.jsx';
 import { AuthContext } from './contexts/index.jsx';
@@ -48,10 +45,9 @@ export default function App() {
     <AuthProvider>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={< RootLayout />} />
+        <Route path="/" element={< Chat />} />
         <Route path="login" element={< LoginForm />} />
         <Route path="signup" element={< SignUpForm />} />
-        {/* <Route path="channels" element={< EnterMessageForm />} /> */}
         <Route path="*" element={< NotFound />} />
       </Routes>
     </BrowserRouter>

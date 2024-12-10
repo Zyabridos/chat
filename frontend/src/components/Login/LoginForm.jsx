@@ -14,12 +14,23 @@ import { FieldError } from './styles.jsx'
 import { useTranslation } from 'react-i18next';
 
 const LoginForm = () => {
+  const SwitchLanguageButton = () => {
+  return (
+    <div className="language-switcher mt-3">
+      <button onClick={handleLanguageChange} className="btn btn-outline-primary">
+        {currentLang === 'en' ? t('language.changeToRussian') : t('language.changeToEnglish')}
+      </button>
+    </div>
+  )
+}
   document.body.classList.add('h-100', 'bg-light')
   const auth = useAuth();
   const [authFailed, setAuthFailed] = useState(false);
   const inputRef = useRef(null);
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+
+  const [currentLang, setCurrentLang] = useState(i18n.language);
 
   useEffect(() => {
     inputRef.current.focus();
@@ -59,6 +70,13 @@ const LoginForm = () => {
     // validateOnBlur: false,
   });
 
+  const handleLanguageChange = () => {
+    const newLang = currentLang === 'en' ? 'ru' : 'en'; // Переключение между языками
+    setCurrentLang(newLang);
+    i18n.changeLanguage(newLang);
+  };
+
+
   return (
     <div className="h-100">
       <div className="h-100" id="chat">
@@ -66,20 +84,22 @@ const LoginForm = () => {
       <Navbar />
       <div className="container-fluid h-100">
       <Row className="row justify-content-center align-content-center h-100">
+
+      так, эту кнопку надо переместить в навбар, чтобы она висела в одном месте на всех страницах
+        < SwitchLanguageButton />
       <Col className="col-12 col-md-8 col-xxl-6">
       <Card className="card shadow-sm">
       <Card.Body className='card-body row p-5'>
         <LoginPicture />
           <Form onSubmit={formik.handleSubmit} className="col-12 col-md-6 mt-3 mt-md-0">
-             <h1>{t('login.title')}</h1> {/* Перевод заголовка */}
+             <h1>{t('login.title')}</h1>
             <fieldset disabled={formik.isSubmitting}>
               <Form.Group>
-                <Form.Label className="form-label" htmlFor="username">Ваш ник</Form.Label>
+                <Form.Label className="form-label" htmlFor="username">{t('login.usernameLabel')}</Form.Label>
                 <Form.Control
                   className="form-control" 
                   type="text" 
                   placeholder={t('login.usernamePlaceholder')}
-                  // placeholder="login.usernameLabel"
                   name="username"
                   id="username"
                   autoComplete="username"
@@ -92,21 +112,20 @@ const LoginForm = () => {
                 {formik.touched.username && formik.errors.username ? (<FieldError>{formik.errors.username}</FieldError>) : null}
               </Form.Group>
               <Form.Group>
-                <Form.Label htmlFor="password" className="form-label">Пароль</Form.Label>
+                <Form.Label htmlFor="password" className="form-label">{t('login.passwordLabel')}</Form.Label>
                 <Form.Control
                   className="form-control" 
                   type="password" 
                   name="password" 
                   autoComplete="current-password" 
                   id="password" 
-                  placeholder="Пароль"
+                  placeholder={t('login.passwordPlaceholder')}
                   onChange={formik.handleChange}
                   value={formik.values.password}
                   isInvalid={authFailed}
                   required
                 />
                 {formik.touched.password && formik.errors.password ? (<FieldError>{formik.errors.password}</FieldError>) : null}
-                {/* <Form.Control.Feedback type="invalid">Неверные имя пользователя или пароль</Form.Control.Feedback> */}
                 <Form.Control.Feedback type="invalid"> {t('login.wrongEmailOrPassword')}</Form.Control.Feedback>
               </Form.Group>
               <LoginButton />
