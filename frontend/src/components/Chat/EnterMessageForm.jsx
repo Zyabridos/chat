@@ -52,8 +52,8 @@ const MessagesForm = ({ socket }) => {
   return (
     <Form onSubmit={handleSendMessage}>
       <div id="messages-box" className="chat-messages overflow-auto px-5">
-        {messages.map((msg, index) => (
-          <Message key={index} userName={msg.userName} message={msg.body} /> 
+        {messages.map((msg) => (
+          <Message key={msg.id} userName={msg.userName} message={msg.body} /> 
         ))}
       </div>
 
