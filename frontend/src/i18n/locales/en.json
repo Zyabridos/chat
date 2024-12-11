@@ -13,12 +13,65 @@
     "loginButton": "Login"
   },
   "signup": {
-    "title": "Вход",
-    "usernameLabel": "Ваш ник",
-    "usernamePlaceholder": "Введите ваш ник",
-    "passwordLabel": "Пароль",
-    "passwordPlaceholder": "Введите пароль",
-    "signupButton": "Зарегестрироваться",
-    "wrongEmailOrPassword": "Неверные имя пользователя или пароль"
+    "title": "Sign Up",
+    "usernameLabel": "Your Username",
+    "usernamePlaceholder": "Enter your username",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "repeatPasswordLabel": "Repeat Password",
+    "repeatPasswordPlaceholder": "Re-enter your password",
+    "signupButton": "Sign Up",
+    "wrongEmailOrPassword": "Incorrect username or password"
+  },
+  "validationErrors": {
+    "min3": "Minimum 3 characters",
+    "min6": "Minimum 6 characters",
+    "max20": "Maximum 20 characters",
+    "required": "Required field",
+    "oneOf": "Passwords must match"
+  },
+  "notFound": {
+    "title": "Page Not Found",
+    "message": "But you can go to the",
+    "linkText": "Home page"
+  },
+  "channels": {
+    "title": "Channels",
+    "addChannel": "Add Channel",
+    "enterChannelName": "Enter channel name",
+    "cancel": "Cancel",
+    "add": "Add"
+  },
+  "loading": {
+    "loadingChannels": "Loading channels..."
+  },
+  "networkErrors": {
+    "generalError": "Error sending the message. Please try again.",
+    "badRequest": "Bad request. Check the data and try again.",
+    "unauthorized": "You are not authorized. Please log in.",
+    "serverError": "Server error. Please try later.",
+    "error": "Error",
+    "connectionError": "Connection error. Check your internet connection.",
+    "unknownError": "An error occurred",
+    "unknown": "Unknown error"
+  },
+  "error": {
+    "tokenNotFound": "Token not found. Please log in again.",
+    "fetchChannels": "Error loading channels",
+    "addChannel": "Error adding channel"
+  },
+  "channelsFormErrors": {
+    "tokenNotFound": "Token not found. Please log in again.",
+    "emptyMessage": "Message cannot be empty.",
+    "connectionError": "Connection error. Please check your internet connection.",
+    "unknownError": "An error occurred. Please try again."
+  },
+  "channnelsForm": {
+    "newMessage": "New message",
+    "enterMessage": "Enter your message..."
+  },
+  "channelsHeader": {
+    "channelName": "# Channel name here",
+    "messageCount": "There are {{count}} messages here"
   }
 }

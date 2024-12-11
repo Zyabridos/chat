@@ -1,5 +1,6 @@
 import avatarLogo from '../assets/avatar-DIE1AEpS.jpg'
 import sugnupAvatar from '../assets/signupAvatar.jpg'
+import notFound from '../assets/404-NotFound.svg'
 
 export const LoginPicture = () => {
   return (
@@ -19,4 +20,15 @@ export const SugnupPicture = () => {
     </div>
     </>
   )
+};
+
+export const NotFoundPicture = () => {
+  return (
+    <img
+      alt="Страница не найдена"
+      className="img-fluid"
+      style={{ maxWidth: '450px', height: 'auto' }}
+      src={notFound}
+    />
+  );
 };

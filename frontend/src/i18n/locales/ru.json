@@ -13,12 +13,65 @@
     "wrongEmailOrPassword": "Неверные имя пользователя или пароль"
   },
   "signup": {
-    "title": "Вход",
+    "title": "Регистрация",
     "usernameLabel": "Ваш ник",
     "usernamePlaceholder": "Введите ваш ник",
     "passwordLabel": "Пароль",
     "passwordPlaceholder": "Введите пароль",
+    "repeatPasswordLabel": " Повторите пароль",
+    "repeatPasswordPlaceholder": "Повторите введенный пароль",
     "signupButton": "Зарегестрироваться",
     "wrongEmailOrPassword": "Неверные имя пользователя или пароль"
+  },
+  "validationErrors": {
+    "min3": "Минимум 3 символа",
+    "min6": "Минимум 6 символов",
+    "max20": "Максимум 20 символов",
+    "required": "Обязательное поле",
+    "oneOf": "Пароли должны совпадать"
+  },
+  "networkErrors": {
+    "generalError": "Ошибка при отправке сообщения. Попробуйте еще раз.",
+    "badRequest": "Неверный запрос. Проверьте данные и попробуйте снова.",
+    "unauthorized": "Вы не авторизованы. Пожалуйста, войдите в систему.",
+    "serverError": "Ошибка сервера. Попробуйте позже.",
+    "error": "Ошибка",
+    "connectionError": "Ошибка соединения. Проверьте ваше интернет-соединение.",
+    "unknownError": "Произошла ошибка",
+    "unknown": "Неизвестная ошибка"
+  },
+  "notFound": {
+    "title": "Страница не найдена",
+    "message": "Но вы можете перейти на",
+    "linkText": "главную страницу"
+  },
+  "channels": {
+    "title": "Каналы",
+    "addChannel": "Добавить канал",
+    "enterChannelName": "Введите название канала",
+    "cancel": "Отменить",
+    "add": "Добавить"
+  },
+  "loading": {
+    "loadingChannels": "Загрузка каналов..."
+  },
+  "error": {
+    "tokenNotFound": "Токен не найден. Пожалуйста, войдите снова.",
+    "fetchChannels": "Ошибка при загрузке каналов",
+    "addChannel": "Ошибка при добавлении канала"
+  },
+  "channelsFormErrors": {
+    "tokenNotFound": "Токен не найден. Пожалуйста, войдите снова.",
+    "emptyMessage": "Сообщение не может быть пустым.",
+    "connectionError": "Ошибка соединения. Проверьте ваше интернет-соединение.",
+    "unknownError": "Произошла ошибка. Попробуйте еще раз."
+  },
+  "channnelsForm": {
+    "newMessage": "Новое сообщение",
+    "enterMessage": "Введите сообщение..."
+  },
+  "channelsHeader": {
+    "channelName": "# Здесь название канала",
+    "messageCount": "Здесь {{count}} сообщений"
   }
 }

@@ -1,4 +1,3 @@
-import ChannelBox from "./ChannelBox.jsx";
 import Channels from './Channels.jsx';
 import Navbar from "../Navbar.jsx";
 import MainWindow from './MainWindow/MainWindow.jsx';

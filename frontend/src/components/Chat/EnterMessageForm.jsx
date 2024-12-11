@@ -7,20 +7,23 @@ import routes from '../../routes.js';
 import Message from './Message.jsx'; 
 import { SendMessageButton } from '../Buttons.jsx';
 import { handleAxiosError } from './utils.js';
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 
 const MessagesForm = ({ socket }) => {
   const dispatch = useDispatch();
-  const messages = useSelector((state) => state.messagesInfo.messages); // Получаем сообщения из Redux
+  const messages = useSelector((state) => state.messagesInfo.messages); // Get messages from Redux
 
   const [messageBody, setMessageBody] = useState('');
   const [error, setError] = useState('');
+
+  const { t } = useTranslation(); // Get the translation function
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
 
     const token = localStorage.getItem('token');
     if (!token) {
-      setError('Токен не найден. Пожалуйста, войдите снова.');
+      setError(t('channelsFormErrors.tokenNotFound')); // Use translation for error
       return;
     }
 
@@ -33,19 +36,18 @@ const MessagesForm = ({ socket }) => {
     if (messageBody.trim()) {
       try {
         const response = await axios.post(routes.messagesPath(), { body: messageBody }, config);
-        // console.log(response);
 
-        // Добавляем сообщение в локальное состояние Redux
+        // Add the message to Redux
         dispatch(addMessage({ body: messageBody }));
         setMessageBody('');
         setError('');
       } catch (err) {
-        const errorMessage = handleAxiosError(err);
+        const errorMessage = handleAxiosError(err); // Use the utility function to handle errors
         setError(errorMessage);
         console.error('Error during message sending:', err);
       }
     } else {
-      setError('Сообщение не может быть пустым.');
+      setError(t('channelsFormErrors.emptyMessage')); // Use translation for empty message error
     }
   };
 
@@ -61,15 +63,15 @@ const MessagesForm = ({ socket }) => {
         <Form.Control
           name="body"
           type="text"
-          aria-label="Новое сообщение"
+          aria-label={t('channnelsForm.newMessage')} // Use translation for placeholder
           className="border-0 p-0 ps-2 form-control"
-          placeholder="Введите сообщение..."
+          placeholder={t('channnelsForm.enterMessage')} // Use translation for placeholder
           value={messageBody}
           onChange={(e) => setMessageBody(e.target.value)}
         />
         <SendMessageButton />
       </Form.Group>
-      {error && <div className="text-danger">{error}</div>} {/* Отображаем ошибки */}
+      {error && <div className="text-danger">{error}</div>} {/* Display errors */}
     </Form>
   );
 };

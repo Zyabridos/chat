@@ -1,6 +1,8 @@
 import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
 
 export const SignupButton = () => {
+  const { t } = useTranslation()
   return (
     <button type="submit" className="w-100 btn btn-outline-primary">{t('signup.signupButton')}</button>
   )
@@ -27,3 +29,19 @@ export const SendMessageButton = () => {
     </button>
   )
 };
+
+export const SwitchLanguageButton = () => {
+  const { t, i18n } = useTranslation();
+  const [currentLang, setCurrentLang] = useState(i18n.language);
+  const handleLanguageChange = () => {
+    const newLang = currentLang === 'en' ? 'ru' : 'en'; 
+    setCurrentLang(newLang);
+    i18n.changeLanguage(newLang);
+  };
+  return (
+    <div className="language-switcher mt-3">
+      <button onClick={handleLanguageChange} className="btn btn-outline-primary">
+        {currentLang === 'en' ? t('language.changeToRussian') : t('language.changeToEnglish')}
+      </button>
+    </div>
+  )} 
