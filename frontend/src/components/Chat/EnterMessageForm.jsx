@@ -1,72 +1,77 @@
+import React, { useState } from 'react';
+import { Form } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux'; 
+import { addMessage } from '../../slices/messagesSlice.js'; 
+import axios from 'axios'; 
+import routes from '../../routes.js'; 
+import Message from './Message.jsx'; 
 import { SendMessageButton } from '../Buttons.jsx';
-import _ from 'lodash';
-import React, { useRef, useState, useEffect } from "react";
-import { io } from "socket.io-client";
-// import io from "hexlet/chat-server";
-import { getMessages } from '../../API/messages.js';
+import { handleAxiosError } from './utils.js';
 
-const MessageComponent = ({ userName, message }) => {
-  return (
-    <div className="text-break mb-2">
-      <b>{userName}</b>: {message}
-    </div>
-  );
-};
+const MessagesForm = ({ socket }) => {
+  const dispatch = useDispatch();
+  const messages = useSelector((state) => state.messagesInfo.messages); // Получаем сообщения из Redux
 
-const EnterMessageForm = () => {
-  const [messages, setMessages] = useState([]);
-  const [newMessage, setNewMessage] = useState('');
-  const [socket, setSocket] = useState(null);
+  const [messageBody, setMessageBody] = useState('');
+  const [error, setError] = useState('');
 
-  useEffect(() => {
-    // const socket = io("http://localhost:5002");
-    const socket = io();
-    setSocket(socket);
-
-    
-    socket.on("messages", (msgs) => {
-      console.log(msgs)
-      setMessages(msgs);
-    });
-
-    socket.on("message", (message) => {
-      setMessages((prevMessages) => [...prevMessages, message]);
-    });
-
-    return () => {
-      socket.disconnect();
-    };
-  }, []);
-
-  const handleSendMessage = (e) => {
+  const handleSendMessage = async (e) => {
     e.preventDefault();
-    if (newMessage.trim() !== "") {
-      socket.emit("sendMessage", newMessage);
-      setNewMessage("");
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setError('Токен не найден. Пожалуйста, войдите снова.');
+      return;
+    }
+
+    const config = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    };
+
+    if (messageBody.trim()) {
+      try {
+        const response = await axios.post(routes.messagesPath(), { body: messageBody }, config);
+        // console.log(response);
+
+        // Добавляем сообщение в локальное состояние Redux
+        dispatch(addMessage({ body: messageBody }));
+        setMessageBody('');
+        setError('');
+      } catch (err) {
+        const errorMessage = handleAxiosError(err);
+        setError(errorMessage);
+        console.error('Error during message sending:', err);
+      }
+    } else {
+      setError('Сообщение не может быть пустым.');
     }
   };
 
   return (
-    <>
-      {messages.map((msg, index) => (
-        <div id="messages-box" className="chat-messages overflow-auto px-5 ">
-          {/* пусть пока с индексом будет, потом переделать в ид сообщение */}
-          <MessageComponent userName='admin' key={index} message={msg} />
-          </div>
+    <Form onSubmit={handleSendMessage}>
+      <div id="messages-box" className="chat-messages overflow-auto px-5">
+        {messages.map((msg, index) => (
+          <Message key={index} userName={msg.userName} message={msg.body} /> 
         ))}
-    <form noValidate="" className="py-1 border rounded-2" onSubmit={handleSendMessage}>
-      <input 
-        name="body" 
-        aria-label="Новое сообщение" 
-        placeholder="Введите сообщение..." 
-        className="border-0 p-0 ps-2 form-control"
-        value={newMessage}
-        onChange={(e) => setNewMessage(e.target.value)}
-      />
-      <SendMessageButton />
-    </form>
-    </>
-  )
+      </div>
+
+      <Form.Group className="input-group">
+        <Form.Control
+          name="body"
+          type="text"
+          aria-label="Новое сообщение"
+          className="border-0 p-0 ps-2 form-control"
+          placeholder="Введите сообщение..."
+          value={messageBody}
+          onChange={(e) => setMessageBody(e.target.value)}
+        />
+        <SendMessageButton />
+      </Form.Group>
+      {error && <div className="text-danger">{error}</div>} {/* Отображаем ошибки */}
+    </Form>
+  );
 };
 
-export default EnterMessageForm;
+export default MessagesForm;

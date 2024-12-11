@@ -10,6 +10,11 @@ import {useAuth} from '../src/hooks/index.jsx';
 import { AuthContext } from './contexts/index.jsx';
 import { useNavigate } from "react-router-dom";
 import i18n from './i18n/i18n.js';
+import reducer from './slices/index.js';
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
+import messagesReducer from './slices/messagesSlice';
+import store from './store.js'
 
 const AuthProvider = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -41,7 +46,9 @@ const PrivateRoute = ({ children }) => {
 };
 
 export default function App() {
+  // console.log(store)
   return (
+    <Provider store={store}>
     <AuthProvider>
     <BrowserRouter>
       <Routes>
@@ -52,5 +59,6 @@ export default function App() {
       </Routes>
     </BrowserRouter>
      </AuthProvider>
+     </Provider>
   );
 }
