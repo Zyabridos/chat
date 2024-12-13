@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import { useFormik } from "formik";
 import { Form } from 'react-bootstrap';
-import { AuthContext } from '../../contexts/index.jsx' // Импортируем контекст авторизации
-import axios from 'axios';
+import { AuthContext } from '../../contexts/index.jsx'
 import { FieldError, FormSuccess } from '../Login/styles.jsx';
 import { SignupButton } from '../Buttons.jsx';
 import { SugnupPicture } from '../Attachments.jsx';
@@ -11,12 +10,11 @@ import Navbar from '../Navbar.jsx';
 import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import routes from '../../routes.js';
 
 const SignUpForm = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
-  const { signUp, loading, serverError } = useContext(AuthContext);  // Используем функцию signUp из контекста
+  const inputRef = useRef(null);
+  const { signUp, serverError } = useContext(AuthContext);
 
   const validationSignupSchema = yup.object({
     username: yup
@@ -34,16 +32,33 @@ const SignUpForm = () => {
       .required(t('validationErrors.required')),
   });
 
+  const handleSubmit = (formikValues) => {
+    console.log(formikValues)
+    signUp(formikValues.username, formikValues.password)
+    .then((userData) => {
+      localStorage.setItem(
+          'user',
+          JSON.stringify({ token: userData.token, username: userData.username }),
+        );
+        navigate('/');
+    })
+    // надо обработку ошибок сделать по-нормальному и в одном месте
+    .catch((error) => {
+        console.log('signupErr err: ', error);
+      });
+  };
+
   const formik = useFormik({
     initialValues: {
       username: '',
       password: '',
       confirmPassword: '',
     },
-    onSubmit: async (values) => {
-      // Вызов функции регистрации из контекста
-      await signUp(values.username, values.password);
-    },
+  
+    //  onSubmit: async (values) => {
+    //   await signUp(values.username, values.password);
+    //  },
+    onSubmit: handleSubmit,
     validationSchema: validationSignupSchema,
   });
 

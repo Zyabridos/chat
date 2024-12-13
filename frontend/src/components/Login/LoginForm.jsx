@@ -1,10 +1,7 @@
-import axios from 'axios';
-import React, { useEffect, useRef, useState, useContext } from 'react';
+import React, { useRef, useState, useContext } from 'react';
 import { useFormik } from 'formik';
 import { Form, Col, Card, Row } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../../contexts/index.jsx' // Импортируем контекст авторизации
-import routes from '../../routes.js';
+import { AuthContext } from '../../contexts/index.jsx'
 import LoginFooter from './Footer.jsx';
 import Navbar from '../Navbar.jsx';
 import { LoginPicture } from './../Attachments.jsx';
@@ -12,40 +9,31 @@ import { LoginButton } from '.././Buttons.jsx';
 import validationLoginSchema from '../../validationSchemas/validationLoginSchema.jsx';
 import { FieldError } from './styles.jsx';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 const LoginForm = () => {
   document.body.classList.add('h-100', 'bg-light');
-  const { logIn } = useContext(AuthContext); // Получаем метод logIn из контекста
-  console.log(logIn)
+  const { logIn } = useContext(AuthContext);
   const [authFailed, setAuthFailed] = useState(false);
   const inputRef = useRef(null);
-  const navigate = useNavigate();
   const { t } = useTranslation();
+  const navigate = useNavigate()
 
-  useEffect(() => {
-    inputRef.current.focus();
-  }, []);
-
-  const handleSubmit = async (formikValues) => {
-    setAuthFailed(false);
-    try {
-      const response = await axios.post(routes.loginPath(), formikValues);
-
-      // Сохраняем данные пользователя в localStorage
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('userId', JSON.stringify({ ...response.data, username: formikValues.username }));
-
-      // Логиним пользователя через контекст
-      logIn({ username: formikValues.username, token: response.data.token });
-
-      // Перенаправляем на главную страницу
-      navigate('/');
-    } catch (err) {
-      if (err.response && err.response.status === 401) {
-        setAuthFailed(true); // Если ошибка авторизации (401), показываем сообщение об ошибке
-        inputRef.current.select();
-      }
-    }
+  const handleSubmit = (formikValues) => {
+    console.log(formikValues)
+    logIn(formikValues.username, formikValues.password)
+    .then((userData) => {
+      console.log(userData)
+      localStorage.setItem(
+          'user',
+          JSON.stringify({ token: userData.token, username: userData.username }),
+        );
+        navigate('/');
+    })
+    // надо обработку ошибок сделать по-нормальному и в одном месте
+    .catch((error) => {
+        console.log('auth err: ', error);
+      });
   };
 
   const formik = useFormik({
@@ -54,6 +42,9 @@ const LoginForm = () => {
       password: '',
     },
     validationSchema: validationLoginSchema,
+    // onSubmit: async (formikValues) => {
+    //   await logIn(formikValues.username, formikValues.password);
+    //  },
     onSubmit: handleSubmit,
   });
 

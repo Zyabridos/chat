@@ -9,14 +9,30 @@ const AuthProvider = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState(false);
   const [user, setUser] = useState(null); 
   const [loading, setLoading] = useState(false);
+  // const [authFailed, setAuthFailed] = useState(false);
   const navigate = useNavigate();
 
-  const logIn = (userData) => {
-    setLoggedIn(true);
-    setUser(userData);
-    localStorage.setItem('userId', userData.id);
-    navigate('/chat'); 
-  };
+  const logIn = async (login, password) => {
+  const response = await axios.post(routes.loginPath(), {
+    username: login,
+    password,
+  })
+  return response.data;
+  // console.log(response)
+  // .then((userData) => {
+  //       setUser(userData);
+  //       localStorage.setItem('userId', JSON.stringify({ token: userData.token, username: userData.username }));
+  //       navigate('/');
+  //     })
+  //     // надо обработку ошибок позже добавить
+  //     .catch((error) => {
+  //       if (error.response && error.response.status === 401) {
+  //       // setAuthFailed(true); 
+  //       console.log('wrong login or password')
+  //       // inputRef.current.select();
+  //     }
+  //     });
+};
 
   const logOut = () => {
     localStorage.removeItem('userId');
@@ -25,21 +41,10 @@ const AuthProvider = ({ children }) => {
     navigate('/login'); 
   };
 
-  const signUp = async (username, password) => {
-    try {
-      setLoading(true);
-      const response = await axios.post(routes.signupPath(), { username, password }); // Путь к вашему API для регистрации
-
-      if (response.status === 201) {
-        // Если регистрация успешна, то логиним пользователя
-        logIn(response.data); // При успешной регистрации мы логиним пользователя
-      }
-    } catch (error) {
-      console.error('Ошибка регистрации', error);
-      setLoading(false);
-      // Обработка ошибок, например, показ сообщения об ошибке
-    }
-  };
+  const signUp = async (login, password) => {
+  const response = await axios.post(routes.signupPath(), { username: login, password })
+  return response.data;
+};
 
   const memoizedValue = useMemo(() => ({ loggedIn, logIn, logOut, signUp, user, loading }), [loggedIn, user, loading]);
 
