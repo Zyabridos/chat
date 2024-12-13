@@ -10,31 +10,34 @@ import routes from "../../routes";
 import { setChannels, addChannel, setError, setLoading } from '../../slices/channelsSlice';
 import _ from 'lodash';
 import { handleAxiosError } from "./utils";
-import { useTranslation } from 'react-i18next'; // Import i18n
+import { useTranslation } from 'react-i18next';
+import { useFormik } from 'formik';
+import validationCreateChannel from '../../validationSchemas/validationCreateChannel.jsx';
+import { FieldError } from "../Login/styles.jsx";
 
 const Channels = () => {
-  const { t } = useTranslation(); // Use translation hook
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { channels, loading, error } = useSelector((state) => state.channelsInfo);
 
-  const [isModalOpen, setIsModalOpen] = useState(false); // Модальное окно для добавления канала
-  const [activeChannel, setActiveChannel] = useState('general'); // Активный канал
-  const [newChannelName, setNewChannelName] = useState(""); // Имя нового канала
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activeChannel, setActiveChannel] = useState('general');
 
-  const socket = useRef(null); // Ссылка для сокета
+  const socket = useRef(null);
   const containerRef = useRef(null);
 
   const token = localStorage.getItem('token');
   if (!token) {
-    dispatch(setError(t('error.tokenNotFound'))); // Use i18n translation
+    dispatch(setError(t('error.tokenNotFound')));
     return;
   }
+  
 
-  // Настройка axios с токеном в заголовке
   const axiosInstance = axios.create({
-    baseURL: routes.apiBaseURL, // Укажите ваш базовый URL
+    baseURL: routes.apiBaseURL,
     headers: {
-      Authorization: `Bearer ${token}`, // Передаем токен в заголовке
+      'Content-Type': 'application/json', 
+      Authorization: `Bearer ${token}`,
     },
   });
 
@@ -70,29 +73,36 @@ const Channels = () => {
     };
   }, [dispatch, t]); // Запускаем только один раз при монтировании компонента
 
+  
   // Обработчик для добавления нового канала
-  const handleAddChannel = async (e) => {
-    e.preventDefault();
+  const handleAddChannel = async (values) => {
+     if (values.channelName.trim()) {
+    try {
+      const response = await axiosInstance.post('/api/channels', { name: values.channelName });
+      // console.log('Status:', response.status); 
+      // console.log('Response body:', response.data);
+      const newChannel = response.data;
 
-    if (newChannelName.trim()) {
-      try {
-        const response = await axiosInstance.post('/api/channels', { name: newChannelName }); // Отправляем новый канал на сервер
-        const newChannel = response.data;
-        console.log(response)
+      socket.current.emit('createChannel', newChannel);
 
-        // Отправляем событие через WebSocket
-        socket.current.emit('createChannel', newChannel); // Отправляем на сервер о новом канале
-
-        dispatch(addChannel(newChannel)); // Обновляем каналы в Redux
-        setNewChannelName(""); // Очищаем поле ввода
-        setIsModalOpen(false); // Закрываем модальное окно
-      } catch (error) {
-        handleAxiosError(error)
-        dispatch(setError(t('error.addChannel'))); // Use i18n translation
-        console.error('Error adding channel:', error);
-      }
+      dispatch(addChannel(newChannel)); // Обновляем каналы в Redux
+      formik.resetForm(); // Очищаем форму
+      setIsModalOpen(false); // Закрываем модальное окно
+    } catch (error) {
+      handleAxiosError(error);
+      dispatch(setError(t('error.addChannel'))); // Use i18n translation
+      console.error('Error adding channel:', error);
+    }
     }
   };
+
+  const formik = useFormik({
+    initialValues: {
+      channelName: '',
+    },
+    validationSchema: validationCreateChannel,
+    onSubmit: async (formikValues) => handleAddChannel(formikValues),
+  });
 
   // Открытие модального окна для добавления канала
   const handleOpen = () => {
@@ -118,6 +128,7 @@ const Channels = () => {
     return null;
   };
 
+  // console.log(channels)
   return (
     <>
       <Container className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
@@ -159,16 +170,20 @@ const Channels = () => {
                 <button type="button" aria-label="Close" data-bs-dismiss="modal" onClick={handleClose} className="btn btn-close"></button>
               </div>
               <div className="modal-body">
-                <form onSubmit={handleAddChannel}>
+                <form onSubmit={formik.handleSubmit}>
                   <div>
                     <input
-                      name="name"
-                      id="name"
+                      name="channelName"
+                      id="channelName"
                       className="mb-2 form-control"
                       placeholder={t('channels.enterChannelName')}
-                      value={newChannelName}
-                      onChange={(e) => setNewChannelName(e.target.value)} // обновляем имя канала
+                      value={formik.values.channelName}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
                     />
+                    {formik.touched.channelName && formik.errors.channelName && (
+                      <FieldError>{formik.errors.channelName}</FieldError>
+                    )}
                     <div className="invalid-feedback"></div>
                     <div className="d-flex justify-content-end">
                       <button type="button" className="me-2 btn btn-secondary" onClick={handleClose}>{t('channels.cancel')}</button>

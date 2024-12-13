@@ -1,51 +1,49 @@
-import React, { useContext, useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useFormik } from "formik";
 import { Form } from 'react-bootstrap';
+import { AuthContext } from '../../contexts/index.jsx' // Импортируем контекст авторизации
 import axios from 'axios';
-import { FieldContainer, FieldError, FormSuccess } from '../Login/styles.jsx';
-import { SignupButton } from '.././Buttons.jsx';
-import { SugnupPicture } from '../Attachments.jsx'
+import { FieldError, FormSuccess } from '../Login/styles.jsx';
+import { SignupButton } from '../Buttons.jsx';
+import { SugnupPicture } from '../Attachments.jsx';
 import { PasswordLabel, UsernameLabel, ConfirmPasswordLabel } from './Labels.jsx';
-import Navbar from '../Navbar.jsx'
+import Navbar from '../Navbar.jsx';
 import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
-
-// Regular expression for password, if needed
-const PASSWORD_REGEX = /^a-zA-Z/
+import { useNavigate } from 'react-router-dom';
+import routes from '../../routes.js';
 
 const SignUpForm = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const { signUp, loading, serverError } = useContext(AuthContext);  // Используем функцию signUp из контекста
 
-  // Define the validation schema
   const validationSignupSchema = yup.object({
     username: yup
       .string()
-      .min(3, t('validationErrors.min3'))
+      // .min(3, t('validationErrors.min3'))
       .max(20, t('validationErrors.max20'))
       .required(t('validationErrors.required')),
     password: yup
       .string()
-      .min(6, t('validationErrors.min6'))
+      // .min(6, t('validationErrors.min6'))
       .required(t('validationErrors.required')),
     passwordConfirmation: yup
       .string()
-      .oneOf([yup.ref('password'), null], t('validationErrors.oneOf'))
+      // .oneOf([yup.ref('password'), null], t('validationErrors.oneOf'))
       .required(t('validationErrors.required')),
   });
 
-  // Formik initialization
   const formik = useFormik({
     initialValues: {
       username: '',
       password: '',
-      confirmPassword: '',  // Make sure this matches the form field name
+      confirmPassword: '',
     },
-    onSubmit: async (formikValues) => {
-      console.log(formikValues);
-      // Handle form submission here
+    onSubmit: async (values) => {
+      // Вызов функции регистрации из контекста
+      await signUp(values.username, values.password);
     },
-    validateOnChange: false,
-    validateOnBlur: false,
     validationSchema: validationSignupSchema,
   });
 
@@ -107,7 +105,7 @@ const SignUpForm = () => {
                         className="form-control"
                         type="password"
                         aria-describedby="passwordHelpBlock"
-                        name="confirmPassword"  // Ensure this matches validation schema
+                        name="confirmPassword"
                         autoComplete="new-password"
                         id="confirmPassword"
                         placeholder={t('signup.repeatPasswordPlaceholder')}
@@ -119,6 +117,9 @@ const SignUpForm = () => {
                         <FieldError>{formik.errors.confirmPassword}</FieldError>
                       )}
                     </Form.Group>
+
+                    {/* Error or Success Messages */}
+                    {serverError && <div className="error-message">{serverError}</div>}
 
                     {/* Submit Button */}
                     <SignupButton />

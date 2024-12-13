@@ -7,7 +7,7 @@ import routes from '../../routes.js';
 import Message from './Message.jsx'; 
 import { SendMessageButton } from '../Buttons.jsx';
 import { handleAxiosError } from './utils.js';
-import { useTranslation } from 'react-i18next'; // Import useTranslation
+import { useTranslation } from 'react-i18next';
 
 const MessagesForm = ({ socket }) => {
   const dispatch = useDispatch();
@@ -42,12 +42,12 @@ const MessagesForm = ({ socket }) => {
         setMessageBody('');
         setError('');
       } catch (err) {
-        const errorMessage = handleAxiosError(err); // Use the utility function to handle errors
+        const errorMessage = handleAxiosError(err);
         setError(errorMessage);
         console.error('Error during message sending:', err);
       }
     } else {
-      setError(t('channelsFormErrors.emptyMessage')); // Use translation for empty message error
+      setError(t('channelsFormErrors.emptyMessage'));
     }
   };
 
@@ -63,9 +63,9 @@ const MessagesForm = ({ socket }) => {
         <Form.Control
           name="body"
           type="text"
-          aria-label={t('channnelsForm.newMessage')} // Use translation for placeholder
+          aria-label={t('channnelsForm.newMessage')}
           className="border-0 p-0 ps-2 form-control"
-          placeholder={t('channnelsForm.enterMessage')} // Use translation for placeholder
+          placeholder={t('channnelsForm.enterMessage')}
           value={messageBody}
           onChange={(e) => setMessageBody(e.target.value)}
         />

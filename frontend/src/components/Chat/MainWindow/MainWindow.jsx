@@ -8,7 +8,7 @@ const MainWindow = () => {
   return (
     <div className="col p-0 h-100">
       <div className="d-flex flex-column h-100">
-        <Header amountOfMessages={messages.length}/>
+        <Header amountOfMessages={messages.length} channelName={'aa'}/>
         <div className="mt-auto px-5 py-3">
           <EnterMessageForm />
         </div>

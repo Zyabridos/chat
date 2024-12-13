@@ -1,7 +1,7 @@
 {
   "language": {
     "changeToEnglish": "Switch to English",
-    "changeToRussian": "Switch to Russian"
+    "changeToRussian": "Переключиться на русский"
   },
   "login": {
     "title": "Login",
@@ -72,6 +72,6 @@
   },
   "channelsHeader": {
     "channelName": "# Channel name here",
-    "messageCount": "There are {{count}} messages here"
+    "messageCount": "There are {{count}} {{count, plural, =0 {messages} =1 {message} other {messages}}} here"
   }
 }
