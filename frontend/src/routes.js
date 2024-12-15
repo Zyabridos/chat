@@ -6,6 +6,3 @@ export default {
   channelsPath: () => [apiPath, 'channels'].join('/'),
   signupPath: () => [apiPath, 'signup'].join('/')
 };
-
-
-// npx eslint ./src/routes.js
