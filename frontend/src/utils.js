@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
-export const handleAxiosError = (error) => {
+export const handleLoginErrors = (error) => {
   const { t } = useTranslation(); 
   let errorMessage = t('error.generalError');
   

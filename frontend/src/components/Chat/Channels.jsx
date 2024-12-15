@@ -9,7 +9,7 @@ import { io } from 'socket.io-client';
 import routes from "../../routes";
 import { setChannels, addChannel, setError, setLoading } from '../../slices/channelsSlice';
 import _ from 'lodash';
-import { handleAxiosError } from "./utils";
+import { handleLoginErrors } from "../../utils.js";
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import validationCreateChannel from '../../validationSchemas/validationCreateChannel.jsx';
@@ -58,9 +58,8 @@ const Channels = () => {
 
     fetchChannels();
 
-    // Устанавливаем WebSocket подключение с токеном
     socket.current = io(routes.socketURL, {
-      query: { token }, // Отправляем токен в query параметры
+      query: { token }, 
     });
 
     // Слушаем события от сервера
@@ -89,7 +88,8 @@ const Channels = () => {
       formik.resetForm(); 
       setIsModalOpen(false); 
     } catch (error) {
-      handleAxiosError(error);
+      //  либо функцию переименовать, либо отдельно ошибки обрабатывать
+      handleLoginErrors(error);
       dispatch(setError(t('error.addChannel'))); // Use i18n translation
       console.error('Error adding channel:', error);
     }

@@ -6,13 +6,15 @@ import axios from 'axios';
 import routes from '../../routes.js'; 
 import Message from './Message.jsx'; 
 import { SendMessageButton } from '../Buttons.jsx';
-import { handleAxiosError } from './utils.js';
+import { handleLoginErrors } from '../../utils.js';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import { uniqueId } from 'lodash';
 
 const MessagesForm = ({ socket }) => {
   const dispatch = useDispatch();
   const messages = useSelector((state) => state.messagesInfo.messages);
+  // console.log(messages)
 
   const [messageBody, setMessageBody] = useState('');
   const [error, setError] = useState('');
@@ -23,8 +25,9 @@ const MessagesForm = ({ socket }) => {
     e.preventDefault();
 
     const user = JSON.parse(localStorage.getItem('user'));
-    // const token = user?.token;
-     const token = localStorage.getItem('token');
+    const token = user?.token;
+    const userName = user?.username
+    const messageId = uniqueId();
 
     if (!token) {
       setError(t('channelsFormErrors.tokenNotFound'));
@@ -40,11 +43,11 @@ const MessagesForm = ({ socket }) => {
     if (messageBody.trim()) {
       try {
         const response = await axios.post(routes.messagesPath(), { body: messageBody }, config);
-        dispatch(addMessage({ body: messageBody }));
+        dispatch(addMessage({ id: messageId, body: messageBody, userName }));
         setMessageBody('');
         setError('');
       } catch (err) {
-        const errorMessage = handleAxiosError(err);
+        const errorMessage = handleLoginErrors(err);
         setError(errorMessage);
         console.error('Error during message sending:', err);
       }
@@ -57,7 +60,8 @@ const MessagesForm = ({ socket }) => {
     <Form onSubmit={handleSendMessage}>
       <div id="messages-box" className="chat-messages overflow-auto px-5">
         {messages.map((msg) => (
-          <Message key={msg.id} userName={msg.userName} message={msg.body} /> 
+          // <Message key={msg.id} userName={msg.userName} message={msg.body} /> 
+          <Message userName={msg.userName} message={msg.body} /> 
         ))}
       </div>
 

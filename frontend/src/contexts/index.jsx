@@ -4,6 +4,7 @@ import routes from '../routes.js';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import { handleLoginErrors } from '../utils.js'
 
 export const AuthContext = createContext();
 
@@ -16,11 +17,13 @@ const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
 
   const logIn = async (login, password) => {
-  const response = await axios.post(routes.loginPath(), {
-    username: login,
-    password,
-  })
-  return response.data;
+  try {
+      const response = await axios.post(routes.loginPath(), { username: login, password })
+      return response
+    }
+    catch (error) {
+    handleLoginErrors(error)
+  }
 };
 
   const logOut = () => {

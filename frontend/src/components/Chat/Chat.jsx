@@ -26,3 +26,12 @@ const Chat = () => {
 };
 
 export default Chat;
+
+// const Chat = () => {
+//   document.body.classList.add('h-100', 'bg-light');
+//   return (
+//     <Channels />
+//   );
+// };
+
+// export default Chat;

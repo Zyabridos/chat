@@ -19,21 +19,17 @@ const LoginForm = () => {
   const { t } = useTranslation();
   const navigate = useNavigate()
 
-  const handleSubmit = (formikValues) => {
-    console.log(formikValues)
-    logIn(formikValues.username, formikValues.password)
-    .then((userData) => {
-      console.log(userData)
-      localStorage.setItem(
-          'user',
-          JSON.stringify({ token: userData.token, username: userData.username }),
-        );
+  const handleSubmit = async (formikValues) => {
+    try {
+      const response = await logIn(formikValues.username, formikValues.password);
+      if (response && response.data) {
+        const { token, username } = response.data;
+        localStorage.setItem('user', JSON.stringify({ token, username }));
         navigate('/');
-    })
-    // надо обработку ошибок сделать по-нормальному и в одном месте
-    .catch((error) => {
-        console.log('auth err: ', error);
-      });
+      }
+    } catch (error) {
+      // console.error(error);
+    }
   };
 
   const formik = useFormik({
@@ -42,9 +38,6 @@ const LoginForm = () => {
       password: '',
     },
     validationSchema: validationLoginSchema,
-    // onSubmit: async (formikValues) => {
-    //   await logIn(formikValues.username, formikValues.password);
-    //  },
     onSubmit: handleSubmit,
   });
 

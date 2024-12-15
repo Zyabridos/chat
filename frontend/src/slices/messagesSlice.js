@@ -10,6 +10,7 @@ const messagesSlice = createSlice({
   reducers: {
     addMessage(state, action) {
       state.messages.push({
+        id: action.payload.id,
         body: action.payload.body,
         userName: action.payload.userName,
       });
