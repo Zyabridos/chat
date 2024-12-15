@@ -11,9 +11,9 @@
     "passwordPlaceholder": "Введите пароль",
     "loginButton": "Вход",
     "wrongEmailOrPassword": "Неверные имя пользователя или пароль",
-      "footer": {
-        "noAccount?": "Нет аккаунта?",
-        "registration": " Регистрация"
+    "footer": {
+      "noAccount?": "Нет аккаунта?",
+      "registration": " Регистрация"
     }
   },
   "signup": {
@@ -25,7 +25,11 @@
     "repeatPasswordLabel": " Повторите пароль",
     "repeatPasswordPlaceholder": "Повторите введенный пароль",
     "signupButton": "Зарегестрироваться",
-    "wrongEmailOrPassword": "Неверные имя пользователя или пароль"
+    "wrongEmailOrPassword": "Неверные имя пользователя или пароль",
+    "errors": {
+      "alreadyExists": "Пользователь с таким логином уже существует",
+      "unknown": "Ошибка при создании пользователя"
+    }
   },
   "validationErrors": {
     "min3": "Минимум 3 символа",

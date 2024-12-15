@@ -44,13 +44,13 @@ const Channels = () => {
 
   useEffect(() => {
     const fetchChannels = async () => {
-      dispatch(setLoading(true)); // Устанавливаем статус загрузки
+      dispatch(setLoading(true));
       try {
         const response = await axiosInstance.get(routes.channelsPath());
         dispatch(setChannels(response.data)); // Обновляем каналы в Redux
-        dispatch(setLoading(false)); // Снимаем статус загрузки
+        dispatch(setLoading(false)); 
       } catch (error) {
-        dispatch(setError(t('error.fetchChannels'))); // Use i18n translation
+        dispatch(setError(t('error.fetchChannels'))); 
         dispatch(setLoading(false)); // Снимаем статус загрузки
         console.error('Error fetching channels:', error);
       }
@@ -65,13 +65,13 @@ const Channels = () => {
 
     // Слушаем события от сервера
     socket.current.on('newChannel', (channel) => {
-      dispatch(addChannel(channel)); // Добавляем новый канал в Redux
+      dispatch(addChannel(channel)); 
     });
 
     return () => {
-      socket.current.disconnect(); // Отключаем сокет при размонтировании компонента
+      socket.current.disconnect(); 
     };
-  }, [dispatch, t]); // Запускаем только один раз при монтировании компонента
+  }, [dispatch, t]); 
 
   
   // Обработчик для добавления нового канала
@@ -85,9 +85,9 @@ const Channels = () => {
 
       socket.current.emit('createChannel', newChannel);
 
-      dispatch(addChannel(newChannel)); // Обновляем каналы в Redux
-      formik.resetForm(); // Очищаем форму
-      setIsModalOpen(false); // Закрываем модальное окно
+      dispatch(addChannel(newChannel)); 
+      formik.resetForm(); 
+      setIsModalOpen(false); 
     } catch (error) {
       handleAxiosError(error);
       dispatch(setError(t('error.addChannel'))); // Use i18n translation
@@ -116,7 +116,6 @@ const Channels = () => {
     setIsModalOpen(false);
   };
 
-  // Обработчик выбора канала
   const handleChannelClick = (channelName) => {
     setActiveChannel(channelName);
   };
@@ -148,10 +147,10 @@ const Channels = () => {
             <button
               type="button"
               className={c("w-100 rounded-0 text-start btn", {
-                'btn-secondary': activeChannel === channel.name, // Подсветка активного канала
-                'btn-light': activeChannel !== channel.name, // Для неактивных каналов
+                'btn-secondary': activeChannel === channel.name, 
+                'btn-light': activeChannel !== channel.name, 
               })}
-              onClick={() => handleChannelClick(channel.name)} // Обрабатываем клик по каналу
+              onClick={() => handleChannelClick(channel.name)} 
             >
               <span className="me-1">#</span>
               {channel.name}
@@ -160,7 +159,6 @@ const Channels = () => {
         ))}
       </ListGroup>
 
-      {/* Модальное окно для добавления нового канала */}
       {isModalOpen && (
         <div className="modal show" tabIndex="-1" aria-hidden="true" style={{ display: 'block' }}>
           <div className="modal-dialog modal-dialog-centered">

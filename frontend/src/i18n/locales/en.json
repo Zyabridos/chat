@@ -25,7 +25,11 @@
     "repeatPasswordLabel": "Repeat Password",
     "repeatPasswordPlaceholder": "Re-enter your password",
     "signupButton": "Sign Up",
-    "wrongEmailOrPassword": "Incorrect username or password"
+    "wrongEmailOrPassword": "Incorrect username or password",
+    "errors": {
+      "alreadyExists": "User with this username already exists",
+      "unknown": "Error during sign up has occured."
+    }
   },
   "validationErrors": {
     "min3": "Minimum 3 characters",

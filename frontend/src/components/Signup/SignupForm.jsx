@@ -11,10 +11,12 @@ import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const SignUpForm = () => {
   const { t } = useTranslation();
   const inputRef = useRef(null);
+  const navigate = useNavigate();
   const { signUp, serverError } = useContext(AuthContext);
 
   const validationSignupSchema = yup.object({
@@ -27,29 +29,24 @@ const SignUpForm = () => {
       .string()
       // .min(6, t('validationErrors.min6'))
       .required(t('validationErrors.required')),
-    passwordConfirmation: yup
-      .string()
-      .required(t('validationErrors.required')),
+    // вот здесь ошибка
+    // passwordConfirmation: yup
+    //   .string()
+    //   .oneOf([yup.ref('password'), null], t('validation.passwordMatch'))
+    //   .required(t('validationErrors.required')),
   });
 
-  const handleSubmit = (formikValues) => {
-    if (formikValues.password !== formikValues.confirmPassword) {
-      toast.error(t('validationErrors.mismatchPasswords'));
-      return;
-    }
-    console.log(formikValues)
-    signUp(formikValues.username, formikValues.password)
-    .then((userData) => {
-      localStorage.setItem(
-          'user',
-          JSON.stringify({ token: userData.token, username: userData.username }),
-        );
+  const handleSubmit = async (formikValues) => {
+    try {
+      const response = await signUp(formikValues.username, formikValues.password);
+      if (response && response.data) {
+        const { token, username } = response.data;
+        localStorage.setItem('user', JSON.stringify({ token, username }));
         navigate('/');
-    })
-    // надо обработку ошибок сделать по-нормальному и в одном месте
-    .catch((error) => {
-        console.log('signupErr err: ', error);
-      });
+      }
+    } catch (error) {
+      console.log(error)
+    }
   };
 
   const formik = useFormik({
@@ -58,12 +55,8 @@ const SignUpForm = () => {
       password: '',
       confirmPassword: '',
     },
-  
-    //  onSubmit: async (values) => {
-    //   await signUp(values.username, values.password);
-    //  },
     onSubmit: handleSubmit,
-    // validationSchema: validationSignupSchema,
+    validationSchema: validationSignupSchema,
   });
 
   return (
@@ -78,7 +71,6 @@ const SignUpForm = () => {
                 <Form onSubmit={formik.handleSubmit} className="w-50">
                   <h1 className="text-center mb-4">{t('signup.title')}</h1>
                   <fieldset>
-                    {/* Username */}
                     <Form.Group className="form-floating mb-3">
                       <Form.Label className="form-label" htmlFor="username">{t('signup.usernameLabel')}</Form.Label>
                       <Form.Control
@@ -97,7 +89,6 @@ const SignUpForm = () => {
                       )}
                     </Form.Group>
 
-                    {/* Password */}
                     <Form.Group className="form-floating mb-3">
                       <Form.Label htmlFor="password" className="form-label">{t('signup.passwordLabel')}</Form.Label>
                       <Form.Control
@@ -117,7 +108,6 @@ const SignUpForm = () => {
                       )}
                     </Form.Group>
 
-                    {/* Confirm Password */}
                     <Form.Group className="form-floating mb-3">
                       <Form.Label htmlFor="confirmPassword" className="form-label">{t('signup.repeatPasswordLabel')}</Form.Label>
                       <Form.Control
@@ -137,10 +127,8 @@ const SignUpForm = () => {
                       )}
                     </Form.Group>
 
-                    {/* Error or Success Messages */}
                     {serverError && <div className="error-message">{serverError}</div>}
 
-                    {/* Submit Button */}
                     <SignupButton />
                   </fieldset>
                 </Form>

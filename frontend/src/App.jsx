@@ -10,6 +10,8 @@ import i18n from './i18n/i18n.js';;
 import { Provider } from 'react-redux';
 import store from './store.js'
 import AuthProvider from './contexts/index.jsx';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function App() {
   // console.log(store)
@@ -23,6 +25,17 @@ export default function App() {
         <Route path="signup" element={< SignUpForm />} />
         <Route path="*" element={< NotFound />} />
       </Routes>
+          <ToastContainer 
+            position="top-right" 
+            autoClose={5000} 
+            hideProgressBar={false} 
+            newestOnTop={false} 
+            closeOnClick 
+            rtl={false} 
+            pauseOnFocusLoss 
+            draggable 
+            pauseOnHover
+          />
      </AuthProvider>
      </Provider>
      </BrowserRouter>

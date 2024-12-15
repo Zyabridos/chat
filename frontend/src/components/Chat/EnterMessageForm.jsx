@@ -8,22 +8,26 @@ import Message from './Message.jsx';
 import { SendMessageButton } from '../Buttons.jsx';
 import { handleAxiosError } from './utils.js';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 
 const MessagesForm = ({ socket }) => {
   const dispatch = useDispatch();
-  const messages = useSelector((state) => state.messagesInfo.messages); // Get messages from Redux
+  const messages = useSelector((state) => state.messagesInfo.messages);
 
   const [messageBody, setMessageBody] = useState('');
   const [error, setError] = useState('');
 
-  const { t } = useTranslation(); // Get the translation function
+  const { t } = useTranslation(); 
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
 
-    const token = localStorage.getItem('token');
+    const user = JSON.parse(localStorage.getItem('user'));
+    // const token = user?.token;
+     const token = localStorage.getItem('token');
+
     if (!token) {
-      setError(t('channelsFormErrors.tokenNotFound')); // Use translation for error
+      setError(t('channelsFormErrors.tokenNotFound'));
       return;
     }
 
@@ -36,8 +40,6 @@ const MessagesForm = ({ socket }) => {
     if (messageBody.trim()) {
       try {
         const response = await axios.post(routes.messagesPath(), { body: messageBody }, config);
-
-        // Add the message to Redux
         dispatch(addMessage({ body: messageBody }));
         setMessageBody('');
         setError('');
@@ -71,7 +73,7 @@ const MessagesForm = ({ socket }) => {
         />
         <SendMessageButton />
       </Form.Group>
-      {error && <div className="text-danger">{error}</div>} {/* Display errors */}
+      {error && <div className="text-danger">{error}</div>} {/* Контейнер для ошибок */}
     </Form>
   );
 };
