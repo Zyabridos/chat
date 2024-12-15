@@ -10,6 +10,7 @@ import validationLoginSchema from '../../validationSchemas/validationLoginSchema
 import { FieldError } from './styles.jsx';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const LoginForm = () => {
   document.body.classList.add('h-100', 'bg-light');
@@ -21,6 +22,10 @@ const LoginForm = () => {
 
   const handleSubmit = (formikValues) => {
     console.log(formikValues)
+    if (formikValues.username !== formikValues.password) {
+      toast.error(t('validationErrors.mismatchPasswords'));
+      return;
+    }
     logIn(formikValues.username, formikValues.password)
     .then((userData) => {
       console.log(userData)

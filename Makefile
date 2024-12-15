@@ -1,8 +1,11 @@
+install: 
+	npm ci
+
+start-frontend:
+	cd frontend; npm run dev
+
+start-backend:
+	cd frontend; npx start-server
+
 develop:
-	npm run dev -s ./frontend
-
-build:
-	npm run build -s ./frontend
-
-start:
-npx start-server -s ./frontend/dist
+	make start-backend & make start-frontend

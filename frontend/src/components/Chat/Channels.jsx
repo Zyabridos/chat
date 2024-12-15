@@ -41,7 +41,7 @@ const Channels = () => {
     },
   });
 
-  // Получаем список каналов с сервера через HTTP при монтировании компонента
+
   useEffect(() => {
     const fetchChannels = async () => {
       dispatch(setLoading(true)); // Устанавливаем статус загрузки

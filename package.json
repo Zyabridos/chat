@@ -2,7 +2,7 @@
   "name": "@hexlet/code",
   "version": "1.0.0",
   "description": "[![Actions Status](https://github.com/Zyabridos/fullstack-javascript-project-12/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/Zyabridos/fullstack-javascript-project-12/actions)",
-  "main": "index.js",
+  "main": "src/main.jsx",
   "type": "module",
   "scripts": {
     "build": "npm run build --prefix frontend",
@@ -21,7 +21,6 @@
   },
   "homepage": "https://github.com/Zyabridos/slack_chat#readme",
   "dependencies": {
-    "@hexlet/chat-server": "^2.0.4",
-    "react-router-dom": "^7.0.2"
+    "@hexlet/chat-server": "^2.0.4"
   }
 }

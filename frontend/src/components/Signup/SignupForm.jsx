@@ -10,6 +10,7 @@ import Navbar from '../Navbar.jsx';
 import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const SignUpForm = () => {
   const { t } = useTranslation();
@@ -28,11 +29,14 @@ const SignUpForm = () => {
       .required(t('validationErrors.required')),
     passwordConfirmation: yup
       .string()
-      // .oneOf([yup.ref('password'), null], t('validationErrors.oneOf'))
       .required(t('validationErrors.required')),
   });
 
   const handleSubmit = (formikValues) => {
+    if (formikValues.password !== formikValues.confirmPassword) {
+      toast.error(t('validationErrors.mismatchPasswords'));
+      return;
+    }
     console.log(formikValues)
     signUp(formikValues.username, formikValues.password)
     .then((userData) => {
@@ -59,7 +63,7 @@ const SignUpForm = () => {
     //   await signUp(values.username, values.password);
     //  },
     onSubmit: handleSubmit,
-    validationSchema: validationSignupSchema,
+    // validationSchema: validationSignupSchema,
   });
 
   return (

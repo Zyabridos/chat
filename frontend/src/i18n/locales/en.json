@@ -32,7 +32,7 @@
     "min6": "Minimum 6 characters",
     "max20": "Maximum 20 characters",
     "required": "Required field",
-    "oneOf": "Passwords must match"
+    "mismatchPasswords": "Passwords must match"
   },
   "notFound": {
     "title": "Page Not Found",
