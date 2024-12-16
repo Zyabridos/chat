@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux'; 
 import { addMessage } from '../../slices/messagesSlice.js'; 
@@ -8,20 +8,23 @@ import Message from './Message.jsx';
 import { SendMessageButton } from '../Buttons.jsx';
 import { handleLoginErrors } from '../../utils.js';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
 import { uniqueId } from 'lodash';
 import leoProfanity from "leo-profanity";
+import forbiddenWords from '../../dictionary/index.js';
 
 const MessagesForm = ({ socket }) => {
   const dispatch = useDispatch();
   const messages = useSelector((state) => state.messagesInfo.messages);
-  
+
   const [messageBody, setMessageBody] = useState('');
   const [error, setError] = useState('');
 
-  leoProfanity.loadDictionary("ru");
+  const { t } = useTranslation();
 
-  const { t } = useTranslation(); 
+  useEffect(() => {
+    leoProfanity.loadDictionary('ru');
+    forbiddenWords.forEach(word => leoProfanity.add(word));
+  }, []);
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
@@ -42,13 +45,10 @@ const MessagesForm = ({ socket }) => {
       },
     };
 
-    const cleanedMessage = leoProfanity.clean(messageBody); 
-
-    if (cleanedMessage.trim()) {
+    if (messageBody.trim()) {
       try {
-        // Отправляем очищенное сообщение на сервер
-        const response = await axios.post(routes.messagesPath(), { body: cleanedMessage }, config);
-        dispatch(addMessage({ id: messageId, body: cleanedMessage, userName }));
+        const response = await axios.post(routes.messagesPath(), { body: messageBody }, config);
+        dispatch(addMessage({ id: messageId, body: messageBody, userName }));
         setMessageBody('');
         setError('');
       } catch (err) {
@@ -61,11 +61,20 @@ const MessagesForm = ({ socket }) => {
     }
   };
 
+  const handleChange = (e) => {
+    const inputMessage = e.target.value;
+    setMessageBody(inputMessage);
+  };
+
+  const cleanProfanityMessage = (message) => {
+    return leoProfanity.clean(message); 
+  };
+
   return (
     <Form onSubmit={handleSendMessage}>
       <div id="messages-box" className="chat-messages overflow-auto px-5">
         {messages.map((msg) => (
-          <Message key={msg.id} userName={msg.userName} message={msg.body}/> 
+          <Message key={msg.id} userName={msg.userName} message={cleanProfanityMessage(msg.body)} /> 
         ))}
       </div>
 
@@ -76,8 +85,8 @@ const MessagesForm = ({ socket }) => {
           aria-label={t('channnelsForm.newMessage')}
           className="border-0 p-0 ps-2 form-control"
           placeholder={t('channnelsForm.enterMessage')}
-          value={messageBody}
-          onChange={(e) => setMessageBody(e.target.value)}
+          value={messageBody} 
+          onChange={handleChange}
         />
         <SendMessageButton />
       </Form.Group>
