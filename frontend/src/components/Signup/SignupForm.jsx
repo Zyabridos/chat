@@ -3,10 +3,10 @@ import { useFormik } from "formik";
 import { Form } from 'react-bootstrap';
 import { AuthContext } from '../../contexts/index.jsx'
 import { FieldError, FormSuccess } from '../Login/styles.jsx';
-import { SignupButton } from '../Buttons.jsx';
+import { SignupButton } from '../Buttons/Buttons.jsx';
 import { SugnupPicture } from '../Attachments.jsx';
 import { PasswordLabel, UsernameLabel, ConfirmPasswordLabel } from './Labels.jsx';
-import Navbar from '../Navbar.jsx';
+import Navbar from '..//Navbar/Navbar.jsx';
 import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';

@@ -1,5 +1,5 @@
 import Channels from '../Channels/Channels.jsx';
-import Navbar from "../Navbar.jsx";
+import Navbar from '..//Navbar/Navbar.jsx';
 import MainWindow from './MainWindow/MainWindow.jsx';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';

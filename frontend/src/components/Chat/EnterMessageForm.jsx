@@ -5,7 +5,7 @@ import { addMessage } from '../../slices/messagesSlice.js';
 import axios from 'axios'; 
 import routes from '../../routes.js'; 
 import Message from './Message.jsx'; 
-import { SendMessageButton } from '../Buttons.jsx';
+import { SendMessageButton } from '../Buttons/Buttons.jsx';
 import { handleLoginErrors } from '../../utils.js';
 import { useTranslation } from 'react-i18next';
 import { uniqueId } from 'lodash';

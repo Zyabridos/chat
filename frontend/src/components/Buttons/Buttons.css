@@ -1,0 +1,26 @@
+.d-flex {
+  display: flex;
+  gap: 10px; 
+  align-items: center;
+}
+
+.btn-anthracite {
+  background-color: #f8f9fa;
+  color: #000;
+  border: 1px solid #ccc;
+  padding: 24px 48px;
+  font-size: 2.4rem;
+  height: 100px;
+  transition: background-color 0.3s, border-color 0.3s, color 0.3s;  /* Плавные переходы */
+}
+
+.btn-anthracite.active {
+  background-color: #f1f3f5;
+  border-color: #bbb;
+}
+
+.btn-anthracite:hover {
+  background-color: #e9ecef;
+  border-color: #ccc;
+  color: #ffffff; 
+}
