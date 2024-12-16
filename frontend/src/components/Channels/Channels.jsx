@@ -11,18 +11,19 @@ import routes from '../../routes';
 import { Dropdown } from 'react-bootstrap';
 import leoProfanity from "leo-profanity";
 import forbiddenWords from '../../dictionary/index.js';
+import './Channels.css'
 
 const Channels = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  const channels = useSelector((state) => state.channelsInfo.channels); // Получаем список каналов из Redux
-  const activeChannel = useSelector((state) => state.channelsInfo.activeChannel); // Получаем активный канал из Redux
+  const channels = useSelector((state) => state.channelsInfo.channels);
+  const activeChannel = useSelector((state) => state.channelsInfo.activeChannel);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [profanityError, setProfanityError] = useState(''); // Ошибка с запрещенными словами
-  const [emptyChannelNameError, setEmptyChannelNameError] = useState(''); // Ошибка с пустым названием канала
+  const [profanityError, setProfanityError] = useState('');
+  const [emptyChannelNameError, setEmptyChannelNameError] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newChannelName, setNewChannelName] = useState('');
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -38,7 +39,6 @@ const Channels = () => {
       return;
     }
 
-    // Запрос для получения каналов
     const fetchChannels = async () => {
       try {
         const response = await axios.get(routes.channelsPath(), {
@@ -48,7 +48,7 @@ const Channels = () => {
         });
 
         if (response.data) {
-          dispatch(setChannels(response.data)); // Отправляем каналы в Redux
+          dispatch(setChannels(response.data)); 
         } else {
           throw new Error('Невозможно загрузить каналы. Ответ не содержит данных.');
         }
@@ -68,20 +68,19 @@ const Channels = () => {
     forbiddenWords.forEach(word => leoProfanity.add(word));
   }, []);
 
-
   const handleChannelClick = (channel) => {
-    dispatch(setActiveChannel(channel.id));  // Обновляем activeChannel в Redux
+    dispatch(setActiveChannel(channel.id));
   };
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
-    setProfanityError(''); // сбрасываем ошибку перед открытием модала
-    setEmptyChannelNameError(''); // сбрасываем ошибку пустого имени канала
+    setProfanityError('');
+    setEmptyChannelNameError('');
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    setNewChannelName(''); 
+    setNewChannelName('');
   };
 
   const handleOpenEditModal = (channel) => {
@@ -98,7 +97,7 @@ const Channels = () => {
 
   const handleChangeNewChannelName = (e) => {
     setNewChannelName(e.target.value);
-    setEmptyChannelNameError(''); // Сбрасываем ошибку при изменении имени
+    setEmptyChannelNameError('');
   };
 
   const handleAddChannel = async (e) => {
@@ -124,14 +123,14 @@ const Channels = () => {
       );
 
       if (response.data) {
-        dispatch(setChannels([...channels, response.data])); // Добавляем новый канал в Redux
+        dispatch(setChannels([...channels, response.data])); 
         handleCloseModal();
       } else {
         throw new Error('Ошибка при создании канала. Ответ не содержит данных.');
       }
     } catch (err) {
       console.error('Ошибка при добавлении канала:', err); 
-      setError(err.response ? err.response.data.message : t('error.addChannelFailed')); 
+      setError(err.response ? err.response.data.message : t('error.addChannelFailed'));
     }
   };
 
@@ -152,7 +151,7 @@ const Channels = () => {
       });
 
       if (response.status === 200) {
-        dispatch(setChannels(channels.filter((channel) => channel.id !== channelId))); // Удаляем из глобального состояния
+        dispatch(setChannels(channels.filter((channel) => channel.id !== channelId))); 
         setError(null);
       } else {
         throw new Error('Ошибка при удалении канала');
@@ -210,7 +209,7 @@ const Channels = () => {
           <Dropdown.Toggle
             variant="link"
             id={`dropdown-${channel.id}`}
-            className="flex-grow-0 dropdown-toggle-split btn btn-secondary"
+            className="btn btn-anthracite"
           >
             <span className="visually-hidden">{t('Управление каналом')}</span>
           </Dropdown.Toggle>
@@ -242,31 +241,32 @@ const Channels = () => {
         </button>
       </Container>
 
-      {/* Индикатор загрузки или ошибки */}
       {renderLoadingOrError()}
 
-      {/* Список каналов */}
       <ListGroup as="ul" className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block">
         {channels.map((channel) => (
           <ListGroup.Item as="li" className="nav-item w-100" key={channel.id}>
-            <button
-              type="button"
-              className={c('w-100 rounded-0 text-start btn', {
-                'btn-secondary': activeChannel === channel.id,
-                'btn-light': activeChannel !== channel.id, 
-              })}
-              onClick={() => handleChannelClick(channel)}
-            >
-              <span className="me-1">#</span>
-              {channel.name}
-            </button>
+            <div className="d-flex justify-content-between align-items-center w-100">
+              <button
+                type="button"
+                className={c('w-100 rounded-0 text-start btn', {
+                  'btn-secondary': activeChannel === channel.id,
+                  'btn-light': activeChannel !== channel.id, 
+                })}
+                onClick={() => handleChannelClick(channel)}
+              >
+                <span className="me-1">#</span>
+                {channel.name}
+              </button>
 
-            {/* Если канал может быть удален, показываем кнопку "Управление каналом" */}
-            {renderManagementButton(channel)}
+              {/* Кнопка управления каналом справа */}
+              {renderManagementButton(channel)}
+            </div>
           </ListGroup.Item>
         ))}
       </ListGroup>
 
+      {/* Модальные окна */}
       {/* Модальное окно для добавления нового канала */}
       {isModalOpen && (
         <div className="modal show" style={{ display: 'block' }}>
@@ -288,8 +288,8 @@ const Channels = () => {
                       onChange={handleChangeNewChannelName}
                     />
                   </div>
-                  {emptyChannelNameError && <div className="text-danger">{emptyChannelNameError}</div>} {/* Выводим ошибку пустого названия */}
-                  {profanityError && <div className="text-danger">{profanityError}</div>} {/* Выводим ошибку в случае запрещенного слова */}
+                  {emptyChannelNameError && <div className="text-danger">{emptyChannelNameError}</div>} 
+                  {profanityError && <div className="text-danger">{profanityError}</div>} 
                   <div className="d-flex justify-content-end">
                     <button type="button" className="me-2 btn btn-secondary" onClick={handleCloseModal}>
                       {t('channels.cancel')}
