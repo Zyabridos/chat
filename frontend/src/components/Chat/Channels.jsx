@@ -4,8 +4,8 @@ import Container from 'react-bootstrap/Container';
 import ListGroup from 'react-bootstrap/ListGroup';
 import c from 'classnames';
 import axios from 'axios';
-import { useDispatch } from 'react-redux'; 
-import { setChannels } from '../../slices/channelsSlice';
+import { useDispatch, useSelector } from 'react-redux'; 
+import { setChannels, setActiveChannel } from '../../slices/channelsSlice';
 import { useTranslation } from 'react-i18next';
 import routes from '../../routes';
 import { Dropdown } from 'react-bootstrap';
@@ -14,9 +14,10 @@ const Channels = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  const [channels, setChannelsState] = useState([]);
+  const channels = useSelector((state) => state.channelsInfo.channels); // Получаем список каналов из Redux
+  const activeChannel = useSelector((state) => state.channelsInfo.activeChannel); // Получаем активный канал из Redux
+
   const [loading, setLoading] = useState(true);
-  const [activeChannel, setActiveChannel] = useState(1);  // "general" активный по умолчанию
   const [error, setError] = useState(null);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -43,11 +44,10 @@ const Channels = () => {
           },
         });
 
-        console.log('Ответ от сервера:', response);
+        // console.log('Ответ от сервера:', response);
 
         if (response.data) {
-          setChannelsState(response.data);  
-          dispatch(setChannels(response.data));  
+          dispatch(setChannels(response.data)); // Отправляем каналы в Redux
         } else {
           throw new Error('Невозможно загрузить каналы. Ответ не содержит данных.');
         }
@@ -62,30 +62,26 @@ const Channels = () => {
     fetchChannels();
   }, [dispatch, t]);
 
-  // Обработчик клика на канал
+
   const handleChannelClick = (channel) => {
-    setActiveChannel(channel.key);
+    dispatch(setActiveChannel(channel.id));  // Обновляем activeChannel в Redux
   };
 
-  // Обработчик открытия модального окна для создания нового канала
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
 
-  // Обработчик закрытия модального окна для создания нового канала
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setNewChannelName(''); 
   };
 
-  // Обработчик открытия модального окна для редактирования канала
   const handleOpenEditModal = (channel) => {
     setEditingChannel(channel);
     setNewChannelName(channel.name);
     setIsEditModalOpen(true);
   };
 
-  // Обработчик закрытия модального окна для редактирования канала
   const handleCloseEditModal = () => {
     setIsEditModalOpen(false);
     setEditingChannel(null);
@@ -113,14 +109,10 @@ const Channels = () => {
         { headers: { 'Authorization': `Bearer ${token}` } }
       );
 
-      console.log('Ответ от сервера после добавления канала:', response);
+      // console.log('Ответ от сервера после добавления канала:', response);
 
       if (response.data) {
-        setChannelsState((prevChannels) => [
-          ...prevChannels,
-          response.data,
-        ]);
-        dispatch(setChannels([...channels, response.data])); 
+        dispatch(setChannels([...channels, response.data])); // Добавляем новый канал в Redux
         handleCloseModal();
       } else {
         throw new Error('Ошибка при создании канала. Ответ не содержит данных.');
@@ -148,7 +140,6 @@ const Channels = () => {
       });
 
       if (response.status === 200) {
-        setChannelsState((prevChannels) => prevChannels.filter((channel) => channel.id !== channelId));
         dispatch(setChannels(channels.filter((channel) => channel.id !== channelId))); // Удаляем из глобального состояния
         setError(null);
       } else {
@@ -180,14 +171,11 @@ const Channels = () => {
       console.log('Ответ от сервера после редактирования канала:', response);
 
       if (response.data) {
-        setChannelsState((prevChannels) => 
-          prevChannels.map((channel) =>
+        dispatch(setChannels(
+          channels.map((channel) =>
             channel.id === editingChannel.id ? { ...channel, name: newChannelName } : channel
           )
-        );
-        dispatch(setChannels(channels.map((channel) =>
-          channel.id === editingChannel.id ? { ...channel, name: newChannelName } : channel
-        )));
+        ));
         setError(null);
         handleCloseEditModal();
       } else {
@@ -254,8 +242,8 @@ const Channels = () => {
             <button
               type="button"
               className={c('w-100 rounded-0 text-start btn', {
-                'btn-secondary': activeChannel === channel.key, 
-                'btn-light': activeChannel !== channel.key, 
+                'btn-secondary': activeChannel === channel.id, // Убедитесь, что сравнивается id
+                'btn-light': activeChannel !== channel.id, 
               })}
               onClick={() => handleChannelClick(channel)}
             >

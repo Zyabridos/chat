@@ -83,11 +83,12 @@
   },
   "channnelsForm": {
     "newMessage": "Новое сообщение",
-    "enterMessage": "Введите сообщение..."
+    "enterMessage": "Введите сообщение...",
+    "noMessages": "На этом канале пока нет сообщений"
   },
-  "channelsHeader": {
-    "channelName": "# Здесь название канала",
-    "messageCount": "Здесь {{count}} {{count, plural, =0 {сообщений} =1 {сообщение} =2 {сообщения} =3 {сообщения} =4 {сообщения} other {сообщений}}}"
+ "channelsHeader": {
+    "channelName": "# {{channelName}}", 
+    "messageCount": "Здесь {{count}} {{count, plural, =0 {нет сообщений} =1 {сообщение} =2 {сообщения} =3 {сообщения} =4 {сообщения} other {сообщений}}}"
   },
   "navbar": {
     "chatname": "Hexlet Chat",

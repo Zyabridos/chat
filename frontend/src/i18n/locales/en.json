@@ -83,7 +83,8 @@
   },
   "channnelsForm": {
     "newMessage": "New message",
-    "enterMessage": "Enter your message..."
+    "enterMessage": "Enter your message...",
+    "noMessages": "There are no messages on this channel yet"
   },
   "channelsHeader": {
     "channelName": "# Channel name here",

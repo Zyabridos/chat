@@ -9,7 +9,7 @@ const Header = ({ amountOfMessages, channelName }) => {
         <b>{channelName}</b> 
       </p>
       <span className="text-muted">
-        {t('channelsHeader.messageCount', { count: amountOfMessages })} {/* Динамический подсчет */}
+        {t('channelsHeader.messageCount', { count: amountOfMessages })}
       </span>
     </div>
   );

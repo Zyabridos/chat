@@ -11,10 +11,14 @@ import { useTranslation } from 'react-i18next';
 import { uniqueId } from 'lodash';
 import leoProfanity from "leo-profanity";
 import forbiddenWords from '../../dictionary/index.js';
+import { setActiveChannel } from '../../slices/channelsSlice.js';
 
 const MessagesForm = ({ socket }) => {
   const dispatch = useDispatch();
   const messages = useSelector((state) => state.messagesInfo.messages);
+  const activeChannel = useSelector((state) => state.channelsInfo.activeChannel); 
+  const channels = useSelector((state) => state.channelsInfo.channels);  // Получаем каналы
+  console.log(activeChannel);
 
   const [messageBody, setMessageBody] = useState('');
   const [error, setError] = useState('');
@@ -25,6 +29,16 @@ const MessagesForm = ({ socket }) => {
     leoProfanity.loadDictionary('ru');
     forbiddenWords.forEach(word => leoProfanity.add(word));
   }, []);
+
+  // Устанавливаем активный канал по умолчанию, если он еще не установлен
+  useEffect(() => {
+    if (activeChannel === null && channels.length > 0) {
+      const defaultChannel = channels.find(channel => channel.name === 'general');
+      if (defaultChannel) {
+        dispatch(setActiveChannel(defaultChannel.id));  // Устанавливаем канал по умолчанию
+      }
+    }
+  }, [channels, activeChannel, dispatch]);
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
@@ -39,6 +53,11 @@ const MessagesForm = ({ socket }) => {
       return;
     }
 
+    if (!activeChannel) {
+      setError(t('channelsFormErrors.noActiveChannel'));
+      return;
+    }
+
     const config = {
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -47,12 +66,16 @@ const MessagesForm = ({ socket }) => {
 
     if (messageBody.trim()) {
       try {
-        const response = await axios.post(routes.messagesPath(), { body: messageBody }, config);
-        dispatch(addMessage({ id: messageId, body: messageBody, userName }));
+        const response = await axios.post(routes.messagesPath(), { 
+          body: messageBody,
+          channelId: activeChannel.id,  // Указываем активный канал
+        }, config);
+        dispatch(addMessage({ id: messageId, body: messageBody, userName, channelId: activeChannel.id }));
+        console.log(response);
         setMessageBody('');
         setError('');
       } catch (err) {
-        const errorMessage = handleLoginErrors(err);
+        const errorMessage = handleLoginErrors(err, t);
         setError(errorMessage);
         console.error('Error during message sending:', err);
       }
@@ -70,12 +93,20 @@ const MessagesForm = ({ socket }) => {
     return leoProfanity.clean(message); 
   };
 
+  // Фильтрация сообщений по активному каналу
+  const filteredMessages = messages.filter((msg) => msg.channelId === activeChannel?.id);
+
   return (
     <Form onSubmit={handleSendMessage}>
       <div id="messages-box" className="chat-messages overflow-auto px-5">
-        {messages.map((msg) => (
-          <Message key={msg.id} userName={msg.userName} message={cleanProfanityMessage(msg.body)} /> 
-        ))}
+        {/* Отображаем только сообщения для активного канала */}
+        {filteredMessages.length > 0 ? (
+          filteredMessages.map((msg) => (
+            <Message key={msg.id} userName={msg.userName} message={cleanProfanityMessage(msg.body)} />
+          ))
+        ) : (
+          <div>{t('channnelsForm.noMessages')}</div>  // Сообщение о том, что нет сообщений
+        )}
       </div>
 
       <Form.Group className="input-group">
