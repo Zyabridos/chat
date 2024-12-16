@@ -10,14 +10,16 @@ import { handleLoginErrors } from '../../utils.js';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { uniqueId } from 'lodash';
+import leoProfanity from "leo-profanity";
 
 const MessagesForm = ({ socket }) => {
   const dispatch = useDispatch();
   const messages = useSelector((state) => state.messagesInfo.messages);
-  // console.log(messages)
-
+  
   const [messageBody, setMessageBody] = useState('');
   const [error, setError] = useState('');
+
+  leoProfanity.loadDictionary("ru");
 
   const { t } = useTranslation(); 
 
@@ -26,7 +28,7 @@ const MessagesForm = ({ socket }) => {
 
     const user = JSON.parse(localStorage.getItem('user'));
     const token = user?.token;
-    const userName = user?.username
+    const userName = user?.username;
     const messageId = uniqueId();
 
     if (!token) {
@@ -40,10 +42,13 @@ const MessagesForm = ({ socket }) => {
       },
     };
 
-    if (messageBody.trim()) {
+    const cleanedMessage = leoProfanity.clean(messageBody); 
+
+    if (cleanedMessage.trim()) {
       try {
-        const response = await axios.post(routes.messagesPath(), { body: messageBody }, config);
-        dispatch(addMessage({ id: messageId, body: messageBody, userName }));
+        // Отправляем очищенное сообщение на сервер
+        const response = await axios.post(routes.messagesPath(), { body: cleanedMessage }, config);
+        dispatch(addMessage({ id: messageId, body: cleanedMessage, userName }));
         setMessageBody('');
         setError('');
       } catch (err) {
@@ -76,6 +81,7 @@ const MessagesForm = ({ socket }) => {
         />
         <SendMessageButton />
       </Form.Group>
+
       {error && <div className="text-danger">{error}</div>} {/* Контейнер для ошибок */}
     </Form>
   );
