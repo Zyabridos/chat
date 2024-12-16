@@ -28,7 +28,7 @@
     "wrongEmailOrPassword": "Incorrect username or password",
     "errors": {
       "alreadyExists": "User with this username already exists",
-      "unknown": "Error during sign up has occured."
+      "unknown": "Error during sign up has occured"
     }
   },
   "validationErrors": {
@@ -45,10 +45,17 @@
   },
   "channels": {
     "title": "Channels",
-    "addChannel": "Add Channel",
     "enterChannelName": "Enter channel name",
+    "addNewChannel": "Add new channel",
     "cancel": "Cancel",
-    "add": "Add"
+    "add": "Add",
+    "modal": {
+      "delete": "Delete",
+      "rename": "Rename",
+      "renameChannel": "Rename channel",
+      "typeNewChannelName": "Enter new channel name",
+      "typeChannelName": "Enter name for new channel"
+    }
   },
   "loading": {
     "loadingChannels": "Loading channels..."

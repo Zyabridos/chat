@@ -5,9 +5,10 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import c from 'classnames';
 import axios from 'axios';
 import { useDispatch } from 'react-redux'; 
-import { setChannels } from '../../slices/channelsSlice'; // Замените на правильный путь к вашему Redux слайсу
+import { setChannels } from '../../slices/channelsSlice';
 import { useTranslation } from 'react-i18next';
 import routes from '../../routes';
+import { Dropdown } from 'react-bootstrap';
 
 const Channels = () => {
   const { t } = useTranslation();
@@ -18,9 +19,10 @@ const Channels = () => {
   const [activeChannel, setActiveChannel] = useState(1);  // "general" активный по умолчанию
   const [error, setError] = useState(null);
 
-  
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newChannelName, setNewChannelName] = useState('');
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editingChannel, setEditingChannel] = useState(null);
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'));
@@ -65,15 +67,29 @@ const Channels = () => {
     setActiveChannel(channel.key);
   };
 
-  // Обработчик открытия модального окна
+  // Обработчик открытия модального окна для создания нового канала
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
 
-  // Обработчик закрытия модального окна
+  // Обработчик закрытия модального окна для создания нового канала
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setNewChannelName(''); 
+  };
+
+  // Обработчик открытия модального окна для редактирования канала
+  const handleOpenEditModal = (channel) => {
+    setEditingChannel(channel);
+    setNewChannelName(channel.name);
+    setIsEditModalOpen(true);
+  };
+
+  // Обработчик закрытия модального окна для редактирования канала
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false);
+    setEditingChannel(null);
+    setNewChannelName('');
   };
 
   const handleChangeNewChannelName = (e) => {
@@ -115,10 +131,102 @@ const Channels = () => {
     }
   };
 
-  // Рендер индикатора загрузки или ошибки
+  const handleDeleteChannel = async (channelId) => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    const token = user?.token;
+
+    if (!token) {
+      setError(t('error.tokenNotFound'));
+      return;
+    }
+
+    try {
+      const response = await axios.delete(`${routes.channelsPath()}/${channelId}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (response.status === 200) {
+        setChannelsState((prevChannels) => prevChannels.filter((channel) => channel.id !== channelId));
+        dispatch(setChannels(channels.filter((channel) => channel.id !== channelId))); // Удаляем из глобального состояния
+        setError(null);
+      } else {
+        throw new Error('Ошибка при удалении канала');
+      }
+    } catch (err) {
+      console.error('Ошибка при удалении канала:', err);
+      setError(err.response ? err.response.data.message : t('error.deleteChannelFailed'));
+    }
+  };
+
+  const handleEditChannel = async (e) => {
+    e.preventDefault();
+    const user = JSON.parse(localStorage.getItem('user'));
+    const token = user?.token;
+
+    if (!newChannelName.trim()) {
+      setError(t('error.emptyChannelName'));
+      return;
+    }
+
+    try {
+      const response = await axios.put(
+        `${routes.channelsPath()}/${editingChannel.id}`,
+        { name: newChannelName },
+        { headers: { 'Authorization': `Bearer ${token}` } }
+      );
+
+      console.log('Ответ от сервера после редактирования канала:', response);
+
+      if (response.data) {
+        setChannelsState((prevChannels) => 
+          prevChannels.map((channel) =>
+            channel.id === editingChannel.id ? { ...channel, name: newChannelName } : channel
+          )
+        );
+        dispatch(setChannels(channels.map((channel) =>
+          channel.id === editingChannel.id ? { ...channel, name: newChannelName } : channel
+        )));
+        setError(null);
+        handleCloseEditModal();
+      } else {
+        throw new Error('Ошибка при редактировании канала');
+      }
+    } catch (err) {
+      console.error('Ошибка при редактировании канала:', err);
+      setError(err.response ? err.response.data.message : t('error.editChannelFailed'));
+    }
+  };
+
   const renderLoadingOrError = () => {
     if (loading) return <div>{t('loading.loadingChannels')}</div>;
     if (error) return <div>{error}</div>;
+    return null;
+  };
+
+  const renderManagementButton = (channel) => {
+    if (channel.removable) {
+      return (
+        <Dropdown align="end">
+          <Dropdown.Toggle
+            variant="link"
+            id={`dropdown-${channel.id}`}
+            className="flex-grow-0 dropdown-toggle-split btn btn-secondary"
+          >
+            <span className="visually-hidden">{t('Управление каналом')}</span>
+          </Dropdown.Toggle>
+          <Dropdown.Menu>
+            <Dropdown.Item as="button" onClick={() => handleDeleteChannel(channel.id)}>
+              {t('channels.modal.delete')}
+            </Dropdown.Item>
+            <Dropdown.Item as="button" onClick={() => handleOpenEditModal(channel)}>
+              {t('channels.modal.rename')}
+            </Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
+      );
+    }
     return null;
   };
 
@@ -154,6 +262,9 @@ const Channels = () => {
               <span className="me-1">#</span>
               {channel.name}
             </button>
+
+            {/* Если канал может быть удален, показываем кнопку "Управление каналом" */}
+            {renderManagementButton(channel)}
           </ListGroup.Item>
         ))}
       </ListGroup>
@@ -170,7 +281,7 @@ const Channels = () => {
               <div className="modal-body">
                 <form onSubmit={handleAddChannel}>
                   <div className="mb-3">
-                    <label htmlFor="channelName" className="form-label">{t('channels.channelName')}</label>
+                    <label htmlFor="channelName" className="form-label">{t('channels.modal.typeChannelName')}</label>
                     <input
                       type="text"
                       id="channelName"
@@ -184,6 +295,40 @@ const Channels = () => {
                       {t('channels.cancel')}
                     </button>
                     <button type="submit" className="btn btn-primary">{t('channels.add')}</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Модальное окно для редактирования канала */}
+      {isEditModalOpen && (
+        <div className="modal show" style={{ display: 'block' }}>
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">{t('channels.modal.renameChannel')}</h5>
+                <button type="button" className="btn-close" onClick={handleCloseEditModal}></button>
+              </div>
+              <div className="modal-body">
+                <form onSubmit={handleEditChannel}>
+                  <div className="mb-3">
+                    <label htmlFor="channelName" className="form-label">{t('channels.modal.typeNewChannelName')}</label>
+                    <input
+                      type="text"
+                      id="channelName"
+                      className="form-control"
+                      value={newChannelName}
+                      onChange={handleChangeNewChannelName}
+                    />
+                  </div>
+                  <div className="d-flex justify-content-end">
+                    <button type="button" className="me-2 btn btn-secondary" onClick={handleCloseEditModal}>
+                      {t('channels.cancel')}
+                    </button>
+                    <button type="submit" className="btn btn-primary">{t('channels.modal.rename')}</button>
                   </div>
                 </form>
               </div>

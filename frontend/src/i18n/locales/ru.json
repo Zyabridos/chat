@@ -55,10 +55,17 @@
   },
   "channels": {
     "title": "Каналы",
-    "addChannel": "Добавить канал",
     "enterChannelName": "Введите название канала",
+    "addNewChannel": "Добавить канал",
     "cancel": "Отменить",
-    "add": "Добавить"
+    "add": "Добавить",
+    "modal": {
+      "delete": "Удалить",
+      "rename": "Переименовать",
+      "typeChannelName": "Введите название нового канала",
+      "typeNewChannelName": "Отредактируйте название канала",
+      "renameChannel": "Переименуйте канал"
+    }
   },
   "loading": {
     "loadingChannels": "Загрузка каналов..."
