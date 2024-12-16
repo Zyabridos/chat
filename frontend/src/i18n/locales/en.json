@@ -83,7 +83,7 @@
     "profanityDetected": "The channel name contains inappropriate words. Please choose a valid name.",
     "emptyChannelName": "Channel name can not be empty"
   },
-  "channnelsForm": {
+  "channelsForm": {
     "newMessage": "New message",
     "enterMessage": "Enter your message...",
     "noMessages": "There are no messages on this channel yet"

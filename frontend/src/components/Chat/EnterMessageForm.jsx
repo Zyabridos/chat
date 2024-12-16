@@ -1,34 +1,57 @@
 import React, { useState, useEffect } from 'react';
 import { Form } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux'; 
-import { addMessage } from '../../slices/messagesSlice.js'; 
+import { addMessage, setMessages } from '../../slices/messagesSlice.js'; 
 import axios from 'axios'; 
 import routes from '../../routes.js'; 
 import Message from './Message.jsx'; 
 import { SendMessageButton } from '../Buttons/Buttons.jsx';
 import { handleLoginErrors } from '../../utils.js';
 import { useTranslation } from 'react-i18next';
-import { uniqueId } from 'lodash';
 import leoProfanity from "leo-profanity";
 import forbiddenWords from '../../dictionary/index.js';
 import { setActiveChannel } from '../../slices/channelsSlice.js';
 
-const MessagesForm = ({ socket }) => {
+const MessagesForm = () => {
   const dispatch = useDispatch();
-  const messages = useSelector((state) => state.messagesInfo.messages);
+  const messages = useSelector((state) => state.messagesInfo.messages); // Сообщения из Redux
   const activeChannel = useSelector((state) => state.channelsInfo.activeChannel); 
   const channels = useSelector((state) => state.channelsInfo.channels); 
-  console.log(activeChannel);
 
   const [messageBody, setMessageBody] = useState('');
   const [error, setError] = useState('');
-
   const { t } = useTranslation();
 
   useEffect(() => {
     leoProfanity.loadDictionary('ru');
     forbiddenWords.forEach(word => leoProfanity.add(word));
-  }, []);
+
+    // Загружаем сообщения при монтировании компонента
+    if (activeChannel) {
+      loadMessages();
+    }
+  }, [activeChannel, channels]);
+
+  const loadMessages = async () => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    const token = user?.token;
+
+    if (!token || !activeChannel) return;
+
+    try {
+      const response = await axios.get(`${routes.messagesPath()}?channelId=${activeChannel.id}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      if (response.data) {
+        // Добавляем сообщения в Redux
+        dispatch(setMessages(response.data));
+      }
+    } catch (err) {
+      console.error('Error fetching messages:', err);
+    }
+  };
 
   useEffect(() => {
     if (activeChannel === null && channels.length > 0) {
@@ -45,7 +68,6 @@ const MessagesForm = ({ socket }) => {
     const user = JSON.parse(localStorage.getItem('user'));
     const token = user?.token;
     const userName = user?.username;
-    const messageId = uniqueId();
 
     if (!token) {
       setError(t('channelsFormErrors.tokenNotFound'));
@@ -69,8 +91,15 @@ const MessagesForm = ({ socket }) => {
           body: messageBody,
           channelId: activeChannel.id,
         }, config);
-        dispatch(addMessage({ id: messageId, body: messageBody, userName, channelId: activeChannel.id }));
-        console.log(response);
+
+        // Добавляем новое сообщение в Redux
+        dispatch(addMessage({
+          id: response.data.id,
+          body: messageBody,
+          userName,
+          channelId: activeChannel.id
+        }));
+
         setMessageBody('');
         setError('');
       } catch (err) {
@@ -104,7 +133,7 @@ const MessagesForm = ({ socket }) => {
             <Message key={msg.id} userName={msg.userName} message={cleanProfanityMessage(msg.body)} />
           ))
         ) : (
-          <div>{t('channnelsForm.noMessages')}</div>
+          <div>{t('channelsForm.noMessages')}</div>
         )}
       </div>
 
@@ -112,9 +141,9 @@ const MessagesForm = ({ socket }) => {
         <Form.Control
           name="body"
           type="text"
-          aria-label={t('channnelsForm.newMessage')}
+          aria-label={t('channelsForm.newMessage')}
           className="border-0 p-0 ps-2 form-control"
-          placeholder={t('channnelsForm.enterMessage')}
+          placeholder={t('channelsForm.enterMessage')}
           value={messageBody} 
           onChange={handleChange}
         />
