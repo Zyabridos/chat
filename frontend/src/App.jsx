@@ -12,10 +12,17 @@ import store from './store.js'
 import AuthProvider from './contexts/index.jsx';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Provider as RollbarProvider, ErrorBoundary } from '@rollbar/react';
+
+const rollbarConfig = {
+  accessToken: 'f19ffe4d0c4a47388313dcb697c85332',
+  environment: 'testenv',
+};
 
 export default function App() {
-  // console.log(store)
   return (
+    <RollbarProvider config={rollbarConfig}>
+      <ErrorBoundary>
     <BrowserRouter>
     <Provider store={store}>
     <AuthProvider>
@@ -39,6 +46,8 @@ export default function App() {
      </AuthProvider>
      </Provider>
      </BrowserRouter>
+     </ErrorBoundary>
+     </RollbarProvider>
   );
 }
 

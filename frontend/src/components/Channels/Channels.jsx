@@ -12,6 +12,7 @@ import { Dropdown } from 'react-bootstrap';
 import leoProfanity from "leo-profanity";
 import forbiddenWords from '../../dictionary/index.js';
 import './Channels.css'
+import { toast } from 'react-toastify';
 
 const Channels = () => {
   const { t } = useTranslation();
@@ -125,6 +126,7 @@ const Channels = () => {
       if (response.data) {
         dispatch(setChannels([...channels, response.data])); 
         handleCloseModal();
+        toast.success(t('toast.channelCreated'))
       } else {
         throw new Error('Ошибка при создании канала. Ответ не содержит данных.');
       }
@@ -152,6 +154,7 @@ const Channels = () => {
 
       if (response.status === 200) {
         dispatch(setChannels(channels.filter((channel) => channel.id !== channelId))); 
+        toast.success(t('toast.channelDeleted'))
         setError(null);
       } else {
         throw new Error('Ошибка при удалении канала');
@@ -186,6 +189,7 @@ const Channels = () => {
           )
         ));
         setError(null);
+        toast.success(t('toast.channelRenamed'))
         handleCloseEditModal();
       } else {
         throw new Error('Ошибка при редактировании канала');
@@ -243,28 +247,29 @@ const Channels = () => {
 
       {renderLoadingOrError()}
 
-      <ListGroup as="ul" className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block">
-        {channels.map((channel) => (
-          <ListGroup.Item as="li" className="nav-item w-100" key={channel.id}>
-            <div className="d-flex justify-content-between align-items-center w-100">
-              <button
-                type="button"
-                className={c('w-100 rounded-0 text-start btn', {
-                  'btn-secondary': activeChannel === channel.id,
-                  'btn-light': activeChannel !== channel.id, 
-                })}
-                onClick={() => handleChannelClick(channel)}
-              >
-                <span className="me-1">#</span>
-                {channel.name}
-              </button>
+      <ListGroup as="ul" className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block position-relative">
+  {channels.map((channel) => (
+    <ListGroup.Item as="li" className="nav-item w-100" key={channel.id}>
+      <div className="d-flex justify-content-between align-items-center w-100">
+        <button
+          type="button"
+          className={c('w-100 rounded-0 text-start btn', {
+            'btn-secondary': activeChannel === channel.id,
+            'btn-light': activeChannel !== channel.id, 
+          })}
+          onClick={() => handleChannelClick(channel)}
+        >
+          <span className="me-1">#</span>
+          {channel.name}
+        </button>
 
-              {/* Кнопка управления каналом справа */}
-              {renderManagementButton(channel)}
-            </div>
-          </ListGroup.Item>
-        ))}
-      </ListGroup>
+        {/* Кнопка управления каналом справа */}
+        {renderManagementButton(channel)}
+      </div>
+    </ListGroup.Item>
+  ))}
+</ListGroup>
+
 
       {/* Модальные окна */}
       {/* Модальное окно для добавления нового канала */}

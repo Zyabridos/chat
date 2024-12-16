@@ -95,5 +95,10 @@
   "navbar": {
     "chatname": "Hexlet Chat",
     "exit": "Exit"
+  },
+  "toast": {
+    "channelCreated": "Channel was successfully created",
+    "channelRenamed": "Channel was successfully renamed",
+    "channelDeleted": "Channel was successfully deleted"
   }
 }

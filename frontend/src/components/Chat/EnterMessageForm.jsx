@@ -90,6 +90,7 @@ const MessagesForm = () => {
         const response = await axios.post(routes.messagesPath(), { 
           body: messageBody,
           channelId: activeChannel.id,
+          userName,
         }, config);
 
         // Добавляем новое сообщение в Redux
