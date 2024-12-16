@@ -36,7 +36,10 @@
     "min6": "Minimum 6 characters",
     "max20": "Maximum 20 characters",
     "required": "Required field",
-    "mismatchPasswords": "Passwords must match"
+    "mismatchPasswords": "Passwords must match",
+    "passwordSymbol": "Password must contain at least one special character",
+    "passwordUppercase": "Password must contain at least one uppercase letter",
+    "passwordLowercase": "Password must contain at least one lowercase letter"
   },
   "notFound": {
     "title": "Page Not Found",

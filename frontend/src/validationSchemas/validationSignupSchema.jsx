@@ -1,26 +1,28 @@
 import * as yup from 'yup';
-import { useTranslation } from 'react-i18next';
 
-// здесь будет надежный пароль, но пока сделаем без него для удобства тестирования
-const PASSWORD_REGEX = /^a-zA-Z/
+const PASSWORD_MIN_LENGTH = 6;
+const PASSWORD_REGEX_LOWERCASE = /^(?=.*[a-z])/;
+const PASSWORD_REGEX_UPPERCASE = /^(?=.*[A-Z])/;
+const PASSWORD_REGEX_SYMBOL = /^(?=.*[\W_])/;
 
-// так не пойдет - хуки только в компонентах работают
-const { t } = useTranslation()
-
-  const validationSignupSchema = yup.object({
+const validationSignupSchema = (t) => {
+  return yup.object({
     username: yup
       .string()
-      .min(3, t('validationErrors.min3'))
       .max(20, t('validationErrors.max20'))
       .required(t('validationErrors.required')),
     password: yup
       .string()
-      .min(6, t('validationErrors.min6'))
+      .min(PASSWORD_MIN_LENGTH, t('validationErrors.passwordLength'))
+      .test('has-lowercase', t('validationErrors.passwordLowercase'), value => PASSWORD_REGEX_LOWERCASE.test(value)) // Проверка на строчную букву
+      .test('has-uppercase', t('validationErrors.passwordUppercase'), value => PASSWORD_REGEX_UPPERCASE.test(value)) // Проверка на заглавную букву
+      .test('has-symbol', t('validationErrors.passwordSymbol'), value => PASSWORD_REGEX_SYMBOL.test(value)) // Проверка на специальный символ
       .required(t('validationErrors.required')),
-    passwordConfirmation: yup
+    confirmPassword: yup
       .string()
-      .oneOf([yup.ref('password'), null], t('validationErrors.oneOf'))
+      .oneOf([yup.ref('password'), null], t('validationErrors.mismatchPasswords'))
       .required(t('validationErrors.required')),
   });
+};
 
 export default validationSignupSchema;

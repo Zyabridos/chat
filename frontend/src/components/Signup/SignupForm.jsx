@@ -5,13 +5,12 @@ import { AuthContext } from '../../contexts/index.jsx'
 import { FieldError, FormSuccess } from '../Login/styles.jsx';
 import { SignupButton } from '../Buttons/Buttons.jsx';
 import { SugnupPicture } from '../Attachments.jsx';
-import { PasswordLabel, UsernameLabel, ConfirmPasswordLabel } from './Labels.jsx';
 import Navbar from '..//Navbar/Navbar.jsx';
 import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import validationSignupSchema from '../../validationSchemas/validationSignupSchema.jsx'
 
 const SignUpForm = () => {
   const { t } = useTranslation();
@@ -19,22 +18,22 @@ const SignUpForm = () => {
   const navigate = useNavigate();
   const { signUp, serverError } = useContext(AuthContext);
 
-  const validationSignupSchema = yup.object({
-    username: yup
-      .string()
-      // .min(3, t('validationErrors.min3'))
-      .max(20, t('validationErrors.max20'))
-      .required(t('validationErrors.required')),
-    password: yup
-      .string()
-      // .min(6, t('validationErrors.min6'))
-      .required(t('validationErrors.required')),
-    // вот здесь ошибка
-    // passwordConfirmation: yup
-    //   .string()
-    //   .oneOf([yup.ref('password'), null], t('validation.passwordMatch'))
-    //   .required(t('validationErrors.required')),
-  });
+  // const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{6,}$/;
+  // const validationSignupSchema = yup.object({
+  //   username: yup
+  //     .string()
+  //     // .min(3, t('validationErrors.min3'))
+  //     .max(20, t('validationErrors.max20'))
+  //     .required(t('validationErrors.required')),
+  //   password: yup
+  //     .string()
+  //     // .min(6, t('validationErrors.min6'))
+  //     .required(t('validationErrors.required')),
+  //   confirmPassword: yup
+  //     .string()
+  //     .oneOf([yup.ref('password'), null], t('validationErrors.mismatchPasswords'))
+  //     .required(t('validationErrors.required')),
+  // });
 
   const handleSubmit = async (formikValues) => {
     try {
@@ -56,7 +55,7 @@ const SignUpForm = () => {
       confirmPassword: '',
     },
     onSubmit: handleSubmit,
-    validationSchema: validationSignupSchema,
+    validationSchema: validationSignupSchema(t),
   });
 
   return (

@@ -5,11 +5,12 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import React, { useState } from "react";
+import './Chat.css'
 
 const Chat = () => {
   document.body.classList.add('h-100', 'bg-light');
   return (
-    <Container fluid className="h-100 p-0">
+    <Container fluid className="chat-container">
       <Navbar />
       <Row className="h-100 m-0"> {/* height-100, margin-0 чтобы убрать лишние отступы/}
         {/* занимает 2/12 на большом экране и 3/12 на среднем*/}
@@ -26,12 +27,3 @@ const Chat = () => {
 };
 
 export default Chat;
-
-// const Chat = () => {
-//   document.body.classList.add('h-100', 'bg-light');
-//   return (
-//     <Channels />
-//   );
-// };
-
-// export default Chat;

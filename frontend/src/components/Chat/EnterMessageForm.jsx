@@ -127,7 +127,7 @@ const MessagesForm = () => {
 
   return (
     <Form onSubmit={handleSendMessage}>
-      <div id="messages-box" className="chat-messages overflow-auto px-5">
+      <div id="messages-box" className="chat-messages overflow-auto px-5 flex-grow-1">
         {/* Отображаем только сообщения для активного канала */}
         {filteredMessages.length > 0 ? (
           filteredMessages.map((msg) => (
