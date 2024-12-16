@@ -9,6 +9,8 @@ import { setChannels, setActiveChannel } from '../../slices/channelsSlice';
 import { useTranslation } from 'react-i18next';
 import routes from '../../routes';
 import { Dropdown } from 'react-bootstrap';
+import leoProfanity from "leo-profanity";
+import forbiddenWords from '../../dictionary/index.js';
 
 const Channels = () => {
   const { t } = useTranslation();
@@ -19,7 +21,8 @@ const Channels = () => {
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const [profanityError, setProfanityError] = useState(''); // Ошибка с запрещенными словами
+  const [emptyChannelNameError, setEmptyChannelNameError] = useState(''); // Ошибка с пустым названием канала
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newChannelName, setNewChannelName] = useState('');
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -44,8 +47,6 @@ const Channels = () => {
           },
         });
 
-        // console.log('Ответ от сервера:', response);
-
         if (response.data) {
           dispatch(setChannels(response.data)); // Отправляем каналы в Redux
         } else {
@@ -62,6 +63,11 @@ const Channels = () => {
     fetchChannels();
   }, [dispatch, t]);
 
+  useEffect(() => {
+    leoProfanity.loadDictionary('ru');
+    forbiddenWords.forEach(word => leoProfanity.add(word));
+  }, []);
+
 
   const handleChannelClick = (channel) => {
     dispatch(setActiveChannel(channel.id));  // Обновляем activeChannel в Redux
@@ -69,6 +75,8 @@ const Channels = () => {
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
+    setProfanityError(''); // сбрасываем ошибку перед открытием модала
+    setEmptyChannelNameError(''); // сбрасываем ошибку пустого имени канала
   };
 
   const handleCloseModal = () => {
@@ -90,6 +98,7 @@ const Channels = () => {
 
   const handleChangeNewChannelName = (e) => {
     setNewChannelName(e.target.value);
+    setEmptyChannelNameError(''); // Сбрасываем ошибку при изменении имени
   };
 
   const handleAddChannel = async (e) => {
@@ -98,7 +107,12 @@ const Channels = () => {
     const token = user?.token;
 
     if (!newChannelName.trim()) {
-      setError(t('error.emptyChannelName'));
+      setEmptyChannelNameError(t('channelsFormErrors.emptyChannelName'));
+      return;
+    }
+
+    if (leoProfanity.check(newChannelName)) {
+      setProfanityError(t('channelsFormErrors.profanityDetected'));
       return;
     }
 
@@ -108,8 +122,6 @@ const Channels = () => {
         { name: newChannelName },
         { headers: { 'Authorization': `Bearer ${token}` } }
       );
-
-      // console.log('Ответ от сервера после добавления канала:', response);
 
       if (response.data) {
         dispatch(setChannels([...channels, response.data])); // Добавляем новый канал в Redux
@@ -157,7 +169,7 @@ const Channels = () => {
     const token = user?.token;
 
     if (!newChannelName.trim()) {
-      setError(t('error.emptyChannelName'));
+      setEmptyChannelNameError(t('channelsFormErrors.emptyChannelName'));
       return;
     }
 
@@ -167,8 +179,6 @@ const Channels = () => {
         { name: newChannelName },
         { headers: { 'Authorization': `Bearer ${token}` } }
       );
-
-      console.log('Ответ от сервера после редактирования канала:', response);
 
       if (response.data) {
         dispatch(setChannels(
@@ -242,7 +252,7 @@ const Channels = () => {
             <button
               type="button"
               className={c('w-100 rounded-0 text-start btn', {
-                'btn-secondary': activeChannel === channel.id, // Убедитесь, что сравнивается id
+                'btn-secondary': activeChannel === channel.id,
                 'btn-light': activeChannel !== channel.id, 
               })}
               onClick={() => handleChannelClick(channel)}
@@ -278,6 +288,8 @@ const Channels = () => {
                       onChange={handleChangeNewChannelName}
                     />
                   </div>
+                  {emptyChannelNameError && <div className="text-danger">{emptyChannelNameError}</div>} {/* Выводим ошибку пустого названия */}
+                  {profanityError && <div className="text-danger">{profanityError}</div>} {/* Выводим ошибку в случае запрещенного слова */}
                   <div className="d-flex justify-content-end">
                     <button type="button" className="me-2 btn btn-secondary" onClick={handleCloseModal}>
                       {t('channels.cancel')}

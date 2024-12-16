@@ -79,7 +79,9 @@
     "tokenNotFound": "Token not found. Please log in again.",
     "emptyMessage": "Message cannot be empty.",
     "connectionError": "Connection error. Please check your internet connection.",
-    "unknownError": "An error occurred. Please try again."
+    "unknownError": "An error occurred. Please try again.",
+    "profanityDetected": "The channel name contains inappropriate words. Please choose a valid name.",
+    "emptyChannelName": "Channel name can not be empty"
   },
   "channnelsForm": {
     "newMessage": "New message",

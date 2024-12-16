@@ -17,7 +17,7 @@ const MessagesForm = ({ socket }) => {
   const dispatch = useDispatch();
   const messages = useSelector((state) => state.messagesInfo.messages);
   const activeChannel = useSelector((state) => state.channelsInfo.activeChannel); 
-  const channels = useSelector((state) => state.channelsInfo.channels);  // Получаем каналы
+  const channels = useSelector((state) => state.channelsInfo.channels); 
   console.log(activeChannel);
 
   const [messageBody, setMessageBody] = useState('');
@@ -30,12 +30,11 @@ const MessagesForm = ({ socket }) => {
     forbiddenWords.forEach(word => leoProfanity.add(word));
   }, []);
 
-  // Устанавливаем активный канал по умолчанию, если он еще не установлен
   useEffect(() => {
     if (activeChannel === null && channels.length > 0) {
       const defaultChannel = channels.find(channel => channel.name === 'general');
       if (defaultChannel) {
-        dispatch(setActiveChannel(defaultChannel.id));  // Устанавливаем канал по умолчанию
+        dispatch(setActiveChannel(defaultChannel.id)); 
       }
     }
   }, [channels, activeChannel, dispatch]);
@@ -68,7 +67,7 @@ const MessagesForm = ({ socket }) => {
       try {
         const response = await axios.post(routes.messagesPath(), { 
           body: messageBody,
-          channelId: activeChannel.id,  // Указываем активный канал
+          channelId: activeChannel.id,
         }, config);
         dispatch(addMessage({ id: messageId, body: messageBody, userName, channelId: activeChannel.id }));
         console.log(response);
@@ -105,7 +104,7 @@ const MessagesForm = ({ socket }) => {
             <Message key={msg.id} userName={msg.userName} message={cleanProfanityMessage(msg.body)} />
           ))
         ) : (
-          <div>{t('channnelsForm.noMessages')}</div>  // Сообщение о том, что нет сообщений
+          <div>{t('channnelsForm.noMessages')}</div>
         )}
       </div>
 
