@@ -1,7 +1,7 @@
 import React, { useRef, useState, useContext } from 'react';
 import { useFormik } from 'formik';
 import { Form, Col, Card, Row } from 'react-bootstrap';
-import { AuthContext } from '../../contexts/index.jsx'
+import { AuthContext } from '../../contexts/index.jsx';
 import LoginFooter from './Footer.jsx';
 import Navbar from '..//Navbar/Navbar.jsx';
 import { LoginPicture } from './../Attachments.jsx';
@@ -15,20 +15,22 @@ const LoginForm = () => {
   document.body.classList.add('h-100', 'bg-light');
   const { logIn } = useContext(AuthContext);
   const [authFailed, setAuthFailed] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(""); // Ошибка сети
   const inputRef = useRef(null);
   const { t } = useTranslation();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleSubmit = async (formikValues) => {
     try {
-      const response = await logIn(formikValues.username, formikValues.password);
+      const response = await logIn(formikValues.username, formikValues.password, setErrorMessage, setAuthFailed);
       if (response && response.data) {
         const { token, username } = response.data;
         localStorage.setItem('user', JSON.stringify({ token, username }));
         navigate('/');
       }
     } catch (error) {
-      // console.error(error);
+      // Ошибка обработана в logIn, не нужно повторно здесь
+      console.error('Login failed', error);
     }
   };
 
@@ -97,7 +99,7 @@ const LoginForm = () => {
                             <FieldError>{formik.errors.password}</FieldError>
                           )}
                           <Form.Control.Feedback type="invalid">
-                            {t('login.wrongEmailOrPassword')}
+                            {authFailed && errorMessage && <FieldError>{errorMessage}</FieldError>}
                           </Form.Control.Feedback>
                         </Form.Group>
                         <LoginButton />

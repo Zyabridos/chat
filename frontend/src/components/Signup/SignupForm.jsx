@@ -1,22 +1,23 @@
-import React, { useState, useEffect, useContext, useRef } from 'react';
+import React, { useState, useContext } from 'react';
 import { useFormik } from "formik";
 import { Form } from 'react-bootstrap';
-import { AuthContext } from '../../contexts/index.jsx'
-import { FieldError, FormSuccess } from '../Login/styles.jsx';
+import { AuthContext } from '../../contexts/index.jsx';
+import { FieldError } from '../Login/styles.jsx';
 import { SignupButton } from '../Buttons/Buttons.jsx';
 import { SugnupPicture } from '../Attachments.jsx';
 import Navbar from '..//Navbar/Navbar.jsx';
-import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
-import validationSignupSchema from '../../validationSchemas/validationSignupSchema.jsx'
+import validationSignupSchema from '../../validationSchemas/validationSignupSchema.jsx';
 
 const SignUpForm = () => {
   const { t } = useTranslation();
-  const inputRef = useRef(null);
   const navigate = useNavigate();
   const { signUp, serverError } = useContext(AuthContext);
+
+  const [focusedField, setFocusedField] = useState(null); // To track which field is focused
+
   const handleSubmit = async (formikValues) => {
     try {
       const response = await signUp(formikValues.username, formikValues.password);
@@ -26,7 +27,7 @@ const SignUpForm = () => {
         navigate('/');
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
 
@@ -39,6 +40,18 @@ const SignUpForm = () => {
     onSubmit: handleSubmit,
     validationSchema: validationSignupSchema(t),
   });
+
+  // Handle focus event to clear placeholder
+  const handleFocus = (field) => {
+    setFocusedField(field); // Set the focused field
+  };
+
+  // Handle blur event to reset placeholder
+  const handleBlur = (field, placeholder) => {
+    if (formik.values[field] === '') {
+      setFocusedField(null); // Reset the focused field if the input is empty
+    }
+  };
 
   return (
     <div className='h-100'>
@@ -57,12 +70,14 @@ const SignUpForm = () => {
                       <Form.Control
                         className="form-control"
                         type="text"
-                        placeholder={t('signup.usernameLabel')}
+                        placeholder={focusedField !== 'username' ? t('signup.usernameLabel') : ''}
                         name="username"
                         id="username"
                         autoComplete="username"
                         onChange={formik.handleChange}
                         value={formik.values.username}
+                        onFocus={() => handleFocus('username')}
+                        onBlur={() => handleBlur('username', t('signup.usernameLabel'))}
                         required
                       />
                       {formik.touched.username && formik.errors.username && (
@@ -79,9 +94,11 @@ const SignUpForm = () => {
                         name="password"
                         autoComplete="current-password"
                         id="password"
-                        placeholder={t('signup.passwordPlaceholder')}
+                        placeholder={focusedField !== 'password' ? t('signup.passwordPlaceholder') : ''}
                         onChange={formik.handleChange}
                         value={formik.values.password}
+                        onFocus={() => handleFocus('password')}
+                        onBlur={() => handleBlur('password', t('signup.passwordPlaceholder'))}
                         required
                       />
                       {formik.touched.password && formik.errors.password && (
@@ -98,9 +115,11 @@ const SignUpForm = () => {
                         name="confirmPassword"
                         autoComplete="new-password"
                         id="confirmPassword"
-                        placeholder={t('signup.repeatPasswordPlaceholder')}
+                        placeholder={focusedField !== 'confirmPassword' ? t('signup.repeatPasswordPlaceholder') : ''}
                         onChange={formik.handleChange}
                         value={formik.values.confirmPassword}
+                        onFocus={() => handleFocus('confirmPassword')}
+                        onBlur={() => handleBlur('confirmPassword', t('signup.repeatPasswordPlaceholder'))}
                         required
                       />
                       {formik.touched.confirmPassword && formik.errors.confirmPassword && (

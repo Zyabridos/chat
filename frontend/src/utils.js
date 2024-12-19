@@ -1,28 +1,24 @@
-import { useTranslation } from 'react-i18next';
-
-export const handleLoginErrors = (error) => {
-  const { t } = useTranslation(); 
-  let errorMessage = t('error.generalError');
-  
-  // Если ошибка от сервера и есть ответ
+export const handleLoginErrors = (error, t, setErrorMessage, setAuthFailed) => {
+  console.error("Login error:", error);
   if (error.response) {
-    if (error.response.status === 400) {
-      errorMessage = t('networkErrors.badRequest');
-    } else if (error.response.status === 401) {
-      errorMessage = t('networkErrors.unauthorized');
-    } else if (error.response.status === 500) {
-      errorMessage = t('networkErrors.serverError');
-    } else {
-      errorMessage = `${t('networkErrors.error')}: ${error.response.statusText}`;
+    switch (error.response.status) {
+      case 400:  // Неверный запрос
+        setErrorMessage(t('networkErrors.badRequest'));
+        break;
+      case 401:  // Не авторизован
+        setErrorMessage(t('networkErrors.unauthorized'));
+        break;
+      case 500:  // Ошибка на сервере
+        setErrorMessage(t('networkErrors.serverError'));
+        break;
+      default:
+        setErrorMessage(t('networkErrors.generalError'));  // Общая ошибка
     }
-  } 
-  // запрос был отправлен, но не получен ответ.
-  else if (error.request) {
-    errorMessage = t('networkErrors.connectionError');
-  } 
-  else {
-    errorMessage = `${t('networkErrors.unknownError')}: ${error.message || t('error.unknown')}`;
+  } else if (error.request) {
+    setErrorMessage(t('networkErrors.connectionError'));
+  } else {
+    setErrorMessage(t('networkErrors.unknownError'));
   }
 
-  return errorMessage;
+  setAuthFailed(true);
 };

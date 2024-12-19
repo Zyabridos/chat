@@ -67,7 +67,7 @@
   "networkErrors": {
     "generalError": "Error sending the message. Please try again.",
     "badRequest": "Bad request. Check the data and try again.",
-    "unauthorized": "You are not authorized. Please log in.",
+    "unauthorized": "Wrong username or password.",
     "serverError": "Server error. Please try later.",
     "error": "Error",
     "connectionError": "Connection error. Check your internet connection.",
