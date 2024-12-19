@@ -13,8 +13,9 @@ import leoProfanity from "leo-profanity";
 import forbiddenWords from '../../dictionary/index.js';
 import './Channels.css'
 import { toast } from 'react-toastify';
+import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as yup from 'yup';
-import { useFormik } from 'formik';
+import validationCreateChannel from '../../validationSchemas/validationCreateChannel.jsx';
 
 const Channels = () => {
   const { t } = useTranslation();
@@ -25,10 +26,7 @@ const Channels = () => {
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [profanityError, setProfanityError] = useState('');
-  const [emptyChannelNameError, setEmptyChannelNameError] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [newChannelName, setNewChannelName] = useState('');
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingChannel, setEditingChannel] = useState(null);
 
@@ -77,116 +75,73 @@ const Channels = () => {
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
-    setProfanityError('');
-    setEmptyChannelNameError('');
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    setNewChannelName('');
   };
 
   const handleOpenEditModal = (channel) => {
     setEditingChannel(channel);
-    formik.setFieldValue('channelName', channel.name); // Update Formik state for edit
     setIsEditModalOpen(true);
   };
 
   const handleCloseEditModal = () => {
     setIsEditModalOpen(false);
     setEditingChannel(null);
-    setNewChannelName('');
   };
 
-
-  const handleAddChannel = async () => {
+  const handleAddChannel = async (values, { setSubmitting }) => {
     const user = JSON.parse(localStorage.getItem('user'));
     const token = user?.token;
 
-    if (!newChannelName.trim()) {
-      setEmptyChannelNameError(t('channelsFormErrors.emptyChannelName'));
-      return;
-    }
-
-    if (leoProfanity.check(newChannelName)) {
-      setProfanityError(t('channelsFormErrors.profanityDetected'));
+    if (leoProfanity.check(values.name)) {
+      setSubmitting(false);
+      toast.error(t('channelsFormErrors.profanityDetected'));
       return;
     }
 
     try {
       const response = await axios.post(
         routes.channelsPath(),
-        { name: newChannelName },
+        { name: values.name },
         { headers: { 'Authorization': `Bearer ${token}` } }
       );
 
       if (response.data) {
-        dispatch(setChannels([...channels, response.data])); 
+        dispatch(setChannels([...channels, response.data]));
         handleCloseModal();
-        toast.success(t('toast.channelCreated'))
+        toast.success(t('toast.channelCreated'));
       } else {
         throw new Error('Ошибка при создании канала. Ответ не содержит данных.');
       }
     } catch (err) {
       console.error('Ошибка при добавлении канала:', err); 
       setError(err.response ? err.response.data.message : t('error.addChannelFailed'));
+    } finally {
+      setSubmitting(false);
     }
   };
 
-  const handleDeleteChannel = async (channelId) => {
+
+  const handleEditChannel = async (values, { setSubmitting }) => {
     const user = JSON.parse(localStorage.getItem('user'));
     const token = user?.token;
-
-    if (!token) {
-      setError(t('error.tokenNotFound'));
-      return;
-    }
-
-    try {
-      const response = await axios.delete(`${routes.channelsPath()}/${channelId}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-
-      if (response.status === 200) {
-        dispatch(setChannels(channels.filter((channel) => channel.id !== channelId))); 
-        toast.success(t('toast.channelDeleted'))
-        setError(null);
-      } else {
-        throw new Error('Ошибка при удалении канала');
-      }
-    } catch (err) {
-      console.error('Ошибка при удалении канала:', err);
-      setError(err.response ? err.response.data.message : t('error.deleteChannelFailed'));
-    }
-  };
-
-  const handleEditChannel = async (e) => {
-    e.preventDefault();
-    const user = JSON.parse(localStorage.getItem('user'));
-    const token = user?.token;
-
-    if (!newChannelName.trim()) {
-      setEmptyChannelNameError(t('channelsFormErrors.emptyChannelName'));
-      return;
-    }
 
     try {
       const response = await axios.put(
         `${routes.channelsPath()}/${editingChannel.id}`,
-        { name: newChannelName },
+        { name: values.name },
         { headers: { 'Authorization': `Bearer ${token}` } }
       );
 
       if (response.data) {
         dispatch(setChannels(
           channels.map((channel) =>
-            channel.id === editingChannel.id ? { ...channel, name: newChannelName } : channel
+            channel.id === editingChannel.id ? { ...channel, name: values.name } : channel
           )
         ));
-        setError(null);
-        toast.success(t('toast.channelRenamed'))
+        toast.success(t('toast.channelRenamed'));
         handleCloseEditModal();
       } else {
         throw new Error('Ошибка при редактировании канала');
@@ -194,31 +149,10 @@ const Channels = () => {
     } catch (err) {
       console.error('Ошибка при редактировании канала:', err);
       setError(err.response ? err.response.data.message : t('error.editChannelFailed'));
+    } finally {
+      setSubmitting(false);
     }
   };
-
-    const validationCreateChannel = (t) => yup.object({
-    channelName: yup.string()
-      .min(6, t('validationErrors.min6')) 
-      .max(20, t('validationErrors.max20')) 
-      .required(t('validationErrors.required'))
-      .test('is-unique', t('validationErrors.channelAlreadyExists'), function(value) {
-      const { channels } = this.options.context || {}; // Обеспечиваем защиту от undefined
-      if (!Array.isArray(channels)) return true; // Если channels нет или это не массив, пропускаем проверку
-      return !channels.some(channel => channel.name === value);
-    })
-  });
-
-  const formik = useFormik({
-    initialValues: {
-      channelName: '',
-    },
-    validationSchema: validationCreateChannel(t),
-    onSubmit: handleAddChannel,
-    validateOnChange: true,
-    context: { channels },
-  });
-
 
   const renderLoadingOrError = () => {
     if (loading) return <div>{t('loading.loadingChannels')}</div>;
@@ -268,31 +202,28 @@ const Channels = () => {
       {renderLoadingOrError()}
 
       <ListGroup as="ul" className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block position-relative">
-  {channels.map((channel) => (
-    <ListGroup.Item as="li" className="nav-item w-100" key={channel.id}>
-      <div className="d-flex justify-content-between align-items-center w-100">
-        <button
-          type="button"
-          className={c('w-100 rounded-0 text-start btn', {
-            'btn-secondary': activeChannel === channel.id,
-            'btn-light': activeChannel !== channel.id, 
-          })}
-          onClick={() => handleChannelClick(channel)}
-        >
-          <span className="me-1">#</span>
-          {channel.name}
-        </button>
+        {channels.map((channel) => (
+          <ListGroup.Item as="li" className="nav-item w-100" key={channel.id}>
+            <div className="d-flex justify-content-between align-items-center w-100">
+              <button
+                type="button"
+                className={c('w-100 rounded-0 text-start btn', {
+                  'btn-secondary': activeChannel === channel.id,
+                  'btn-light': activeChannel !== channel.id, 
+                })}
+                onClick={() => handleChannelClick(channel)}
+              >
+                <span className="me-1">#</span>
+                {channel.name}
+              </button>
 
-        {/* Кнопка управления каналом справа */}
-        {renderManagementButton(channel)}
-      </div>
-    </ListGroup.Item>
-  ))}
-</ListGroup>
-
+              {renderManagementButton(channel)}
+            </div>
+          </ListGroup.Item>
+        ))}
+      </ListGroup>
 
       {/* Модальные окна */}
-      {/* Модальное окно для добавления нового канала */}
       {isModalOpen && (
         <div className="modal show" style={{ display: 'block' }}>
           <div className="modal-dialog modal-dialog-centered">
@@ -302,37 +233,41 @@ const Channels = () => {
                 <button type="button" className="btn-close" onClick={handleCloseModal}></button>
               </div>
               <div className="modal-body">
-                <form onSubmit={formik.handleSubmit}>
-                  <div className="mb-3">
-                    <label htmlFor="channelName" className="form-label">{t('channels.modal.typeChannelName')}</label>
-                    <input
-                      type="text"
-                      id="channelName"
-                      className="form-control"
-                      // value={newChannelName}
-                      value={formik.values.channelName}  // Controlled input
-  onChange={formik.handleChange}     // Add onChange handler from Formik
-  onBlur={formik.handleBlur}  
-                    />
-                  </div>
-                  {formik.errors.channelName && formik.touched.channelName && (
-  <div className="text-danger">{formik.errors.channelName}</div>
-)}
-                  {/* {profanityError && <div className="text-danger">{profanityError}</div>}  */}
-                  <div className="d-flex justify-content-end">
-                    <button type="button" className="me-2 btn btn-secondary" onClick={handleCloseModal}>
-                      {t('channels.cancel')}
-                    </button>
-                    <button type="submit" className="btn btn-primary">{t('channels.add')}</button>
-                  </div>
-                </form>
+                <Formik
+                  initialValues={{ name: '' }}
+                  validationSchema={validationCreateChannel(t)}
+                  onSubmit={handleAddChannel}
+                  context={{ channels }} 
+                >
+                  {({ isSubmitting }) => (
+                    <Form>
+                      <div className="mb-3">
+                        <label htmlFor="name" className="form-label">{t('channels.modal.typeChannelName')}</label>
+                        <Field
+                          type="text"
+                          id="name"
+                          className="form-control"
+                          name="name"
+                        />
+                        <ErrorMessage name="name" component="div" className="text-danger" />
+                      </div>
+                      <div className="d-flex justify-content-end">
+                        <button type="button" className="me-2 btn btn-secondary" onClick={handleCloseModal}>
+                          {t('channels.cancel')}
+                        </button>
+                        <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
+                          {t('channels.add')}
+                        </button>
+                      </div>
+                    </Form>
+                  )}
+                </Formik>
               </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* Модальное окно для редактирования канала */}
       {isEditModalOpen && (
         <div className="modal show" style={{ display: 'block' }}>
           <div className="modal-dialog modal-dialog-centered">
@@ -342,25 +277,34 @@ const Channels = () => {
                 <button type="button" className="btn-close" onClick={handleCloseEditModal}></button>
               </div>
               <div className="modal-body">
-                <form onSubmit={handleEditChannel}>
-                  <div className="mb-3">
-                    <label htmlFor="channelName" className="form-label">{t('channels.modal.typeNewChannelName')}</label>
-                    <input
-  type="text"
-  id="channelName"
-  className="form-control"
-  value={formik.values.channelName}
-  onChange={formik.handleChange}
-  onBlur={formik.handleBlur}
-/>
-                  </div>
-                  <div className="d-flex justify-content-end">
-                    <button type="button" className="me-2 btn btn-secondary" onClick={handleCloseEditModal}>
-                      {t('channels.cancel')}
-                    </button>
-                    <button type="submit" className="btn btn-primary">{t('channels.modal.rename')}</button>
-                  </div>
-                </form>
+                <Formik
+                  initialValues={{ name: editingChannel?.name || '' }}
+                  validationSchema={validationSchema}
+                  onSubmit={handleEditChannel}
+                >
+                  {({ isSubmitting }) => (
+                    <Form>
+                      <div className="mb-3">
+                        <label htmlFor="name" className="form-label">{t('channels.modal.typeNewChannelName')}</label>
+                        <Field
+                          type="text"
+                          id="name"
+                          className="form-control"
+                          name="name"
+                        />
+                        <ErrorMessage name="name" component="div" className="text-danger" />
+                      </div>
+                      <div className="d-flex justify-content-end">
+                        <button type="button" className="me-2 btn btn-secondary" onClick={handleCloseEditModal}>
+                          {t('channels.cancel')}
+                        </button>
+                        <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
+                          {t('channels.modal.rename')}
+                        </button>
+                      </div>
+                    </Form>
+                  )}
+                </Formik>
               </div>
             </div>
           </div>

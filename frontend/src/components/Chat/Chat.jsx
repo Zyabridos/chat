@@ -1,4 +1,4 @@
-import Channels from '../Channels/Channels.jsx';
+import Channels from '../Channels/Chanells.jsx'
 import Navbar from '..//Navbar/Navbar.jsx';
 import MainWindow from './MainWindow/MainWindow.jsx';
 import Container from 'react-bootstrap/Container';
