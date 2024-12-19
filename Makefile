@@ -10,8 +10,5 @@ start-backend:
 develop:
 		make start-backend & make start-frontend
 
-start-back-from-main:
-		npx start-server -s ./frontend/dist && make start-backend & make start-frontend
-
 build:
-	npm run build
+		npm run build
