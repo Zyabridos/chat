@@ -34,10 +34,10 @@ export const handleDeleteChannel = async (channelId, dispatch, channels, token, 
       toast.success(t('toast.channelDeleted'));
       setError(null);
     } else {
-      throw new Error('Ошибка при удалении канала');
+      throw new Error('Error while deleting the channel');
     }
   } catch (err) {
-    console.error('Ошибка при удалении канала:', err);
+    console.error('Error while deleting the channel:', err);
     setError(err.response ? err.response.data.message : t('error.deleteChannelFailed'));
   }
 };
@@ -61,10 +61,10 @@ export const handleAddChannel = async (values, { setSubmitting }, channels, disp
       handleCloseModal();
       toast.success(t('toast.channelCreated'));
     } else {
-      throw new Error('Ошибка при создании канала. Ответ не содержит данных.');
+      throw new Error('Error while creating the channel. The response contains no data.');
     }
   } catch (err) {
-    console.error('Ошибка при добавлении канала:', err);
+    console.error('Error while creating the channel:', err);
     setError(err.response ? err.response.data.message : t('error.addChannelFailed'));
   } finally {
     setSubmitting(false);
@@ -75,7 +75,7 @@ export const handleAddChannel = async (values, { setSubmitting }, channels, disp
 
 export const handleEditChannel = async (
   values, 
-  { setSubmitting },  // <- Ensure this is passed correctly here
+  { setSubmitting },
   channels,
   dispatch,
   setError,
@@ -84,7 +84,7 @@ export const handleEditChannel = async (
   t
 ) => {
   if (leoProfanity.check(values.name)) {
-    setSubmitting(false);  // Ensure this is called to reset the submitting state
+    setSubmitting(false); 
     toast.error(t('channelsFormErrors.profanityDetected'));
     return;
   }
@@ -105,12 +105,12 @@ export const handleEditChannel = async (
       });
       toast.success(t('toast.channelRenamed'));
     } else {
-      throw new Error('Ошибка при редактировании канала');
+      throw new Error('Error while editing the channel.');
     }
   } catch (err) {
-    console.error('Ошибка при редактировании канала:', err);
+    console.error('Error while editing the channel:', err);
     setError(err.response ? err.response.data.message : t('error.editChannelFailed'));
   } finally {
-    setSubmitting(false);  // Ensure this is called when the action finishes (success or error)
+    setSubmitting(false); 
   }
 };
