@@ -311,7 +311,7 @@ const Channels = () => {
         </div>
       )}
     </>
-  );
+  )
 };
 
 export default Channels;
