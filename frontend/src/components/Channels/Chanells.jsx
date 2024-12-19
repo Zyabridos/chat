@@ -13,9 +13,9 @@ import leoProfanity from "leo-profanity";
 import forbiddenWords from '../../dictionary/index.js';
 import './Channels.css'
 import { toast } from 'react-toastify';
-import { Formik, Field, Form, ErrorMessage } from 'formik';
-import validationCreateChannel from '../../validationSchemas/validationCreateChannel.jsx';
-import { handleDeleteChannel, handleAddChannel} from './buttonHandlers.js';
+import { handleDeleteChannel } from './buttonHandlers.js';
+import AddChannelModal from './Modals/AddChannellModal.jsx';
+import EditChannelModal from './Modals/EditChannelModal.jsx';
 
 const Channels = () => {
   const { t } = useTranslation();
@@ -95,9 +95,7 @@ const Channels = () => {
   const token = user?.token;
 
   const handleEditChannel = async (values, { setSubmitting }) => {
-    const user = JSON.parse(localStorage.getItem('user'));
-    const token = user?.token;
-
+    console.log(values.name)
     try {
       const response = await axios.put(
         `${routes.channelsPath()}/${editingChannel.id}`,
@@ -194,94 +192,23 @@ const Channels = () => {
       </ListGroup>
 
       {/* Modal windows */}
-      {isModalOpen && (
-        <div className="modal show" style={{ display: 'block' }}>
-          <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">{t('channels.addNewChannel')}</h5>
-                <button type="button" className="btn-close" onClick={handleCloseModal}></button>
-              </div>
-              <div className="modal-body">
-                <Formik
-                  initialValues={{ name: '' }}
-                  validationSchema={validationCreateChannel(t)}
-                  onSubmit={(values, actions) => handleAddChannel(values, actions, channels, dispatch, handleCloseModal, setError, token, t)} 
-                  context={{ channels }} 
-                >
-                  {({ isSubmitting }) => (
-                    <Form>
-                      <div className="mb-3">
-                        <label htmlFor="name" className="form-label">{t('channels.modal.typeChannelName')}</label>
-                        <Field
-                          type="text"
-                          id="name"
-                          className="form-control"
-                          name="name"
-                        />
-                        <ErrorMessage name="name" component="div" className="text-danger" />
-                      </div>
-                      <div className="d-flex justify-content-end">
-                        <button type="button" className="me-2 btn btn-secondary" onClick={handleCloseModal}>
-                          {t('channels.cancel')}
-                        </button>
-                        <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
-                          {t('channels.add')}
-                        </button>
-                      </div>
-                    </Form>
-                  )}
-                </Formik>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      <AddChannelModal 
+        isModalOpen={isModalOpen} 
+        handleCloseModal={handleCloseModal}
+        channels={channels}
+        dispatch={dispatch}
+        setError={setError}
+        token={token}
+      />
 
-      {isEditModalOpen && (
-        <div className="modal show" style={{ display: 'block' }}>
-          <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">{t('channels.modal.renameChannel')}</h5>
-                <button type="button" className="btn-close" onClick={handleCloseEditModal}></button>
-              </div>
-              <div className="modal-body">
-                <Formik
-                  initialValues={{ name: editingChannel?.name || '' }}
-                  validationSchema={validationCreateChannel(t)}
-                  onSubmit={handleEditChannel}
-                >
-                  {({ isSubmitting }) => (
-                    <Form>
-                      <div className="mb-3">
-                        <label htmlFor="name" className="form-label">{t('channels.modal.typeNewChannelName')}</label>
-                        <Field
-                          type="text"
-                          id="name"
-                          className="form-control"
-                          name="name"
-                        />
-                        <ErrorMessage name="name" component="div" className="text-danger" />
-                      </div>
-                      <div className="d-flex justify-content-end">
-                        <button type="button" className="me-2 btn btn-secondary" onClick={handleCloseEditModal}>
-                          {t('channels.cancel')}
-                        </button>
-                        <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
-                          {t('channels.modal.rename')}
-                        </button>
-                      </div>
-                    </Form>
-                  )}
-                </Formik>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      <EditChannelModal
+        isEditModalOpen={isEditModalOpen}
+        handleCloseEditModal={handleCloseEditModal}
+        editingChannel={editingChannel}
+        handleEditChannel={handleEditChannel}
+      />
     </>
-  )
+  );
 };
 
 export default Channels;
