@@ -7,7 +7,7 @@ import Navbar from '..//Navbar/Navbar.jsx';
 import { LoginPicture } from './../Attachments.jsx';
 import { LoginButton } from '../Buttons/Buttons.jsx';
 import validationLoginSchema from '../../validationSchemas/validationLoginSchema.jsx';
-import { FieldError } from './styles.jsx';
+import { FieldError } from '../styles.jsx';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 

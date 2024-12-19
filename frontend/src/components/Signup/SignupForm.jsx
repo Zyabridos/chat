@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { useFormik } from "formik";
+import { useFormik } from 'formik';
 import { Form } from 'react-bootstrap';
 import { AuthContext } from '../../contexts/index.jsx';
 import { FieldError } from '../Login/styles.jsx';
@@ -16,7 +16,7 @@ const SignUpForm = () => {
   const navigate = useNavigate();
   const { signUp, serverError } = useContext(AuthContext);
 
-  const [focusedField, setFocusedField] = useState(null); // To track which field is focused
+  const [focusedField, setFocusedField] = useState(null);
 
   const handleSubmit = async (formikValues) => {
     try {
@@ -41,15 +41,13 @@ const SignUpForm = () => {
     validationSchema: validationSignupSchema(t),
   });
 
-  // Handle focus event to clear placeholder
   const handleFocus = (field) => {
-    setFocusedField(field); // Set the focused field
+    setFocusedField(field);
   };
 
-  // Handle blur event to reset placeholder
-  const handleBlur = (field, placeholder) => {
+  const handleBlur = (field) => {
     if (formik.values[field] === '') {
-      setFocusedField(null); // Reset the focused field if the input is empty
+      setFocusedField(null);
     }
   };
 
@@ -77,7 +75,7 @@ const SignUpForm = () => {
                         onChange={formik.handleChange}
                         value={formik.values.username}
                         onFocus={() => handleFocus('username')}
-                        onBlur={() => handleBlur('username', t('signup.usernameLabel'))}
+                        onBlur={() => handleBlur('username')}
                         required
                       />
                       {formik.touched.username && formik.errors.username && (
@@ -98,7 +96,7 @@ const SignUpForm = () => {
                         onChange={formik.handleChange}
                         value={formik.values.password}
                         onFocus={() => handleFocus('password')}
-                        onBlur={() => handleBlur('password', t('signup.passwordPlaceholder'))}
+                        onBlur={() => handleBlur('password')}
                         required
                       />
                       {formik.touched.password && formik.errors.password && (
@@ -119,7 +117,7 @@ const SignUpForm = () => {
                         onChange={formik.handleChange}
                         value={formik.values.confirmPassword}
                         onFocus={() => handleFocus('confirmPassword')}
-                        onBlur={() => handleBlur('confirmPassword', t('signup.repeatPasswordPlaceholder'))}
+                        onBlur={() => handleBlur('confirmPassword')}
                         required
                       />
                       {formik.touched.confirmPassword && formik.errors.confirmPassword && (
@@ -127,7 +125,8 @@ const SignUpForm = () => {
                       )}
                     </Form.Group>
 
-                    {serverError && <div className="error-message">{serverError}</div>}
+                    {/* Отображаем ошибку от сервера */}
+                    <FieldError>{serverError && <div className="error-message">{serverError}</div>}</FieldError>
 
                     <SignupButton />
                   </fieldset>

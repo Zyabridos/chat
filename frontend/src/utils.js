@@ -22,3 +22,17 @@ export const handleLoginErrors = (error, t, setErrorMessage, setAuthFailed) => {
 
   setAuthFailed(true);
 };
+
+export const handleSignUpError = (error, setServerError, t) => {
+  if (error.response) {
+    if (error.response.status === 409) {
+      setServerError(t('signup.errors.alreadyExists')); // Ошибка уже существующего пользователя
+    } else if (error.response.status === 400) {
+      setServerError(t('signup.errors.badRequest'));
+    } else {
+      setServerError(t('signup.errors.unknown'));
+    }
+  } else {
+    setServerError(t('signup.errors.connectionError')); // Ошибка соединения
+  }
+};

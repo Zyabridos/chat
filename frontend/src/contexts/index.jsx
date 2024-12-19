@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { handleLoginErrors } from '../utils';  // Импортируем функцию для обработки ошибок
+import { handleLoginErrors, handleSignUpError } from '../utils'; 
 import routes from '../routes.js';
 
 export const AuthContext = createContext();
@@ -15,13 +15,12 @@ const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  // Функция логина, передаем setErrorMessage и setAuthFailed
   const logIn = async (login, password, setErrorMessage, setAuthFailed) => {
     try {
       const response = await axios.post(routes.loginPath(), { username: login, password });
       return response;
     } catch (error) {
-      handleLoginErrors(error, t, setErrorMessage, setAuthFailed);  // Передаем функции в обработчик ошибок
+      handleLoginErrors(error, t, setErrorMessage, setAuthFailed);
     }
   };
 
@@ -37,12 +36,7 @@ const AuthProvider = ({ children }) => {
       const response = await axios.post(routes.signupPath(), { username: login, password });
       return response;
     } catch (error) {
-      if (error.response && error.response.status === 409) {
-        toast.error(t('signup.errors.alreadyExists'));
-      } else {
-        toast.error(t('signup.errors.unknown'));
-      }
-      throw error;
+      handleSignUpError(error, setServerError, t);
     }
   };
 
