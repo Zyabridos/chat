@@ -4,7 +4,7 @@ import MainWindow from './MainWindow/MainWindow.jsx';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import React, { useState } from "react";
+import React from "react";
 import './Chat.css'
 
 const Chat = () => {

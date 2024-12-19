@@ -14,7 +14,6 @@ import forbiddenWords from '../../dictionary/index.js';
 import './Channels.css'
 import { toast } from 'react-toastify';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
-import * as yup from 'yup';
 import validationCreateChannel from '../../validationSchemas/validationCreateChannel.jsx';
 import { handleDeleteChannel, handleAddChannel} from './buttonHandlers.js';
 
@@ -52,10 +51,10 @@ const Channels = () => {
         if (response.data) {
           dispatch(setChannels(response.data)); 
         } else {
-          throw new Error('Невозможно загрузить каналы. Ответ не содержит данных.');
+          throw new Error('Unable to load channels. The response contains no data.');
         }
       } catch (err) {
-        console.error('Ошибка при запросе каналов:', err); 
+        console.error('Error fetching channels:', err); 
         setError(err.response ? err.response.data.message : t('error.fetchChannels'));
       } finally {
         setLoading(false);
@@ -115,10 +114,10 @@ const Channels = () => {
         toast.success(t('toast.channelRenamed'));
         handleCloseEditModal();
       } else {
-        throw new Error('Ошибка при редактировании канала');
+        throw new Error('Error editing the channel.');
       }
     } catch (err) {
-      console.error('Ошибка при редактировании канала:', err);
+      console.error('Error editing the channel:', err);
       setError(err.response ? err.response.data.message : t('error.editChannelFailed'));
     } finally {
       setSubmitting(false);
@@ -140,10 +139,9 @@ const Channels = () => {
             id={`dropdown-${channel.id}`}
             className="btn btn-anthracite"
           >
-            <span className="visually-hidden">{t('Управление каналом')}</span>
+            <span className="visually-hidden">{t('channel.management')}</span>
           </Dropdown.Toggle>
           <Dropdown.Menu>
-            {/* <Dropdown.Item as="button" onClick={() => handleDeleteChannel(channel.id)}> */}
             <Dropdown.Item as="button" onClick={() => handleDeleteChannel(channel.id, dispatch, channels, user?.token, setError, t)}>
               {t('channels.modal.delete')}
             </Dropdown.Item>
@@ -166,7 +164,7 @@ const Channels = () => {
           className="p-0 text-primary btn btn-group-vertical"
           onClick={handleOpenModal}
         >
-          <img src={addSymbol} className="rounded-circle" alt="Добавить канал" width="20px" height="20px" />
+          <img src={addSymbol} className="rounded-circle" alt="Add channel" width="20px" height="20px" />
           <span className="visually-hidden">+</span>
         </button>
       </Container>
@@ -195,7 +193,7 @@ const Channels = () => {
         ))}
       </ListGroup>
 
-      {/* Модальные окна */}
+      {/* Modal windows */}
       {isModalOpen && (
         <div className="modal show" style={{ display: 'block' }}>
           <div className="modal-dialog modal-dialog-centered">
