@@ -13,6 +13,8 @@ import leoProfanity from "leo-profanity";
 import forbiddenWords from '../../dictionary/index.js';
 import './Channels.css'
 import { toast } from 'react-toastify';
+import * as yup from 'yup';
+import { useFormik } from 'formik';
 
 const Channels = () => {
   const { t } = useTranslation();
@@ -86,7 +88,7 @@ const Channels = () => {
 
   const handleOpenEditModal = (channel) => {
     setEditingChannel(channel);
-    setNewChannelName(channel.name);
+    formik.setFieldValue('channelName', channel.name); // Update Formik state for edit
     setIsEditModalOpen(true);
   };
 
@@ -96,13 +98,8 @@ const Channels = () => {
     setNewChannelName('');
   };
 
-  const handleChangeNewChannelName = (e) => {
-    setNewChannelName(e.target.value);
-    setEmptyChannelNameError('');
-  };
 
-  const handleAddChannel = async (e) => {
-    e.preventDefault();
+  const handleAddChannel = async () => {
     const user = JSON.parse(localStorage.getItem('user'));
     const token = user?.token;
 
@@ -200,6 +197,29 @@ const Channels = () => {
     }
   };
 
+    const validationCreateChannel = (t) => yup.object({
+    channelName: yup.string()
+      .min(6, t('validationErrors.min6')) 
+      .max(20, t('validationErrors.max20')) 
+      .required(t('validationErrors.required'))
+      .test('is-unique', t('validationErrors.channelAlreadyExists'), function(value) {
+      const { channels } = this.options.context || {}; // Обеспечиваем защиту от undefined
+      if (!Array.isArray(channels)) return true; // Если channels нет или это не массив, пропускаем проверку
+      return !channels.some(channel => channel.name === value);
+    })
+  });
+
+  const formik = useFormik({
+    initialValues: {
+      channelName: '',
+    },
+    validationSchema: validationCreateChannel(t),
+    onSubmit: handleAddChannel,
+    validateOnChange: true,
+    context: { channels },
+  });
+
+
   const renderLoadingOrError = () => {
     if (loading) return <div>{t('loading.loadingChannels')}</div>;
     if (error) return <div>{error}</div>;
@@ -282,19 +302,23 @@ const Channels = () => {
                 <button type="button" className="btn-close" onClick={handleCloseModal}></button>
               </div>
               <div className="modal-body">
-                <form onSubmit={handleAddChannel}>
+                <form onSubmit={formik.handleSubmit}>
                   <div className="mb-3">
                     <label htmlFor="channelName" className="form-label">{t('channels.modal.typeChannelName')}</label>
                     <input
                       type="text"
                       id="channelName"
                       className="form-control"
-                      value={newChannelName}
-                      onChange={handleChangeNewChannelName}
+                      // value={newChannelName}
+                      value={formik.values.channelName}  // Controlled input
+  onChange={formik.handleChange}     // Add onChange handler from Formik
+  onBlur={formik.handleBlur}  
                     />
                   </div>
-                  {emptyChannelNameError && <div className="text-danger">{emptyChannelNameError}</div>} 
-                  {profanityError && <div className="text-danger">{profanityError}</div>} 
+                  {formik.errors.channelName && formik.touched.channelName && (
+  <div className="text-danger">{formik.errors.channelName}</div>
+)}
+                  {/* {profanityError && <div className="text-danger">{profanityError}</div>}  */}
                   <div className="d-flex justify-content-end">
                     <button type="button" className="me-2 btn btn-secondary" onClick={handleCloseModal}>
                       {t('channels.cancel')}
@@ -322,12 +346,13 @@ const Channels = () => {
                   <div className="mb-3">
                     <label htmlFor="channelName" className="form-label">{t('channels.modal.typeNewChannelName')}</label>
                     <input
-                      type="text"
-                      id="channelName"
-                      className="form-control"
-                      value={newChannelName}
-                      onChange={handleChangeNewChannelName}
-                    />
+  type="text"
+  id="channelName"
+  className="form-control"
+  value={formik.values.channelName}
+  onChange={formik.handleChange}
+  onBlur={formik.handleBlur}
+/>
                   </div>
                   <div className="d-flex justify-content-end">
                     <button type="button" className="me-2 btn btn-secondary" onClick={handleCloseEditModal}>

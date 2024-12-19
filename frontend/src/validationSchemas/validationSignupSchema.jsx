@@ -13,10 +13,10 @@ const validationSignupSchema = (t) => {
       .required(t('validationErrors.required')),
     password: yup
       .string()
-      .min(PASSWORD_MIN_LENGTH, t('validationErrors.passwordLength'))
-      .test('has-lowercase', t('validationErrors.passwordLowercase'), value => PASSWORD_REGEX_LOWERCASE.test(value)) // Проверка на строчную букву
-      .test('has-uppercase', t('validationErrors.passwordUppercase'), value => PASSWORD_REGEX_UPPERCASE.test(value)) // Проверка на заглавную букву
-      .test('has-symbol', t('validationErrors.passwordSymbol'), value => PASSWORD_REGEX_SYMBOL.test(value)) // Проверка на специальный символ
+      // .min(PASSWORD_MIN_LENGTH, t('validationErrors.passwordLength'))
+      // .test('has-lowercase', t('validationErrors.passwordLowercase'), value => PASSWORD_REGEX_LOWERCASE.test(value)) // Проверка на строчную букву
+      // .test('has-uppercase', t('validationErrors.passwordUppercase'), value => PASSWORD_REGEX_UPPERCASE.test(value)) // Проверка на заглавную букву
+      // .test('has-symbol', t('validationErrors.passwordSymbol'), value => PASSWORD_REGEX_SYMBOL.test(value)) // Проверка на специальный символ
       .required(t('validationErrors.required')),
     confirmPassword: yup
       .string()

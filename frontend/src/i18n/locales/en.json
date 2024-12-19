@@ -39,7 +39,8 @@
     "mismatchPasswords": "Passwords must match",
     "passwordSymbol": "Password must contain at least one special character",
     "passwordUppercase": "Password must contain at least one uppercase letter",
-    "passwordLowercase": "Password must contain at least one lowercase letter"
+    "passwordLowercase": "Password must contain at least one lowercase letter",
+    "channelAlreadyExists": "Channel with this name already exists"
   },
   "notFound": {
     "title": "Page Not Found",

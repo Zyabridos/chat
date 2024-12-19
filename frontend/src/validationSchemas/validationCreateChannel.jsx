@@ -1,14 +1,14 @@
 import * as yup from 'yup';
 
-const validationCreateChannel = yup.object({
+const validationCreateChannel = (t) => yup.object({
   channelName: yup.string()
-    .min(3, 'Название канала должно быть не менее 3 символов')
-    .max(20, 'Название канала не может быть более 20 символов')
-    .required('Название канала обязательно')
-    // .test('is-unique', 'Такой канал уже существует', function(value) {
-    //   const { channels } = this.options.context;
-    //   return !channels.some(channel => channel.name === value);
-    // }),
+    .min(6, t('validationErrors.min6')) 
+    .max(20, t('validationErrors.max20')) 
+    .required(t('validationErrors.required'))
+    .test('is-unique', (t('validationErrors.channelAlreadyExists')), function(value) {
+      const { channels } = this.options.context;
+      return !channels.some(channel => channel.name === value);
+    }),
 });
 
 export default validationCreateChannel;

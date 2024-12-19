@@ -3,7 +3,7 @@ import { useFormik } from 'formik';
 import { Form, Col, Card, Row } from 'react-bootstrap';
 import { AuthContext } from '../../contexts/index.jsx'
 import LoginFooter from './Footer.jsx';
-import Navbar from '../Navbar.jsx';
+import Navbar from '..//Navbar/Navbar.jsx';
 import { LoginPicture } from './../Attachments.jsx';
 import { LoginButton } from '../Buttons/Buttons.jsx';
 import validationLoginSchema from '../../validationSchemas/validationLoginSchema.jsx';
@@ -37,7 +37,7 @@ const LoginForm = () => {
       username: '',
       password: '',
     },
-    validationSchema: validationLoginSchema,
+    validationSchema: validationLoginSchema(t),
     onSubmit: handleSubmit,
   });
 

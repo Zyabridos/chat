@@ -17,24 +17,6 @@ const SignUpForm = () => {
   const inputRef = useRef(null);
   const navigate = useNavigate();
   const { signUp, serverError } = useContext(AuthContext);
-
-  // const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{6,}$/;
-  // const validationSignupSchema = yup.object({
-  //   username: yup
-  //     .string()
-  //     // .min(3, t('validationErrors.min3'))
-  //     .max(20, t('validationErrors.max20'))
-  //     .required(t('validationErrors.required')),
-  //   password: yup
-  //     .string()
-  //     // .min(6, t('validationErrors.min6'))
-  //     .required(t('validationErrors.required')),
-  //   confirmPassword: yup
-  //     .string()
-  //     .oneOf([yup.ref('password'), null], t('validationErrors.mismatchPasswords'))
-  //     .required(t('validationErrors.required')),
-  // });
-
   const handleSubmit = async (formikValues) => {
     try {
       const response = await signUp(formikValues.username, formikValues.password);
