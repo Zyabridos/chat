@@ -2,7 +2,7 @@ import * as yup from 'yup';
 
 const validationCreateChannel = (t) => yup.object({
   name: yup.string()
-    .min(6, t('validationErrors.min6')) 
+    .min(3, t('validationErrors.min6')) 
     .max(20, t('validationErrors.max20')) 
     .required(t('validationErrors.required'))
     // .test('is-unique', (t('validationErrors.channelAlreadyExists')), function(value) {

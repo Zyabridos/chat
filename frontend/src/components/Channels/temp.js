@@ -16,7 +16,7 @@ import { toast } from 'react-toastify';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as yup from 'yup';
 import validationCreateChannel from '../../validationSchemas/validationCreateChannel.jsx';
-import { handleDeleteChannel, handleAddChannel} from './buttonHandlers.js';
+import { handleDeleteChannel, handleAddChannel, handleEditChannel } from './buttonHandlers.js';
 
 const Channels = () => {
   const { t } = useTranslation();
@@ -93,37 +93,7 @@ const Channels = () => {
   };
 
   const user = JSON.parse(localStorage.getItem('user'));
-  const token = user?.token;
-
-  const handleEditChannel = async (values, { setSubmitting }) => {
-    const user = JSON.parse(localStorage.getItem('user'));
     const token = user?.token;
-
-    try {
-      const response = await axios.put(
-        `${routes.channelsPath()}/${editingChannel.id}`,
-        { name: values.name },
-        { headers: { 'Authorization': `Bearer ${token}` } }
-      );
-
-      if (response.data) {
-        dispatch(setChannels(
-          channels.map((channel) =>
-            channel.id === editingChannel.id ? { ...channel, name: values.name } : channel
-          )
-        ));
-        toast.success(t('toast.channelRenamed'));
-        handleCloseEditModal();
-      } else {
-        throw new Error('Ошибка при редактировании канала');
-      }
-    } catch (err) {
-      console.error('Ошибка при редактировании канала:', err);
-      setError(err.response ? err.response.data.message : t('error.editChannelFailed'));
-    } finally {
-      setSubmitting(false);
-    }
-  };
 
   const renderLoadingOrError = () => {
     if (loading) return <div>{t('loading.loadingChannels')}</div>;
@@ -252,7 +222,7 @@ const Channels = () => {
                 <Formik
                   initialValues={{ name: editingChannel?.name || '' }}
                   validationSchema={validationCreateChannel(t)}
-                  onSubmit={handleEditChannel}
+                  onSubmit={values => handleEditChannel(values, { setSubmitting }, channels, dispatch, setError, token, editingChannel.id, t)}
                 >
                   {({ isSubmitting }) => (
                     <Form>

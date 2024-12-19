@@ -1,0 +1,116 @@
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import routes from '../../routes';
+import { setChannels } from '../../slices/channelsSlice';
+import leoProfanity from 'leo-profanity';
+
+
+/**
+ * @param {string} channelId - channelId to edit/delete
+ * @param {Function} dispatch - upsate Redux store
+ * @param {Array} channels - list of all channels
+ * @param {string} token - auth token
+ * @param {Function} setError - func to set error
+ * @param {Function} t - funct of text translation
+ * @param {Object} values - obj with new form values (for example, { name: 'новое имя канала' })
+ * @param {Function} setSubmitting - funch to change submitting state
+ * @param {Array} channels - array of all channels
+ */
+export const handleDeleteChannel = async (channelId, dispatch, channels, token, setError, t) => {
+  if (!token) {
+    setError(t('error.tokenNotFound'));
+    return;
+  }
+
+  try {
+    const response = await axios.delete(`${routes.channelsPath()}/${channelId}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (response.status === 200) {
+      dispatch(setChannels(channels.filter((channel) => channel.id !== channelId)));
+      toast.success(t('toast.channelDeleted'));
+      setError(null);
+    } else {
+      throw new Error('Ошибка при удалении канала');
+    }
+  } catch (err) {
+    console.error('Ошибка при удалении канала:', err);
+    setError(err.response ? err.response.data.message : t('error.deleteChannelFailed'));
+  }
+};
+
+export const handleAddChannel = async (values, { setSubmitting }, channels, dispatch, handleCloseModal, setError, token, t) => {
+  if (leoProfanity.check(values.name)) {
+    setSubmitting(false);
+    toast.error(t('channelsFormErrors.profanityDetected'));
+    return;
+  }
+
+  try {
+    const response = await axios.post(
+      routes.channelsPath(),
+      { name: values.name },
+      { headers: { 'Authorization': `Bearer ${token}` } }
+    );
+
+    if (response.data) {
+      dispatch(setChannels([...channels, response.data]));
+      handleCloseModal();
+      toast.success(t('toast.channelCreated'));
+    } else {
+      throw new Error('Ошибка при создании канала. Ответ не содержит данных.');
+    }
+  } catch (err) {
+    console.error('Ошибка при добавлении канала:', err);
+    setError(err.response ? err.response.data.message : t('error.addChannelFailed'));
+  } finally {
+    setSubmitting(false);
+  }
+};
+
+
+
+export const handleEditChannel = async (
+  values, 
+  { setSubmitting },  // <- Ensure this is passed correctly here
+  channels,
+  dispatch,
+  setError,
+  token,
+  editingChannelId,
+  t
+) => {
+  if (leoProfanity.check(values.name)) {
+    setSubmitting(false);  // Ensure this is called to reset the submitting state
+    toast.error(t('channelsFormErrors.profanityDetected'));
+    return;
+  }
+
+  try {
+    const response = await axios.put(
+      `${routes.channelsPath()}/${editingChannelId}`,
+      { name: values.name },
+      { headers: { 'Authorization': `Bearer ${token}` } }
+    );
+
+    if (response.data) {
+      dispatch({
+        type: 'SET_CHANNELS',
+        payload: channels.map(channel =>
+          channel.id === editingChannelId ? { ...channel, name: values.name } : channel
+        ),
+      });
+      toast.success(t('toast.channelRenamed'));
+    } else {
+      throw new Error('Ошибка при редактировании канала');
+    }
+  } catch (err) {
+    console.error('Ошибка при редактировании канала:', err);
+    setError(err.response ? err.response.data.message : t('error.editChannelFailed'));
+  } finally {
+    setSubmitting(false);  // Ensure this is called when the action finishes (success or error)
+  }
+};
