@@ -4,7 +4,7 @@
     "changeToRussian": "Переключиться на русский"
   },
   "login": {
-    "title": "Вход",
+    "title": "Войти",
     "usernameLabel": "Ваш ник",
     "usernamePlaceholder": "Введите ваш ник",
     "passwordLabel": "Пароль",

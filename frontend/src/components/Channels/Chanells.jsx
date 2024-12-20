@@ -3,19 +3,18 @@ import addSymbol from '../../assets/add-symbol.png';
 import Container from 'react-bootstrap/Container';
 import ListGroup from 'react-bootstrap/ListGroup';
 import c from 'classnames';
-import axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux'; 
+import { useDispatch, useSelector } from 'react-redux';
 import { setChannels, setActiveChannel } from '../../slices/channelsSlice';
 import { useTranslation } from 'react-i18next';
-import routes from '../../routes';
 import { Dropdown } from 'react-bootstrap';
-import leoProfanity from "leo-profanity";
+import leoProfanity from 'leo-profanity';
 import forbiddenWords from '../../dictionary/index.js';
-import './Channels.css'
+import './Channels.css';
 import { toast } from 'react-toastify';
 import { handleDeleteChannel } from './buttonHandlers.js';
 import AddChannelModal from './Modals/AddChannellModal.jsx';
 import EditChannelModal from './Modals/EditChannelModal.jsx';
+import { fetchChannels } from '../../API/channels.js';
 
 const Channels = () => {
   const { t } = useTranslation();
@@ -40,33 +39,23 @@ const Channels = () => {
       return;
     }
 
-    const fetchChannels = async () => {
+    const loadChannels = async () => {
       try {
-        const response = await axios.get(routes.channelsPath(), {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-
-        if (response.data) {
-          dispatch(setChannels(response.data)); 
-        } else {
-          throw new Error('Unable to load channels. The response contains no data.');
-        }
+        const data = await fetchChannels(token);
+        dispatch(setChannels(data));
       } catch (err) {
-        console.error('Error fetching channels:', err); 
         setError(err.response ? err.response.data.message : t('error.fetchChannels'));
       } finally {
         setLoading(false);
       }
     };
 
-    fetchChannels();
+    loadChannels();
   }, [dispatch, t]);
 
   useEffect(() => {
     leoProfanity.loadDictionary('ru');
-    forbiddenWords.forEach(word => leoProfanity.add(word));
+    forbiddenWords.forEach((word) => leoProfanity.add(word));
   }, []);
 
   const handleChannelClick = (channel) => {
@@ -95,20 +84,21 @@ const Channels = () => {
   const token = user?.token;
 
   const handleEditChannel = async (values, { setSubmitting }) => {
-    console.log(values.name)
     try {
       const response = await axios.put(
         `${routes.channelsPath()}/${editingChannel.id}`,
         { name: values.name },
-        { headers: { 'Authorization': `Bearer ${token}` } }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
       if (response.data) {
-        dispatch(setChannels(
-          channels.map((channel) =>
-            channel.id === editingChannel.id ? { ...channel, name: values.name } : channel
+        dispatch(
+          setChannels(
+            channels.map((channel) =>
+              channel.id === editingChannel.id ? { ...channel, name: values.name } : channel
+            )
           )
-        ));
+        );
         toast.success(t('toast.channelRenamed'));
         handleCloseEditModal();
       } else {
@@ -140,7 +130,12 @@ const Channels = () => {
             <span className="visually-hidden">{t('channel.management')}</span>
           </Dropdown.Toggle>
           <Dropdown.Menu>
-            <Dropdown.Item as="button" onClick={() => handleDeleteChannel(channel.id, dispatch, channels, user?.token, setError, t)}>
+            <Dropdown.Item
+              as="button"
+              onClick={() =>
+                handleDeleteChannel(channel.id, dispatch, channels, user?.token, setError, t)
+              }
+            >
               {t('channels.modal.delete')}
             </Dropdown.Item>
             <Dropdown.Item as="button" onClick={() => handleOpenEditModal(channel)}>
@@ -169,7 +164,10 @@ const Channels = () => {
 
       {renderLoadingOrError()}
 
-      <ListGroup as="ul" className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block position-relative">
+      <ListGroup
+        as="ul"
+        className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block position-relative"
+      >
         {channels.map((channel) => (
           <ListGroup.Item as="li" className="nav-item w-100" key={channel.id}>
             <div className="d-flex justify-content-between align-items-center w-100">
@@ -177,7 +175,7 @@ const Channels = () => {
                 type="button"
                 className={c('w-100 rounded-0 text-start btn', {
                   'btn-secondary': activeChannel === channel.id,
-                  'btn-light': activeChannel !== channel.id, 
+                  'btn-light': activeChannel !== channel.id,
                 })}
                 onClick={() => handleChannelClick(channel)}
               >
@@ -191,9 +189,8 @@ const Channels = () => {
         ))}
       </ListGroup>
 
-      {/* Modal windows */}
-      <AddChannelModal 
-        isModalOpen={isModalOpen} 
+      <AddChannelModal
+        isModalOpen={isModalOpen}
         handleCloseModal={handleCloseModal}
         channels={channels}
         dispatch={dispatch}
