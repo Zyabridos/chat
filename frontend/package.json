@@ -18,7 +18,6 @@
     "@rollbar/react": "^0.12.0-beta",
     "axios": "^1.7.8",
     "bootstrap": "^5.3.3",
-    "eslint-plugin-functional": "^4.4.1",
     "express": "^4.21.2",
     "formik": "^2.4.6",
     "i18next": "^24.1.0",
@@ -49,6 +48,6 @@
     "globals": "^15.13.0"
   },
   "engines": {
-  "node": ">=18.18.0 <2p.0.0"
+  "node": ">=18.18.0 <=20.18.1"
 }
 }
