@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../store/slices/userSlice.js';
+import routes from '../routes.js';
 
 const ProtectedRoute = ({ children }) => {
   const dispatch = useDispatch();
@@ -32,7 +33,7 @@ const ProtectedRoute = ({ children }) => {
 
   // Check if there is a token in Redux and whether the user is authenticated
   if (!user.token || !user.username) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to={routes.loginPath()} replace />;
   }
 
   return children;

@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Form } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux'; 
-import { addMessage, setMessages } from '../../store/slices/messagesSlice.js'; 
-import axios from 'axios'; 
-import routes from '../../routes.js'; 
-import Message from './Message.jsx'; 
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
+import { useTranslation } from 'react-i18next';
+import leoProfanity from 'leo-profanity';
+import { addMessage, setMessages } from '../../store/slices/messagesSlice.js';
+import routes from '../../routes.js';
+import Message from './Message.jsx';
 import { SendMessageButton } from '../Buttons/Buttons.jsx';
 import { handleLoginErrors } from '../../utils.js';
-import { useTranslation } from 'react-i18next';
-import leoProfanity from "leo-profanity"; 
-import forbiddenWords from '../../dictionary/index.js'; 
+import forbiddenWords from '../../dictionary/index.js';
 import { setActiveChannel } from '../../store/slices/channelsSlice.js';
 
 const MessagesForm = () => {
@@ -20,17 +20,7 @@ const MessagesForm = () => {
 
   const [messageBody, setMessageBody] = useState(''); // message input
   const [error, setError] = useState(''); // displaying errors state
-  const { t } = useTranslation(); 
-
-  useEffect(() => {
-    leoProfanity.loadDictionary('ru');
-    forbiddenWords.forEach(word => leoProfanity.add(word));
-
-    // Load messages when the component is mounted or activeChannel changes
-    if (activeChannel) {
-      loadMessages();
-    }
-  }, [activeChannel, channels]);
+  const { t } = useTranslation();
 
   // Function to fetch messages from the server for the active channel
   const loadMessages = async () => {
@@ -42,7 +32,7 @@ const MessagesForm = () => {
     try {
       const response = await axios.get(`${routes.messagesPath()}?channelId=${activeChannel.id}`, {
         headers: {
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
       if (response.data) {
@@ -54,10 +44,20 @@ const MessagesForm = () => {
     }
   };
 
+  useEffect(() => {
+    leoProfanity.loadDictionary('ru');
+    forbiddenWords.forEach((word) => leoProfanity.add(word));
+
+    // Load messages when the component is mounted or activeChannel changes
+    if (activeChannel) {
+      loadMessages();
+    }
+  }, [activeChannel, channels]);
+
   // Set default active channel if no active channel is selected
   useEffect(() => {
     if (activeChannel === null && channels.length > 0) {
-      const defaultChannel = channels.find(channel => channel.name === 'general');
+      const defaultChannel = channels.find((channel) => channel.name === 'general');
       if (defaultChannel) {
         dispatch(setActiveChannel(defaultChannel.id)); // Set 'general' channel as active
       }
@@ -84,26 +84,33 @@ const MessagesForm = () => {
 
     const config = {
       headers: {
-        'Authorization': `Bearer ${token}`, // Add token to the request headers
+        Authorization: `Bearer ${token}`, // Add token to the request headers
       },
     };
 
-    if (messageBody.trim()) { // Check if the message body is not empty
+    if (messageBody.trim()) {
+      // Check if the message body is not empty
       try {
         // Send message to the server
-        const response = await axios.post(routes.messagesPath(), { 
-          body: messageBody,
-          channelId: activeChannel.id,
-          userName,
-        }, config);
+        const response = await axios.post(
+          routes.messagesPath(),
+          {
+            body: messageBody,
+            channelId: activeChannel.id,
+            userName,
+          },
+          config
+        );
 
         // Add new message to Redux
-        dispatch(addMessage({
-          id: response.data.id,
-          body: messageBody,
-          userName,
-          channelId: activeChannel.id
-        }));
+        dispatch(
+          addMessage({
+            id: response.data.id,
+            body: messageBody,
+            userName,
+            channelId: activeChannel.id,
+          })
+        );
 
         setMessageBody(''); // Clear the message input field
         setError(''); // Clear error message
@@ -124,7 +131,7 @@ const MessagesForm = () => {
   };
 
   const cleanProfanityMessage = (message) => {
-    return leoProfanity.clean(message); 
+    return leoProfanity.clean(message);
   };
 
   // Filter messages based on the active channel
@@ -136,13 +143,16 @@ const MessagesForm = () => {
         {/* Display only messages for the active channel */}
         {filteredMessages.length > 0 ? (
           filteredMessages.map((msg) => (
-            <Message key={msg.id} userName={msg.userName} message={cleanProfanityMessage(msg.body)} />
+            <Message
+              key={msg.id}
+              userName={msg.userName}
+              message={cleanProfanityMessage(msg.body)}
+            />
           ))
         ) : (
           <div>{t('channelsForm.noMessages')}</div> // Show message if no messages are present
         )}
       </div>
-
       <Form.Group className="input-group">
         <Form.Control
           name="body"
@@ -150,12 +160,11 @@ const MessagesForm = () => {
           aria-label={t('channelsForm.newMessage')}
           className="border-0 p-0 ps-2 form-control"
           placeholder={t('channelsForm.enterMessage')}
-          value={messageBody} 
-          onChange={handleChange} 
+          value={messageBody}
+          onChange={handleChange}
         />
-        <SendMessageButton /> 
+        <SendMessageButton />
       </Form.Group>
-
       {error && <div className="text-danger">{error}</div>} {/* Display error if there is one */}
     </Form>
   );

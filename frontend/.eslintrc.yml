@@ -39,6 +39,10 @@ rules:
     [2, { 'namedComponents': 'arrow-function' }]
   testing-library/no-debug: 0
   react/jsx-filename-extension: [1, { 'extensions': ['.js', '.jsx'] }]
+  # Assignment to property of function parameter 'state' 
+  no-param-reassign:
+    [2, { 'props': true, 'ignorePropertyModificationsFor': ['state'] }]
+
 
   prettier/prettier: [
       'error',

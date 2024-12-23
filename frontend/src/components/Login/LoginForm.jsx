@@ -1,29 +1,34 @@
 import React, { useRef, useState, useContext } from 'react';
 import { useFormik } from 'formik';
 import { Form, Col, Card, Row } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../contexts/index.jsx';
 import LoginFooter from './Footer.jsx';
-import Navbar from '..//Navbar/Navbar.jsx';
-import { LoginPicture } from './../Attachments.jsx';
+import Navbar from '../Navbar/Navbar.jsx';
+import { LoginPicture } from '../Attachments.jsx';
 import { LoginButton } from '../Buttons/Buttons.jsx';
 import validationLoginSchema from '../../validationSchemas/validationLoginSchema.jsx';
 import { FieldError } from '../styles.jsx';
-import { StyledCardBody } from './styles.jsx'
-import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { StyledCardBody } from './styles.jsx';
 
 const LoginForm = () => {
   document.body.classList.add('h-100', 'bg-light');
   const { logIn } = useContext(AuthContext);
   const [authFailed, setAuthFailed] = useState(false); // State for tracking authentication failure
-  const [errorMessage, setErrorMessage] = useState(""); // State for storing error message on failed login
+  const [errorMessage, setErrorMessage] = useState(''); // State for storing error message on failed login
   const inputRef = useRef(null); // Reference to the username input field
   const { t } = useTranslation();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleSubmit = async (formikValues) => {
     try {
-      const response = await logIn(formikValues.username, formikValues.password, setErrorMessage, setAuthFailed);
+      const response = await logIn(
+        formikValues.username,
+        formikValues.password,
+        setErrorMessage,
+        setAuthFailed
+      );
       if (response && response.data) {
         const { token, username } = response.data;
         localStorage.setItem('user', JSON.stringify({ token, username }));
@@ -52,9 +57,15 @@ const LoginForm = () => {
             <Row className="row justify-content-center align-content-center h-100">
               <Col className="col-12 col-md-8 col-xxl-6">
                 <Card className="card shadow-sm">
-                  <StyledCardBody className="card-body row"
-                    style={{ padding: '4.5rem', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-                    >
+                  <StyledCardBody
+                    className="card-body row"
+                    style={{
+                      padding: '4.5rem',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
                     <LoginPicture />
                     <Form onSubmit={formik.handleSubmit} className="col-12 col-md-6 mt-3 mt-md-0">
                       <h1>{t('login.title')}</h1>

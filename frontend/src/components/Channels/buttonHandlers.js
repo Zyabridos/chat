@@ -16,6 +16,7 @@ import leoProfanity from 'leo-profanity';
  * @param {Function} setSubmitting - funch to change submitting state
  * @param {Array} channels - array of all channels
  */
+
 export const handleDeleteChannel = async (channelId, dispatch, channels, token, setError, t) => {
   if (!token) {
     setError(t('error.tokenNotFound'));

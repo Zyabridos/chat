@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import Navbar from './Navbar';
 import { NotFoundPicture } from './Attachments';
 
-export default function NotFound() {
+const NotFound = () => {
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -27,8 +27,10 @@ export default function NotFound() {
             </p>
           </div>
         </div>
-        <div className="Toastify"></div>
+        <div className="Toastify" />
       </div>
     </div>
   );
-}
+};
+
+export default NotFound;

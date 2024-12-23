@@ -3,8 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import routes from '../routes.js';
-import { handleLoginErrors } from '../utils.js';
-import { handleSignUpError } from '../utils.js';
+import { handleLoginErrors, handleSignUpError } from '../utils.js';
 
 export const AuthContext = createContext();
 
@@ -32,7 +31,7 @@ const AuthProvider = ({ children }) => {
         localStorage.setItem('user', JSON.stringify({ token, username })); // Store user data in localStorage
         setUser({ token, username }); // Set user data in state
         setLoggedIn(true); // Update logged-in status
-        navigate('/');
+        navigate(routes.mainPage());
       }
       return response;
     } catch (error) {
@@ -44,7 +43,7 @@ const AuthProvider = ({ children }) => {
     localStorage.removeItem('user');
     setLoggedIn(false);
     setUser(null);
-    navigate('/login');
+    navigate(routes.loginPath());
   };
 
   const signUp = async (login, password) => {
@@ -56,17 +55,12 @@ const AuthProvider = ({ children }) => {
     }
   };
 
-  const memoizedValue = useMemo(() => ({ loggedIn, logIn, logOut, signUp, user, serverError }), [
-    loggedIn,
-    user,
-    serverError,
-  ]);
-
-  return (
-    <AuthContext.Provider value={memoizedValue}>
-      {children}
-    </AuthContext.Provider>
+  const memoizedValue = useMemo(
+    () => ({ loggedIn, logIn, logOut, signUp, user, serverError }),
+    [loggedIn, user, serverError]
   );
+
+  return <AuthContext.Provider value={memoizedValue}>{children}</AuthContext.Provider>;
 };
 
 export default AuthProvider;

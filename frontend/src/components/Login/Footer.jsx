@@ -1,4 +1,4 @@
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
 export default function LoginFooter() {
   const { t } = useTranslation();
@@ -9,5 +9,5 @@ export default function LoginFooter() {
         <a href="/signup">{t('login.footer.registration')}</a>
       </div>
     </div>
-  )
+  );
 }

@@ -1,15 +1,16 @@
 import React, { useState, useContext } from 'react';
 import { useFormik } from 'formik';
 import { Form } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../contexts/index.jsx';
 import { FieldError } from '../Login/styles.jsx';
 import { SignupButton } from '../Buttons/Buttons.jsx';
 import { SugnupPicture } from '../Attachments.jsx';
-import Navbar from '..//Navbar/Navbar.jsx';
-import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import Navbar from '../Navbar/Navbar.jsx';
 import 'react-toastify/dist/ReactToastify.css';
 import validationSignupSchema from '../../validationSchemas/validationSignupSchema.jsx';
+import routes from '../../routes.js';
 
 const SignUpForm = () => {
   const { t } = useTranslation();
@@ -24,7 +25,7 @@ const SignUpForm = () => {
       if (response && response.data) {
         const { token, username } = response.data;
         localStorage.setItem('user', JSON.stringify({ token, username })); // Store the user data in localStorage
-        navigate('/'); // Redirect to the home page upon successful sign-up
+        navigate(routes.mainPage()); // Redirect to the home page upon successful sign-up
       }
     } catch (error) {
       console.log(error);
@@ -52,11 +53,11 @@ const SignUpForm = () => {
   };
 
   return (
-    <div className='h-100'>
-      <div className='h-100' id='chat'>
-        <div className='d-flex flex-column h-100'>
+    <div className="h-100">
+      <div className="h-100" id="chat">
+        <div className="d-flex flex-column h-100">
           <Navbar />
-          <div className='container-fluid h-100'>
+          <div className="container-fluid h-100">
             <div className="row justify-content-center align-content-center h-100">
               <div className="card-body d-flex flex-column flex-md-row justify-content-around align-items-center p-5">
                 <SugnupPicture />
@@ -65,11 +66,12 @@ const SignUpForm = () => {
                   <fieldset>
                     {/* Username input */}
                     <Form.Group className="form-floating mb-3">
-                      <Form.Label className="form-label" htmlFor="username">{t('signup.usernameLabel')}</Form.Label>
+                      <Form.Label className="form-label" htmlFor="username">
+                        {t('signup.usernameLabel')}
+                      </Form.Label>
                       <Form.Control
                         className="form-control"
                         type="text"
-                        // placeholder={focusedField !== 'username' ? t('signup.usernameLabel') : ''}
                         placeholder={t('signup.usernameLabel')}
                         name="username"
                         id="username"
@@ -79,14 +81,6 @@ const SignUpForm = () => {
                         onFocus={() => handleFocus('username')}
                         onBlur={() => handleBlur('username')}
                         required
-
-          //               name="body"
-          // type="text"
-          // aria-label={t('channelsForm.newMessage')}
-          // className="border-0 p-0 ps-2 form-control"
-          // placeholder={t('channelsForm.enterMessage')}
-          // value={messageBody} 
-          // onChange={handleChange} 
                       />
                       {formik.touched.username && formik.errors.username && (
                         <FieldError>{formik.errors.username}</FieldError>
@@ -95,7 +89,9 @@ const SignUpForm = () => {
 
                     {/* Password input */}
                     <Form.Group className="form-floating mb-3">
-                      <Form.Label htmlFor="password" className="form-label">{t('signup.passwordLabel')}</Form.Label>
+                      <Form.Label htmlFor="password" className="form-label">
+                        {t('signup.passwordLabel')}
+                      </Form.Label>
                       <Form.Control
                         className="form-control"
                         type="password"
@@ -103,7 +99,9 @@ const SignUpForm = () => {
                         name="password"
                         autoComplete="current-password"
                         id="password"
-                        placeholder={focusedField !== 'password' ? t('signup.passwordPlaceholder') : ''}
+                        placeholder={
+                          focusedField !== 'password' ? t('signup.passwordPlaceholder') : ''
+                        }
                         onChange={formik.handleChange}
                         value={formik.values.password}
                         onFocus={() => handleFocus('password')}
@@ -117,7 +115,9 @@ const SignUpForm = () => {
 
                     {/* Repeat password input */}
                     <Form.Group className="form-floating mb-3">
-                      <Form.Label htmlFor="confirmPassword" className="form-label">{t('signup.repeatPasswordLabel')}</Form.Label>
+                      <Form.Label htmlFor="confirmPassword" className="form-label">
+                        {t('signup.repeatPasswordLabel')}
+                      </Form.Label>
                       <Form.Control
                         className="form-control"
                         type="password"
@@ -125,7 +125,11 @@ const SignUpForm = () => {
                         name="confirmPassword"
                         autoComplete="new-password"
                         id="confirmPassword"
-                        placeholder={focusedField !== 'confirmPassword' ? t('signup.repeatPasswordPlaceholder') : ''}
+                        placeholder={
+                          focusedField !== 'confirmPassword'
+                            ? t('signup.repeatPasswordPlaceholder')
+                            : ''
+                        }
                         onChange={formik.handleChange}
                         value={formik.values.confirmPassword}
                         onFocus={() => handleFocus('confirmPassword')}
@@ -139,7 +143,9 @@ const SignUpForm = () => {
                     </Form.Group>
 
                     {/* Server Error Container  */}
-                    <FieldError>{serverError && <div className="error-message">{serverError}</div>}</FieldError>
+                    <FieldError>
+                      {serverError && <div className="error-message">{serverError}</div>}
+                    </FieldError>
 
                     <SignupButton />
                   </fieldset>
