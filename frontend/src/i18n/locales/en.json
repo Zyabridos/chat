@@ -77,7 +77,8 @@
   "error": {
     "tokenNotFound": "Token not found. Please log in again.",
     "fetchChannels": "Error loading channels",
-    "addChannel": "Error adding channel"
+    "addChannel": "Error adding channel",
+    "editChannelFailed": "Error during renaming of channel"
   },
   "channelsFormErrors": {
     "tokenNotFound": "Token not found. Please log in again.",

@@ -15,6 +15,8 @@ import { handleDeleteChannel } from './buttonHandlers.js';
 import AddChannelModal from './Modals/AddChannellModal.jsx'; 
 import EditChannelModal from './Modals/EditChannelModal.jsx'; 
 import { fetchChannels } from '../../API/channels.js'; 
+import axios from 'axios'
+import routes from '../../routes.js';
 
 const Channels = () => {
   const { t } = useTranslation();
@@ -89,12 +91,14 @@ const Channels = () => {
   // Handle the editing of a channel (renaming the channel)
   const handleEditChannel = async (values, { setSubmitting }) => {
     try {
-      const response = await axios.put(
+      const editedChannel = { name: values.name };
+      const response = await axios.patch(
         `${routes.channelsPath()}/${editingChannel.id}`,
-        { name: values.name },
+        editedChannel, 
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
+      console.log(response.data)
       if (response.data) {
         dispatch(
           setChannels(
