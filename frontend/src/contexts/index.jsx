@@ -3,16 +3,17 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import routes from '../routes.js';
+import { handleLoginErrors } from '../utils.js'
 
 export const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
   const { t } = useTranslation();
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [user, setUser] = useState(null);
+  const [loggedIn, setLoggedIn] = useState(false); // State to track login status
+  const [user, setUser] = useState(null); // State to store user data
   const navigate = useNavigate();
 
-  // Загрузить пользователя из localStorage при монтировании
+  // Load the user from localStorage on mount
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
@@ -26,10 +27,10 @@ const AuthProvider = ({ children }) => {
       const response = await axios.post(routes.loginPath(), { username: login, password });
       if (response && response.data) {
         const { token, username } = response.data;
-        localStorage.setItem('user', JSON.stringify({ token, username }));
-        setUser({ token, username });
-        setLoggedIn(true);
-        navigate('/');  // Редирект после успешного логина
+        localStorage.setItem('user', JSON.stringify({ token, username })); // Store user data in localStorage
+        setUser({ token, username }); // Set user data in state
+        setLoggedIn(true); // Update logged-in status
+        navigate('/');
       }
       return response;
     } catch (error) {
@@ -41,7 +42,7 @@ const AuthProvider = ({ children }) => {
     localStorage.removeItem('user');
     setLoggedIn(false);
     setUser(null);
-    navigate('/login');  // Редирект после логаута
+    navigate('/login');
   };
 
   const signUp = async (login, password) => {

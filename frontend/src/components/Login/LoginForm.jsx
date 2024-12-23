@@ -14,11 +14,11 @@ import { useNavigate } from 'react-router-dom';
 const LoginForm = () => {
   document.body.classList.add('h-100', 'bg-light');
   const { logIn } = useContext(AuthContext);
-  const [authFailed, setAuthFailed] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(""); // Ошибка сети
-  const inputRef = useRef(null);
+  const [authFailed, setAuthFailed] = useState(false); // State for tracking authentication failure
+  const [errorMessage, setErrorMessage] = useState(""); // State for storing error message on failed login
+  const inputRef = useRef(null); // Reference to the username input field
   const { t } = useTranslation();
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const handleSubmit = async (formikValues) => {
     try {
@@ -29,7 +29,6 @@ const LoginForm = () => {
         navigate('/');
       }
     } catch (error) {
-      // Ошибка обработана в logIn, не нужно повторно здесь
       console.error('Login failed', error);
     }
   };
@@ -58,6 +57,7 @@ const LoginForm = () => {
                       <h1>{t('login.title')}</h1>
                       <fieldset disabled={formik.isSubmitting}>
                         <Form.Group>
+                          {/* Username input */}
                           <Form.Label className="form-label" htmlFor="username">
                             {t('login.usernameLabel')}
                           </Form.Label>
@@ -74,12 +74,14 @@ const LoginForm = () => {
                             required
                             ref={inputRef}
                           />
+                          {/* Display username validation error container */}
                           {formik.touched.username && formik.errors.username && (
                             <FieldError>{formik.errors.username}</FieldError>
                           )}
                         </Form.Group>
 
                         <Form.Group>
+                          {/* Password Input */}
                           <Form.Label htmlFor="password" className="form-label">
                             {t('login.passwordLabel')}
                           </Form.Label>
@@ -95,9 +97,11 @@ const LoginForm = () => {
                             isInvalid={authFailed}
                             required
                           />
+                          {/* Display password validation error container */}
                           {formik.touched.password && formik.errors.password && (
                             <FieldError>{formik.errors.password}</FieldError>
                           )}
+                          {/* Display Network error */}
                           <Form.Control.Feedback type="invalid">
                             {authFailed && errorMessage && <FieldError>{errorMessage}</FieldError>}
                           </Form.Control.Feedback>

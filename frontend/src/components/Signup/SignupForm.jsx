@@ -23,8 +23,8 @@ const SignUpForm = () => {
       const response = await signUp(formikValues.username, formikValues.password);
       if (response && response.data) {
         const { token, username } = response.data;
-        localStorage.setItem('user', JSON.stringify({ token, username }));
-        navigate('/');
+        localStorage.setItem('user', JSON.stringify({ token, username })); // Store the user data in localStorage
+        navigate('/'); // Redirect to the home page upon successful sign-up
       }
     } catch (error) {
       console.log(error);
@@ -63,6 +63,7 @@ const SignUpForm = () => {
                 <Form onSubmit={formik.handleSubmit} className="w-50">
                   <h1 className="text-center mb-4">{t('signup.title')}</h1>
                   <fieldset>
+                    {/* Username input */}
                     <Form.Group className="form-floating mb-3">
                       <Form.Label className="form-label" htmlFor="username">{t('signup.usernameLabel')}</Form.Label>
                       <Form.Control
@@ -83,6 +84,7 @@ const SignUpForm = () => {
                       )}
                     </Form.Group>
 
+                    {/* Password input */}
                     <Form.Group className="form-floating mb-3">
                       <Form.Label htmlFor="password" className="form-label">{t('signup.passwordLabel')}</Form.Label>
                       <Form.Control
@@ -104,6 +106,7 @@ const SignUpForm = () => {
                       )}
                     </Form.Group>
 
+                    {/* Repeat password input */}
                     <Form.Group className="form-floating mb-3">
                       <Form.Label htmlFor="confirmPassword" className="form-label">{t('signup.repeatPasswordLabel')}</Form.Label>
                       <Form.Control
@@ -120,12 +123,13 @@ const SignUpForm = () => {
                         onBlur={() => handleBlur('confirmPassword')}
                         required
                       />
+                      {/* Validatuin Error Container  */}
                       {formik.touched.confirmPassword && formik.errors.confirmPassword && (
                         <FieldError>{formik.errors.confirmPassword}</FieldError>
                       )}
                     </Form.Group>
 
-                    {/* Отображаем ошибку от сервера */}
+                    {/* Server Error Container  */}
                     <FieldError>{serverError && <div className="error-message">{serverError}</div>}</FieldError>
 
                     <SignupButton />

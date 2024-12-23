@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { login } from '../slices/userSlice.js';
+import { login } from '../store/slices/userSlice.js';
 
 const ProtectedRoute = ({ children }) => {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user); // Получаем состояние пользователя из Redux
+  const user = useSelector((state) => state.user); // Get the user state from Redux
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
@@ -13,12 +13,12 @@ const ProtectedRoute = ({ children }) => {
       try {
         const parsedUser = JSON.parse(storedUser);
 
-        // Проверка на наличие токена и его валидность
+        // Check if the token exists and is valid
         if (parsedUser.token && parsedUser.username) {
-          // Здесь можно добавить дополнительные проверки, например, на срок действия токена
-          dispatch(login(parsedUser)); // Устанавливаем пользователя в Redux
+          // Additional checks can be added here, e.g., token expiration
+          dispatch(login(parsedUser)); // Set the user in Redux
         } else {
-          // Если данные некорректны, очистить localStorage и Redux
+          // If the data is invalid, clear localStorage and Redux
           localStorage.removeItem('user');
           dispatch(login({ token: null, username: null }));
         }
@@ -30,7 +30,7 @@ const ProtectedRoute = ({ children }) => {
     }
   }, [dispatch]);
 
-  // Проверяем, есть ли токен в Redux и является ли пользователь авторизованным
+  // Check if there is a token in Redux and whether the user is authenticated
   if (!user.token || !user.username) {
     return <Navigate to="/login" replace />;
   }

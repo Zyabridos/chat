@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import routes from '../../routes';
-import { setChannels } from '../../slices/channelsSlice';
+import { setChannels } from '../../store/slices/channelsSlice';
 import leoProfanity from 'leo-profanity';
 
 
