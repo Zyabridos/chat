@@ -1,6 +1,16 @@
 import avatarLogo from '../assets/avatar-DIE1AEpS.jpg'
 import sugnupAvatar from '../assets/signupAvatar.jpg'
 import notFound from '../assets/404-NotFound.svg'
+import loading from '../assets/loading.gif'
+
+export const LoadingBar = ({ t }) => {
+  return (
+        <div className="loading-container">
+          <img src={loading} alt="Loading..." className="loading-gif" />
+          <div>{t('loading.loadingChannels')}</div>
+        </div>
+      );
+}
 
 export const LoginPicture = () => {
   return (

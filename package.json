@@ -12,14 +12,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Zyabridos/slack_chat.git"
+    "url": "git+https://github.com/Zyabridos/chat.git"
   },
   "author": "Nina Zyabrina",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Zyabridos/slack_chat/issues"
+    "url": "https://github.com/Zyabridos/chat/issues"
   },
-  "homepage": "https://github.com/Zyabridos/slack_chat#readme",
+  "homepage": "https://github.com/Zyabridos/chat#readme",
   "dependencies": {
     "@hexlet/chat-server": "^2.0.4"
   }

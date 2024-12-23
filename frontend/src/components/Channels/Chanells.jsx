@@ -17,6 +17,7 @@ import EditChannelModal from './Modals/EditChannelModal.jsx';
 import { fetchChannels } from '../../API/channels.js'; 
 import axios from 'axios'
 import routes from '../../routes.js';
+import { LoadingBar } from '../Attachments.jsx'
 
 const Channels = () => {
   const { t } = useTranslation();
@@ -56,7 +57,7 @@ const Channels = () => {
     };
 
     loadChannels();
-  }, [dispatch, t]); // Re-run this effect when `dispatch` or `t` changes
+  }, [dispatch, t]);
 
   useEffect(() => {
     leoProfanity.loadDictionary('ru');
@@ -121,13 +122,6 @@ const Channels = () => {
     }
   };
 
-  // Render loading or error messages based on component state
-  const renderLoadingOrError = () => {
-    if (loading) return <div>{t('loading.loadingChannels')}</div>;
-    if (error) return <div>{error}</div>;
-    return null;
-  };
-
   // Render management buttons (delete, rename) for each channel if the user has permissions
   const renderManagementButton = (channel) => {
     if (channel.removable) {
@@ -156,6 +150,13 @@ const Channels = () => {
         </Dropdown>
       );
     }
+    return null;
+  };
+
+  // Render loading or error messages based on component state
+  const renderLoadingOrError = () => {
+    if (loading) return <LoadingBar t={t} />; 
+    if (error) return <div>{error}</div>;
     return null;
   };
 

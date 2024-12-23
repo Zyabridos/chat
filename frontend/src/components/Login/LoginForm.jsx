@@ -8,6 +8,7 @@ import { LoginPicture } from './../Attachments.jsx';
 import { LoginButton } from '../Buttons/Buttons.jsx';
 import validationLoginSchema from '../../validationSchemas/validationLoginSchema.jsx';
 import { FieldError } from '../styles.jsx';
+import { StyledCardBody } from './styles.jsx'
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -51,7 +52,9 @@ const LoginForm = () => {
             <Row className="row justify-content-center align-content-center h-100">
               <Col className="col-12 col-md-8 col-xxl-6">
                 <Card className="card shadow-sm">
-                  <Card.Body className="card-body row p-5">
+                  <StyledCardBody className="card-body row"
+                    style={{ padding: '4.5rem', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+                    >
                     <LoginPicture />
                     <Form onSubmit={formik.handleSubmit} className="col-12 col-md-6 mt-3 mt-md-0">
                       <h1>{t('login.title')}</h1>
@@ -110,7 +113,7 @@ const LoginForm = () => {
                       </fieldset>
                     </Form>
                     <LoginFooter />
-                  </Card.Body>
+                  </StyledCardBody>
                 </Card>
               </Col>
             </Row>

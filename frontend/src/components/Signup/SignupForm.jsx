@@ -69,7 +69,8 @@ const SignUpForm = () => {
                       <Form.Control
                         className="form-control"
                         type="text"
-                        placeholder={focusedField !== 'username' ? t('signup.usernameLabel') : ''}
+                        // placeholder={focusedField !== 'username' ? t('signup.usernameLabel') : ''}
+                        placeholder={t('signup.usernameLabel')}
                         name="username"
                         id="username"
                         autoComplete="username"
@@ -78,6 +79,14 @@ const SignUpForm = () => {
                         onFocus={() => handleFocus('username')}
                         onBlur={() => handleBlur('username')}
                         required
+
+          //               name="body"
+          // type="text"
+          // aria-label={t('channelsForm.newMessage')}
+          // className="border-0 p-0 ps-2 form-control"
+          // placeholder={t('channelsForm.enterMessage')}
+          // value={messageBody} 
+          // onChange={handleChange} 
                       />
                       {formik.touched.username && formik.errors.username && (
                         <FieldError>{formik.errors.username}</FieldError>

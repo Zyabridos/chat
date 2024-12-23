@@ -3,7 +3,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import routes from '../routes.js';
-import { handleLoginErrors } from '../utils.js'
+import { handleLoginErrors } from '../utils.js';
+import { handleSignUpError } from '../utils.js';
 
 export const AuthContext = createContext();
 
@@ -11,6 +12,7 @@ const AuthProvider = ({ children }) => {
   const { t } = useTranslation();
   const [loggedIn, setLoggedIn] = useState(false); // State to track login status
   const [user, setUser] = useState(null); // State to store user data
+  const [serverError, setServerError] = useState(null); // State for server error messages
   const navigate = useNavigate();
 
   // Load the user from localStorage on mount
@@ -50,11 +52,15 @@ const AuthProvider = ({ children }) => {
       const response = await axios.post(routes.signupPath(), { username: login, password });
       return response;
     } catch (error) {
-      handleSignUpError(error, setServerError, t);
+      handleSignUpError(error, setServerError, t); // Pass setServerError to handleSignUpError
     }
   };
 
-  const memoizedValue = useMemo(() => ({ loggedIn, logIn, logOut, signUp, user }), [loggedIn, user]);
+  const memoizedValue = useMemo(() => ({ loggedIn, logIn, logOut, signUp, user, serverError }), [
+    loggedIn,
+    user,
+    serverError,
+  ]);
 
   return (
     <AuthContext.Provider value={memoizedValue}>

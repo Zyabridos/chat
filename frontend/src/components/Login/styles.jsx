@@ -1,3 +1,4 @@
+import { Card } from 'react-bootstrap';
 import styled from "styled-components";
 
 export const FieldContainer = styled.div`
@@ -27,3 +28,10 @@ export const FormSuccess = styled.span`
 export const mainContainer = styled.div`
   class="row justify-content-center align-content-center h-100"
 `
+
+export const StyledCardBody = styled(Card.Body)`
+  padding: 4.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
