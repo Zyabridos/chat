@@ -3,9 +3,13 @@
 ### Hexlet Tests and Linter Status  
 [![Actions Status](https://github.com/Zyabridos/fullstack-javascript-project-12/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/Zyabridos/fullstack-javascript-project-12/actions)
 
-# Project description
+## Project Description
 
-Chat Project is a project currently under development.
+This is a 3-page chat application where users can log in, sign up, and participate in chats. The app includes the following features:
+
+- **Login/Signup**: Log in using the credentials (username: admin, password: admin) or create a new account on the signup page.
+- **Channels**: Users can join different chat channels, write messages, and switch between channels.
+- **Channel Management**: Users can rename or delete channels they have created.
 
 # Project Setup
 
