@@ -14,7 +14,7 @@ import { setActiveChannel } from '../../slices/channelsSlice.js';
 
 const MessagesForm = () => {
   const dispatch = useDispatch();
-  const messages = useSelector((state) => state.messagesInfo.messages); // Сообщения из Redux
+  const messages = useSelector((state) => state.messagesInfo.messages); // messages from Redux
   const activeChannel = useSelector((state) => state.channelsInfo.activeChannel); 
   const channels = useSelector((state) => state.channelsInfo.channels); 
 
@@ -26,7 +26,7 @@ const MessagesForm = () => {
     leoProfanity.loadDictionary('ru');
     forbiddenWords.forEach(word => leoProfanity.add(word));
 
-    // Загружаем сообщения при монтировании компонента
+    // Downloading messages when we mount the Component
     if (activeChannel) {
       loadMessages();
     }
@@ -45,7 +45,7 @@ const MessagesForm = () => {
         },
       });
       if (response.data) {
-        // Добавляем сообщения в Redux
+        // Add messages to Redux
         dispatch(setMessages(response.data));
       }
     } catch (err) {
@@ -93,7 +93,7 @@ const MessagesForm = () => {
           userName,
         }, config);
 
-        // Добавляем новое сообщение в Redux
+        // Add new message to Redux
         dispatch(addMessage({
           id: response.data.id,
           body: messageBody,
@@ -122,13 +122,13 @@ const MessagesForm = () => {
     return leoProfanity.clean(message); 
   };
 
-  // Фильтрация сообщений по активному каналу
+  // Filter messages by active channel
   const filteredMessages = messages.filter((msg) => msg.channelId === activeChannel?.id);
 
   return (
     <Form onSubmit={handleSendMessage}>
       <div id="messages-box" className="chat-messages overflow-auto px-5 flex-grow-1">
-        {/* Отображаем только сообщения для активного канала */}
+        {/* Show only messages for active channel */}
         {filteredMessages.length > 0 ? (
           filteredMessages.map((msg) => (
             <Message key={msg.id} userName={msg.userName} message={cleanProfanityMessage(msg.body)} />
@@ -151,7 +151,7 @@ const MessagesForm = () => {
         <SendMessageButton />
       </Form.Group>
 
-      {error && <div className="text-danger">{error}</div>} {/* Контейнер для ошибок */}
+      {error && <div className="text-danger">{error}</div>} {/* Error Container */}
     </Form>
   );
 };

@@ -14,6 +14,7 @@ import AuthProvider from './contexts/index.jsx';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Provider as RollbarProvider, ErrorBoundary } from '@rollbar/react';
+import ProtectedRoute from './components/ProtectedRoute.jsx';
 
 const rollbarConfig = {
   accessToken: 'f19ffe4d0c4a47388313dcb697c85332',
@@ -29,7 +30,16 @@ export default function App() {
             <Provider store={store}>
               <AuthProvider>
                 <Routes>
-                  <Route path="/" element={<Chat />} />
+                   <Route
+                path="/"
+                element={
+                  (
+                    <ProtectedRoute>
+                      <Chat />
+                    </ProtectedRoute>
+                  )
+                }
+              />
                   <Route path="login" element={<LoginForm />} />
                   <Route path="signup" element={<SignUpForm />} />
                   <Route path="*" element={<NotFound />} />

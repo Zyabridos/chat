@@ -41,7 +41,7 @@ const MainWindow = () => {
   const messages = useSelector((state) => state.messagesInfo.messages); 
   const activeChannel = useSelector((state) => state.channelsInfo.activeChannel);
 
-  const { t } = useTranslation(); // Use the i18next hook
+  const { t } = useTranslation();
   const channelName = activeChannel ? activeChannel.name : 'general';
   const amountOfMessages = messages.length;
 
