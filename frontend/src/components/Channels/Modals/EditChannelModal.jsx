@@ -1,8 +1,7 @@
-// components/Channels/Modals/EditChannelForm.jsx
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-import { setChannels } from '../../../slices/channelsSlice';
+import { setChannels } from '../../../slices/channelsSlice.js';
 
 const EditChannelForm = ({ channel, channels, onClose }) => {
   const dispatch = useDispatch();

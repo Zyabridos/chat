@@ -22,5 +22,8 @@
   "homepage": "https://github.com/Zyabridos/chat#readme",
   "dependencies": {
     "@hexlet/chat-server": "^2.0.4"
+  },
+  "engines": {
+    "node": ">=18.18.0 <=20.18.1"
   }
 }

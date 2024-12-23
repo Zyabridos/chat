@@ -1,9 +1,8 @@
-// components/ModalManager.jsx
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { closeModal } from '../store/slices/modalSlice';
-import AddChannelForm from './Channels/Modals/AddChannelForm';
-import EditChannelForm from './Channels/Modals/EditChannelForm';
+import { closeModal } from '../store/slices/modalSlice.js';
+import AddChannelForm from './Channels/Modals/AddChannelForm.jsx';
+import EditChannelForm from './Channels/Modals/EditChannelForm.jsx';
 
 const ModalManager = () => {
   const dispatch = useDispatch();
