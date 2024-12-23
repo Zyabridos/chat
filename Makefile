@@ -5,7 +5,7 @@ start-frontend:
 		cd frontend; npm run dev
 
 start-backend:
-		cd frontend; npx start-server
+		npx start-server -s ./frontend/dist
 
 develop:
 		make start-backend & make start-frontend
