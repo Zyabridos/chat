@@ -31,9 +31,7 @@ const SignUpForm = () => {
       if (response && response.data) {
         const { token, username } = response.data;
         localStorage.setItem('user', JSON.stringify({ token, username })); // Store the user data in localStorage
-        navigate('/');
-        // вот при такой смене получаю 409 ошибку - пользователь уже существует
-        // navigate(routes.mainPage());
+        navigate(routes.mainPage());
       }
     } catch (error) {
       console.log(error);

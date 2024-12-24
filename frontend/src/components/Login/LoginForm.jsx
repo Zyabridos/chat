@@ -33,9 +33,7 @@ const LoginForm = () => {
       if (response && response.data) {
         const { token, username } = response.data;
         localStorage.setItem('user', JSON.stringify({ token, username }));
-        navigate('/');
-        // вот при такой смене не получаю еще хуже: не получаю никакую ошибку - просто ничего не происходит
-        // navigate(routes.mainPage());
+        navigate(routes.mainPage());
       }
     } catch (error) {
       console.error('Login failed', error);

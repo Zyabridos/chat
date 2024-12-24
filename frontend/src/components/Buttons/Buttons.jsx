@@ -46,9 +46,7 @@ export const ExitButton = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   return (
-    <button type="button" className="btn-anthracite" onClick={() => navigate('/login')}>
-      {/* тут при такой смене перенаправляется на api/v1/login - страницы не найдена */}
-      {/* <button type="button" className="btn-anthracite" onClick={() => navigate(routes.loginPath())}> */}
+    <button type="button" className="btn-anthracite" onClick={() => navigate(routes.loginPage())}>
       {t('navbar.exit')}
     </button>
   );
