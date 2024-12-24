@@ -43,7 +43,7 @@ const AuthProvider = ({ children }) => {
     localStorage.removeItem('user');
     setLoggedIn(false);
     setUser(null);
-    navigate(routes.loginPath());
+    navigate(routes.loginPage());
   };
 
   const signUp = async (login, password) => {

@@ -52,84 +52,82 @@ const LoginForm = () => {
   return (
     <div className="h-100">
       <div className="h-100" id="chat">
-        <div className="d-flex flex-column h-100">
-          <Navbar />
-          <div className="container-fluid h-100">
-            <Row className="row justify-content-center align-content-center h-100">
-              <Col className="col-12 col-md-8 col-xxl-6">
-                <Card className="card shadow-sm">
-                  <StyledCardBody
-                    className="card-body row"
-                    style={{
-                      padding: '4.5rem',
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}
-                  >
-                    <LoginPicture t={t} />
-                    <Form onSubmit={formik.handleSubmit} className="col-12 col-md-6 mt-3 mt-md-0">
-                      <h1>{t('login.title')}</h1>
-                      <fieldset disabled={formik.isSubmitting}>
-                        <Form.Group>
-                          {/* Username input */}
-                          <Form.Label className="form-label" htmlFor="username">
-                            {t('login.usernameLabel')}
-                          </Form.Label>
-                          <Form.Control
-                            className="form-control"
-                            type="text"
-                            placeholder={t('login.usernamePlaceholder')}
-                            name="username"
-                            id="username"
-                            autoComplete="username"
-                            onChange={formik.handleChange}
-                            value={formik.values.username}
-                            isInvalid={authFailed}
-                            required
-                            ref={inputRef}
-                          />
-                          {/* Display username validation error container */}
-                          {formik.touched.username && formik.errors.username && (
-                            <FieldError>{formik.errors.username}</FieldError>
-                          )}
-                        </Form.Group>
+        <Navbar />
+        <div className="container-fluid h-100">
+          <Row className="row justify-content-center align-content-center h-100">
+            <Col className="col-12 col-md-8 col-xxl-6">
+              <Card className="card shadow-sm">
+                <StyledCardBody
+                  className="card-body row"
+                  style={{
+                    padding: '4.5rem',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <LoginPicture t={t} />
+                  <Form onSubmit={formik.handleSubmit} className="col-12 col-md-6 mt-3 mt-md-0">
+                    <h1>{t('login.title')}</h1>
+                    <fieldset disabled={formik.isSubmitting}>
+                      <Form.Group>
+                        {/* Username input */}
+                        <Form.Label className="form-label" htmlFor="username">
+                          {t('login.usernameLabel')}
+                        </Form.Label>
+                        <Form.Control
+                          className="form-control"
+                          type="text"
+                          placeholder={t('login.usernamePlaceholder')}
+                          name="username"
+                          id="username"
+                          autoComplete="username"
+                          onChange={formik.handleChange}
+                          value={formik.values.username}
+                          isInvalid={authFailed}
+                          required
+                          ref={inputRef}
+                        />
+                        {/* Display username validation error container */}
+                        {formik.touched.username && formik.errors.username && (
+                          <FieldError>{formik.errors.username}</FieldError>
+                        )}
+                      </Form.Group>
 
-                        <Form.Group>
-                          {/* Password Input */}
-                          <Form.Label htmlFor="password" className="form-label">
-                            {t('login.passwordLabel')}
-                          </Form.Label>
-                          <Form.Control
-                            className="form-control"
-                            type="password"
-                            name="password"
-                            autoComplete="current-password"
-                            id="password"
-                            placeholder={t('login.passwordPlaceholder')}
-                            onChange={formik.handleChange}
-                            value={formik.values.password}
-                            isInvalid={authFailed}
-                            required
-                          />
-                          {/* Display password validation error container */}
-                          {formik.touched.password && formik.errors.password && (
-                            <FieldError>{formik.errors.password}</FieldError>
-                          )}
-                          {/* Display Network error */}
-                          <Form.Control.Feedback type="invalid">
-                            {authFailed && errorMessage && <FieldError>{errorMessage}</FieldError>}
-                          </Form.Control.Feedback>
-                        </Form.Group>
-                        <LoginButton />
-                      </fieldset>
-                    </Form>
-                    <LoginFooter />
-                  </StyledCardBody>
-                </Card>
-              </Col>
-            </Row>
-          </div>
+                      <Form.Group>
+                        {/* Password Input */}
+                        <Form.Label htmlFor="password" className="form-label">
+                          {t('login.passwordLabel')}
+                        </Form.Label>
+                        <Form.Control
+                          className="form-control"
+                          type="password"
+                          name="password"
+                          autoComplete="current-password"
+                          id="password"
+                          placeholder={t('login.passwordPlaceholder')}
+                          onChange={formik.handleChange}
+                          value={formik.values.password}
+                          isInvalid={authFailed}
+                          required
+                        />
+                        {/* Display password validation error container */}
+                        {formik.touched.password && formik.errors.password && (
+                          <FieldError>{formik.errors.password}</FieldError>
+                        )}
+                        {/* Display Network error */}
+                        <Form.Control.Feedback type="invalid">
+                          {authFailed && errorMessage && <FieldError>{errorMessage}</FieldError>}
+                        </Form.Control.Feedback>
+                      </Form.Group>
+                      <LoginButton />
+                    </fieldset>
+                  </Form>
+                  <LoginFooter />
+                </StyledCardBody>
+              </Card>
+            </Col>
+          </Row>
         </div>
       </div>
     </div>

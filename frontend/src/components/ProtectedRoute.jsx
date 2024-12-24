@@ -33,7 +33,7 @@ const ProtectedRoute = ({ children }) => {
 
   // Check if there is a token in Redux and whether the user is authenticated
   if (!user.token || !user.username) {
-    return <Navigate to={routes.loginPath()} replace />;
+    return <Navigate to={routes.loginPage()} replace />;
   }
 
   return children;
