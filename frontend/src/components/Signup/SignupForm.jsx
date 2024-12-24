@@ -49,90 +49,93 @@ const SignUpForm = () => {
   return (
     <div className="h-100">
       <div className="h-100" id="chat">
-        <div className="d-flex flex-column h-100">
-          <Navbar />
-          <Container fluid className="h-100">
-            <Row className="justify-content-center align-items-center h-100">
-              <Col md={3} lg={5} className="d-flex justify-content-center">
-                {/* Левая колонка с изображением */}
-                <SugnupPicture t={t} />
-              </Col>
-              <Col md={9} lg={5}>
-                {/* Правая колонка с формой */}
-                <Card className="card shadow-sm">
-                  <Card.Body className="p-5">
-                    <Form onSubmit={formik.handleSubmit}>
-                      <h1 className="text-center mb-4">{t('signup.title')}</h1>
-                      <fieldset>
-                        {/* Username input */}
-                        <Form.Group className="mb-3">
-                          <Form.Label htmlFor="username">{t('signup.usernameLabel')}</Form.Label>
-                          <Form.Control
-                            type="text"
-                            name="username"
-                            id="username"
-                            placeholder={t('signup.usernamePlaceholder')}
-                            onChange={formik.handleChange}
-                            value={formik.values.username}
-                            isInvalid={
-                              formik.touched.username && (formik.errors.username || usernameError)
-                            }
-                          />
-                          <Form.Control.Feedback type="invalid">
-                            {formik.errors.username || usernameError}
-                          </Form.Control.Feedback>
-                        </Form.Group>
+        <Navbar />
+        <Container fluid className="h-100">
+          <Row className="h-100">
+            <Col className="d-flex align-items-center justify-content-center">
+              <Card className="card shadow-sm">
+                <Card.Body>
+                  <Row>
+                    {/* Left part with pic */}
+                    <Col md={5} className="d-flex align-items-center justify-content-center">
+                      <SugnupPicture t={t} />
+                    </Col>
 
-                        {/* Password input */}
-                        <Form.Group className="mb-3">
-                          <Form.Label htmlFor="password">{t('signup.passwordLabel')}</Form.Label>
-                          <Form.Control
-                            type="password"
-                            name="password"
-                            id="password"
-                            placeholder={t('signup.passwordPlaceholder')}
-                            onChange={formik.handleChange}
-                            value={formik.values.password}
-                            isInvalid={formik.touched.password && formik.errors.password}
-                          />
-                          <Form.Control.Feedback type="invalid">
-                            {formik.errors.password}
-                          </Form.Control.Feedback>
-                        </Form.Group>
+                    {/* Right part with form */}
+                    <Col md={7}>
+                      <Form onSubmit={formik.handleSubmit}>
+                        <h1 className="text-center mb-4">{t('signup.title')}</h1>
+                        <fieldset>
+                          {/* Username input */}
+                          <Form.Group className="mb-3">
+                            <Form.Label htmlFor="username">{t('signup.usernameLabel')}</Form.Label>
+                            <Form.Control
+                              type="text"
+                              name="username"
+                              id="username"
+                              placeholder={t('signup.usernamePlaceholder')}
+                              onChange={formik.handleChange}
+                              value={formik.values.username}
+                              isInvalid={
+                                formik.touched.username && (formik.errors.username || usernameError)
+                              }
+                            />
+                            <Form.Control.Feedback type="invalid">
+                              {formik.errors.username || usernameError}
+                            </Form.Control.Feedback>
+                          </Form.Group>
 
-                        {/* Repeat password input */}
-                        <Form.Group className="mb-3">
-                          <Form.Label htmlFor="confirmPassword">
-                            {t('signup.repeatPasswordLabel')}
-                          </Form.Label>
-                          <Form.Control
-                            type="password"
-                            name="confirmPassword"
-                            id="confirmPassword"
-                            placeholder={t('signup.repeatPasswordPlaceholder')}
-                            onChange={formik.handleChange}
-                            value={formik.values.confirmPassword}
-                            isInvalid={
-                              formik.touched.confirmPassword && formik.errors.confirmPassword
-                            }
-                          />
-                          <Form.Control.Feedback type="invalid">
-                            {formik.errors.confirmPassword}
-                          </Form.Control.Feedback>
-                        </Form.Group>
+                          {/* Password input */}
+                          <Form.Group className="mb-3">
+                            <Form.Label htmlFor="password">{t('signup.passwordLabel')}</Form.Label>
+                            <Form.Control
+                              type="password"
+                              name="password"
+                              id="password"
+                              placeholder={t('signup.passwordPlaceholder')}
+                              onChange={formik.handleChange}
+                              value={formik.values.password}
+                              isInvalid={formik.touched.password && formik.errors.password}
+                            />
+                            <Form.Control.Feedback type="invalid">
+                              {formik.errors.password}
+                            </Form.Control.Feedback>
+                          </Form.Group>
 
-                        {/* Server Error */}
-                        {serverError && <FieldError>{serverError}</FieldError>}
+                          {/* Repeat password input */}
+                          <Form.Group className="mb-3">
+                            <Form.Label htmlFor="confirmPassword">
+                              {t('signup.repeatPasswordLabel')}
+                            </Form.Label>
+                            <Form.Control
+                              type="password"
+                              name="confirmPassword"
+                              id="confirmPassword"
+                              placeholder={t('signup.repeatPasswordPlaceholder')}
+                              onChange={formik.handleChange}
+                              value={formik.values.confirmPassword}
+                              isInvalid={
+                                formik.touched.confirmPassword && formik.errors.confirmPassword
+                              }
+                            />
+                            <Form.Control.Feedback type="invalid">
+                              {formik.errors.confirmPassword}
+                            </Form.Control.Feedback>
+                          </Form.Group>
 
-                        <SignupButton />
-                      </fieldset>
-                    </Form>
-                  </Card.Body>
-                </Card>
-              </Col>
-            </Row>
-          </Container>
-        </div>
+                          {/* Server Error */}
+                          {serverError && <FieldError>{serverError}</FieldError>}
+
+                          <SignupButton />
+                        </fieldset>
+                      </Form>
+                    </Col>
+                  </Row>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+        </Container>
       </div>
     </div>
   );

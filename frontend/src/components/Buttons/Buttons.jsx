@@ -2,23 +2,24 @@ import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import './Buttons.css';
 import { useNavigate } from 'react-router-dom';
+import { Button } from 'react-bootstrap';
 import routes from '../../routes.js';
 
 export const SignupButton = () => {
   const { t } = useTranslation();
   return (
-    <button type="submit" className="w-100 btn btn-outline-primary">
+    <Button variant="outline-dark" type="submit">
       {t('signup.signupButton')}
-    </button>
+    </Button>
   );
 };
 
 export const LoginButton = () => {
   const { t } = useTranslation();
   return (
-    <button type="submit" className="w-100 mb-3 btn btn-outline-primary">
+    <Button variant="outline-dark" type="submit">
       {t('login.loginButton')}
-    </button>
+    </Button>
   );
 };
 
@@ -46,9 +47,9 @@ export const ExitButton = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   return (
-    <button type="button" className="btn-anthracite" onClick={() => navigate(routes.loginPage())}>
+    <Button variant="outline-dark" type="button" onClick={() => navigate(routes.loginPage())}>
       {t('navbar.exit')}
-    </button>
+    </Button>
   );
 };
 
@@ -64,9 +65,9 @@ export const NavbarButtons = () => {
 
   return (
     <div className="d-flex gap-2 mt-3">
-      <button onClick={handleLanguageChange} className="btn-anthracite">
+      <Button variant="outline-dark" onClick={handleLanguageChange}>
         {currentLang === 'en' ? t('language.changeToRussian') : t('language.changeToEnglish')}
-      </button>
+      </Button>
 
       <ExitButton />
     </div>
