@@ -29,7 +29,6 @@ const App = () => {
         <I18nextProvider i18n={i18n}>
           <BrowserRouter>
             <Provider store={store}>
-              {/* Wrap the app in PersistGate to ensure persisted state is loaded first */}
               <PersistGate loading={null} persistor={persistor}>
                 <AuthProvider>
                   <Routes>
@@ -41,8 +40,8 @@ const App = () => {
                         </ProtectedRoute>
                       }
                     />
-                    <Route path="login" element={<LoginForm />} />
-                    <Route path="signup" element={<SignUpForm />} />
+                    <Route path="/login" element={<LoginForm />} />
+                    <Route path="/signup" element={<SignUpForm />} />
                     <Route path="*" element={<NotFound />} />
                   </Routes>
                   <ToastContainer

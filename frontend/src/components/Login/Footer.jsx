@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
-export default function LoginFooter() {
+const LoginFooter = () => {
   const { t } = useTranslation();
   return (
     <div className="card-footer p-4">
@@ -10,4 +10,6 @@ export default function LoginFooter() {
       </div>
     </div>
   );
-}
+};
+
+export default LoginFooter;

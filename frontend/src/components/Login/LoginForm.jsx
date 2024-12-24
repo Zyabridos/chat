@@ -11,6 +11,7 @@ import { LoginButton } from '../Buttons/Buttons.jsx';
 import validationLoginSchema from '../../validationSchemas/validationLoginSchema.jsx';
 import { FieldError } from '../styles.jsx';
 import { StyledCardBody } from './styles.jsx';
+import routes from '../../routes.js';
 
 const LoginForm = () => {
   document.body.classList.add('h-100', 'bg-light');
@@ -33,6 +34,8 @@ const LoginForm = () => {
         const { token, username } = response.data;
         localStorage.setItem('user', JSON.stringify({ token, username }));
         navigate('/');
+        // вот при такой смене не получаю еще хуже: не получаю никакую ошибку - просто ничего не происходит
+        // navigate(routes.mainPage());
       }
     } catch (error) {
       console.error('Login failed', error);

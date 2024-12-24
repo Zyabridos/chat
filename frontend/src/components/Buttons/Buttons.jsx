@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import './Buttons.css';
 import { useNavigate } from 'react-router-dom';
+import routes from '../../routes.js';
 
 export const SignupButton = () => {
   const { t } = useTranslation();
@@ -46,6 +47,8 @@ export const ExitButton = () => {
   const navigate = useNavigate();
   return (
     <button type="button" className="btn-anthracite" onClick={() => navigate('/login')}>
+      {/* тут при такой смене перенаправляется на api/v1/login - страницы не найдена */}
+      {/* <button type="button" className="btn-anthracite" onClick={() => navigate(routes.loginPath())}> */}
       {t('navbar.exit')}
     </button>
   );
