@@ -1,4 +1,4 @@
-import React, { createContext, useState, useMemo, useEffect } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -55,12 +55,12 @@ const AuthProvider = ({ children }) => {
     }
   };
 
-  const memoizedValue = useMemo(
-    () => ({ loggedIn, logIn, logOut, signUp, user, serverError }),
-    [loggedIn, user, serverError]
+  return (
+    /* eslint-disable */
+    <AuthContext.Provider value={{ loggedIn, logIn, logOut, signUp, user, serverError }}>
+      {children}
+    </AuthContext.Provider>
   );
-
-  return <AuthContext.Provider value={memoizedValue}>{children}</AuthContext.Provider>;
 };
 
 export default AuthProvider;
