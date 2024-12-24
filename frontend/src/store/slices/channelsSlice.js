@@ -19,6 +19,14 @@ const channelsSlice = createSlice({
     addChannel: (state, action) => {
       state.channels.push(action.payload);
     },
+    removeChannel: (state, action) => {
+      const channelId = action.payload;
+      state.channels = state.channels.filter((channel) => channel.id !== channelId);
+      // if active channel was deleted, set first channel on list active (general)
+      if (state.activeChannel?.id === channelId) {
+        state.activeChannel = state.channels[0] || null;
+      }
+    },
     // set an error message in the state
     setError: (state, action) => {
       state.error = action.payload;
@@ -35,7 +43,7 @@ const channelsSlice = createSlice({
   },
 });
 
-export const { setChannels, addChannel, setError, setLoading, setActiveChannel } =
+export const { setChannels, addChannel, removeChannel, setError, setLoading, setActiveChannel } =
   channelsSlice.actions;
 
 export default channelsSlice.reducer;

@@ -31,7 +31,7 @@ const AuthProvider = ({ children }) => {
         localStorage.setItem('user', JSON.stringify({ token, username })); // Store user data in localStorage
         setUser({ token, username }); // Set user data in state
         setLoggedIn(true); // Update logged-in status
-        navigate(routes.mainPage());
+        navigate('/');
       }
       return response;
     } catch (error) {
@@ -43,12 +43,13 @@ const AuthProvider = ({ children }) => {
     localStorage.removeItem('user');
     setLoggedIn(false);
     setUser(null);
-    navigate(routes.loginPath());
+    navigate('/login');
   };
 
   const signUp = async (login, password) => {
     try {
       const response = await axios.post(routes.signupPath(), { username: login, password });
+      console.log(response);
       return response;
     } catch (error) {
       handleSignUpError(error, setServerError, t); // Pass setServerError to handleSignUpError
