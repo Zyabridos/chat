@@ -9,7 +9,6 @@ import routes from '../../routes.js';
 import Message from './Message.jsx';
 import { SendMessageButton } from '../Buttons/Buttons.jsx';
 import { handleLoginErrors } from '../../utils.js';
-import forbiddenWords from '../../dictionary/index.js';
 import { setActiveChannel } from '../../store/slices/channelsSlice.js';
 
 const MessagesForm = () => {
@@ -45,9 +44,6 @@ const MessagesForm = () => {
   };
 
   useEffect(() => {
-    leoProfanity.loadDictionary('ru');
-    forbiddenWords.forEach((word) => leoProfanity.add(word));
-
     // Load messages when the component is mounted or activeChannel changes
     if (activeChannel) {
       loadMessages();
@@ -146,6 +142,7 @@ const MessagesForm = () => {
             <Message
               key={msg.id}
               userName={msg.userName}
+              // message={cleanProfanityMessage(msg.body)}
               message={cleanProfanityMessage(msg.body)}
             />
           ))

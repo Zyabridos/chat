@@ -69,7 +69,7 @@ const LoginForm = () => {
                       alignItems: 'center',
                     }}
                   >
-                    <LoginPicture />
+                    <LoginPicture t={t} />
                     <Form onSubmit={formik.handleSubmit} className="col-12 col-md-6 mt-3 mt-md-0">
                       <h1>{t('login.title')}</h1>
                       <fieldset disabled={formik.isSubmitting}>

@@ -3,6 +3,7 @@ import { useFormik } from 'formik';
 import { Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import leoProfanity from 'leo-profanity';
 import { AuthContext } from '../../contexts/index.jsx';
 import { FieldError } from '../Login/styles.jsx';
 import { SignupButton } from '../Buttons/Buttons.jsx';
@@ -16,10 +17,15 @@ const SignUpForm = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { signUp, serverError } = useContext(AuthContext);
+  const [usernameError, setUsernameError] = useState(''); // State for username error message
 
   const [focusedField, setFocusedField] = useState(null);
 
   const handleSubmit = async (formikValues) => {
+    if (leoProfanity.check(formikValues.username)) {
+      setUsernameError(t('signup.errors.profanityError'));
+      return;
+    }
     try {
       const response = await signUp(formikValues.username, formikValues.password);
       if (response && response.data) {
@@ -62,7 +68,7 @@ const SignUpForm = () => {
           <div className="container-fluid h-100">
             <div className="row justify-content-center align-content-center h-100">
               <div className="card-body d-flex flex-column flex-md-row justify-content-around align-items-center p-5">
-                <SugnupPicture />
+                <SugnupPicture t={t} />
                 <Form onSubmit={formik.handleSubmit} className="w-50">
                   <h1 className="text-center mb-4">{t('signup.title')}</h1>
                   <fieldset>
@@ -87,6 +93,7 @@ const SignUpForm = () => {
                       {formik.touched.username && formik.errors.username && (
                         <FieldError>{formik.errors.username}</FieldError>
                       )}
+                      {usernameError && <FieldError>{usernameError}</FieldError>}
                     </Form.Group>
 
                     {/* Password input */}
