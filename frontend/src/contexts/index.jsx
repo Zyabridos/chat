@@ -49,7 +49,6 @@ const AuthProvider = ({ children }) => {
   const signUp = async (login, password) => {
     try {
       const response = await axios.post(routes.signupPath(), { username: login, password });
-      console.log(response);
       return response;
     } catch (error) {
       handleSignUpError(error, setServerError, t); // Pass setServerError to handleSignUpError

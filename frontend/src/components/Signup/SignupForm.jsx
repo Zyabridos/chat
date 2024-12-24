@@ -25,7 +25,7 @@ const SignUpForm = () => {
       if (response && response.data) {
         const { token, username } = response.data;
         localStorage.setItem('user', JSON.stringify({ token, username })); // Store the user data in localStorage
-        navigate(routes.mainPage()); // Redirect to the home page upon successful sign-up
+        navigate('/');
       }
     } catch (error) {
       console.log(error);
