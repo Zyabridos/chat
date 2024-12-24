@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import c from 'classnames';
 import addSymbol from '../../assets/add-symbol.png';
-import { setChannels, setActiveChannel } from '../../slices/channelsSlice.js';
+import { setChannels, setActiveChannel } from '../../store/slices/channelsSlice.js';
 import { openModal } from '../../store/slices/modalSlice.js';
 import './Channels.css';
 
