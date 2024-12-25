@@ -4,6 +4,7 @@ import './Buttons.css';
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import routes from '../../routes.js';
+import LanguageSwitcher from '../LanguageSwitcher.jsx';
 
 export const SignupButton = () => {
   const { t } = useTranslation();
@@ -54,21 +55,9 @@ export const ExitButton = () => {
 };
 
 export const NavbarButtons = () => {
-  const { t, i18n } = useTranslation();
-  const [currentLang, setCurrentLang] = useState(i18n.language);
-
-  const handleLanguageChange = () => {
-    const newLang = currentLang === 'en' ? 'ru' : 'en';
-    setCurrentLang(newLang);
-    i18n.changeLanguage(newLang);
-  };
-
   return (
     <div className="d-flex gap-2 mt-3">
-      <Button variant="outline-dark" onClick={handleLanguageChange}>
-        {currentLang === 'en' ? t('language.changeToRussian') : t('language.changeToEnglish')}
-      </Button>
-
+      <LanguageSwitcher />
       <ExitButton />
     </div>
   );

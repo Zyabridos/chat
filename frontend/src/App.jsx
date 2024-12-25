@@ -1,3 +1,4 @@
+// надо на все кнопки отправки поставить блок, покк они отправляются
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import React, { useEffect } from 'react';
@@ -27,7 +28,7 @@ const rollbarConfig = {
 const App = () => {
   // Initialize leoProfanity dictionary once when the app starts
   useEffect(() => {
-    leoProfanity.loadDictionary('ru'); // Load Russian dictionary
+    leoProfanity.loadDictionary('ru');
     forbiddenWords.forEach((word) => leoProfanity.add(word)); // Add custom forbidden words
   }, []); // Empty dependency array ensures it runs only once on mount
   return (

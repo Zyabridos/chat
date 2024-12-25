@@ -1,0 +1,110 @@
+{
+  "language": {
+    "changeToEnglish": "Bytt til engelsk",
+    "changeToRussian": "Bytt til russisk"
+  },
+  "login": {
+    "title": "Logg inn",
+    "usernameLabel": "Brukernavn",
+    "usernamePlaceholder": "Skriv inn brukernavnet ditt",
+    "passwordLabel": "Passord",
+    "passwordPlaceholder": "Skriv inn passordet ditt",
+    "wrongEmailOrPassword": "Feil brukernavn eller passord",
+    "loginButton": "Logg inn",
+    "footer": {
+      "noAccount?": "Har du ikke en konto?",
+      "registration": " Registrering"
+    }
+  },
+  "signup": {
+    "title": "Registrer deg",
+    "usernameLabel": "Ditt brukernavn",
+    "usernamePlaceholder": "Skriv inn brukernavnet ditt",
+    "passwordLabel": "Passord",
+    "passwordPlaceholder": "Skriv inn passordet ditt",
+    "repeatPasswordLabel": "Gjenta passord",
+    "repeatPasswordPlaceholder": "Skriv inn passordet ditt på nytt",
+    "signupButton": "Registrer deg",
+    "wrongEmailOrPassword": "Feil brukernavn eller passord",
+    "errors": {
+      "alreadyExists": "En bruker med dette brukernavnet eksisterer allerede",
+      "unknown": "En feil oppstod under registrering",
+      "profanityError": "Brukernavnet inneholder upassende ord. Vennligst velg et gyldig navn."
+    }
+  },
+  "validationErrors": {
+    "min3": "Minimum 3 tegn",
+    "min6": "Minimum 6 tegn",
+    "max20": "Maksimum 20 tegn",
+    "required": "Dette feltet er obligatorisk",
+    "mismatchPasswords": "Passordene må samsvare",
+    "passwordSymbol": "Passordet må inneholde minst ett spesialtegn",
+    "passwordUppercase": "Passordet må inneholde minst én stor bokstav",
+    "passwordLowercase": "Passordet må inneholde minst én liten bokstav",
+    "channelAlreadyExists": "En kanal med dette navnet eksisterer allerede"
+  },
+  "notFound": {
+    "title": "Siden ble ikke funnet",
+    "message": "Men du kan gå til",
+    "linkText": "Hjemmesiden"
+  },
+  "channels": {
+    "title": "Kanaler",
+    "enterChannelName": "Skriv inn kanalnavn",
+    "addNewChannel": "Legg til ny kanal",
+    "cancel": "Avbryt",
+    "add": "Legg til",
+    "modal": {
+      "delete": "Slett",
+      "rename": "Gi nytt navn",
+      "renameChannel": "Gi kanalen et nytt navn",
+      "typeNewChannelName": "Skriv inn et nytt kanalnavn",
+      "typeChannelName": "Skriv inn et navn for ny kanal"
+    }
+  },
+  "loading": {
+    "loadingChannels": "Laster inn kanaler..."
+  },
+  "networkErrors": {
+    "generalError": "Feil ved sending av meldingen. Prøv igjen.",
+    "badRequest": "Ugyldig forespørsel. Sjekk dataene og prøv igjen.",
+    "unauthorized": "Feil brukernavn eller passord.",
+    "serverError": "Serverfeil. Prøv igjen senere.",
+    "error": "Feil",
+    "connectionError": "Tilkoblingsfeil. Sjekk internettforbindelsen.",
+    "unknownError": "En ukjent feil oppstod",
+    "unknown": "Ukjent feil"
+  },
+  "error": {
+    "tokenNotFound": "Token ble ikke funnet. Logg inn igjen.",
+    "fetchChannels": "Feil ved lasting av kanaler",
+    "addChannel": "Feil ved oppretting av kanal",
+    "editChannelFailed": "Feil ved endring av kanalnavn"
+  },
+  "channelsFormErrors": {
+    "tokenNotFound": "Token ble ikke funnet. Logg inn igjen.",
+    "emptyMessage": "Meldingen kan ikke være tom.",
+    "connectionError": "Tilkoblingsfeil. Sjekk internettforbindelsen.",
+    "unknownError": "En feil oppstod. Prøv igjen.",
+    "profanityDetected": "Kanalnavnet inneholder upassende ord. Vennligst velg et gyldig navn.",
+    "emptyChannelName": "Kanalnavnet kan ikke være tomt"
+  },
+  "channelsForm": {
+    "newMessage": "Ny melding",
+    "enterMessage": "Skriv inn meldingen din...",
+    "noMessages": "Det er ingen meldinger på denne kanalen ennå"
+  },
+  "channelsHeader": {
+    "channelName": "# Kanalnavn her",
+    "messageCount": "Det er {{count}} {{count, plural, =0 {meldinger} =1 {melding} other {meldinger}}} her"
+  },
+  "navbar": {
+    "chatname": "Hexlet Chat",
+    "exit": "Logg ut"
+  },
+  "toast": {
+    "channelCreated": "Kanalen ble opprettet",
+    "channelRenamed": "Kanalen ble omdøpt",
+    "channelDeleted": "Kanalen ble slettet"
+  }
+}
