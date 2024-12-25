@@ -1,10 +1,9 @@
 import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
 import './Buttons.css';
-import { useNavigate } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
-import routes from '../../routes.js';
+import { useDispatch } from 'react-redux';
 import LanguageSwitcher from '../LanguageSwitcher.jsx';
+import { logout } from '../../store/slices/userSlice.js';
 
 export const SignupButton = () => {
   const { t } = useTranslation();
@@ -45,10 +44,16 @@ export const SendMessageButton = () => {
 };
 
 export const ExitButton = () => {
+  const dispatch = useDispatch();
   const { t } = useTranslation();
-  const navigate = useNavigate();
+
+  const handleLogOut = () => {
+    dispatch(logout());
+    localStorage.removeItem('user');
+  };
+
   return (
-    <Button variant="outline-dark" type="button" onClick={() => navigate(routes.loginPage())}>
+    <Button variant="outline-dark" type="button" onClick={handleLogOut}>
       {t('navbar.exit')}
     </Button>
   );

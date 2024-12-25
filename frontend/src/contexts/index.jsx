@@ -2,26 +2,29 @@ import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 import routes from '../routes.js';
 import { handleLoginErrors, handleSignUpError } from '../utils.js';
+import { logout } from '../store/slices/userSlice.js';
 
 export const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
+  const dispatch = useDispatch();
   const { t } = useTranslation();
   const [loggedIn, setLoggedIn] = useState(false); // State to track login status
   const [user, setUser] = useState(null); // State to store user data
   const [serverError, setServerError] = useState(null); // State for server error messages
   const navigate = useNavigate();
 
-  // Load the user from localStorage on mount
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
       setUser(JSON.parse(storedUser));
       setLoggedIn(true);
+      navigate(routes.mainPage());
     }
-  }, []);
+  }, [navigate]); // Add navigate to dependencies
 
   const logIn = async (login, password, setErrorMessage, setAuthFailed) => {
     try {
@@ -43,6 +46,7 @@ const AuthProvider = ({ children }) => {
     localStorage.removeItem('user');
     setLoggedIn(false);
     setUser(null);
+    dispatch(logout());
     navigate(routes.loginPage());
   };
 

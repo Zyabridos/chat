@@ -5,7 +5,6 @@ const initialState = {
   username: null,
 };
 
-// Create the 'auth' slice of the Redux store
 const userSlice = createSlice({
   name: 'auth',
   initialState,
@@ -15,13 +14,14 @@ const userSlice = createSlice({
       state.token = token;
       state.username = username;
     },
-    clearUser: (state) => {
+    // clearUser: (state) => {
+    logout: (state) => {
       state.token = null;
       state.username = null;
     },
   },
 });
 
-export const { login, clearUser } = userSlice.actions;
+export const { login, logout } = userSlice.actions;
 
 export default userSlice.reducer;

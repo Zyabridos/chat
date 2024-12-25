@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dropdown } from 'react-bootstrap';
+import { Dropdown, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 // change import evnt
 import './commonStyles.css';
@@ -13,6 +13,7 @@ const LanguageSwitcher = () => {
 
   return (
     <Dropdown align="end">
+      {/* <Button variant="outline-dark" type="submit"></Button> */}
       <Dropdown.Toggle variant="link" id="dropdown-changeLanguafe" className="btn btn-anthracite">
         {i18n.language.toUpperCase()}
       </Dropdown.Toggle>
