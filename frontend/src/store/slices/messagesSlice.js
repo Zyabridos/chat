@@ -8,7 +8,7 @@ const initialState = {
   error: null, // Stores any error that occurs during message operations
 };
 
-// Async thunk for fetching messages from API
+// пусть пока тут будет... под конец посмотрим, куда загрузку лучше пристроить
 export const fetchMessages = createAsyncThunk(
   'messages/fetchMessages',
   async (channelId, { rejectWithValue }) => {

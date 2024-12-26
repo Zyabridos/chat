@@ -18,12 +18,12 @@
   },
   "signup": {
     "title": "Регистрация",
-    "usernameLabel": "Ваш ник",
-    "usernamePlaceholder": "Введите ваш ник",
+    "usernameLabel": "Имя пользователя",
+    "usernamePlaceholder": "Имя пользователя",
     "passwordLabel": "Пароль",
-    "passwordPlaceholder": "Введите пароль",
+    "passwordPlaceholder": "Пароль",
     "repeatPasswordLabel": " Повторите пароль",
-    "repeatPasswordPlaceholder": "Повторите введенный пароль",
+    "repeatPasswordPlaceholder": "Подтвердите пароль",
     "signupButton": "Зарегестрироваться",
     "wrongEmailOrPassword": "Неверные имя пользователя или пароль",
     "errors": {
