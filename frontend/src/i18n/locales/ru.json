@@ -22,7 +22,7 @@
     "usernamePlaceholder": "Имя пользователя",
     "passwordLabel": "Пароль",
     "passwordPlaceholder": "Пароль",
-    "repeatPasswordLabel": " Повторите пароль",
+    "repeatPasswordLabel": "Подтвердите пароль",
     "repeatPasswordPlaceholder": "Подтвердите пароль",
     "signupButton": "Зарегестрироваться",
     "wrongEmailOrPassword": "Неверные имя пользователя или пароль",
