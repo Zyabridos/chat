@@ -76,7 +76,7 @@ const LoginForm = () => {
                           {t('login.usernameLabel')}
                         </Form.Label>
                         <Form.Control
-                          className="form-control"
+                          className="form-control-lg border-primary"
                           type="text"
                           placeholder={t('login.usernamePlaceholder')}
                           name="username"
@@ -100,7 +100,7 @@ const LoginForm = () => {
                           {t('login.passwordLabel')}
                         </Form.Label>
                         <Form.Control
-                          className="form-control"
+                          className="form-control-lg border-primary"
                           type="password"
                           name="password"
                           autoComplete="current-password"

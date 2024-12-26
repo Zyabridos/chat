@@ -70,6 +70,7 @@ const SignUpForm = () => {
                           <Form.Group className="mb-3">
                             <Form.Label htmlFor="username">{t('signup.usernameLabel')}</Form.Label>
                             <Form.Control
+                              className="form-control-lg border-primary"
                               type="text"
                               name="username"
                               id="username"
@@ -89,6 +90,7 @@ const SignUpForm = () => {
                           <Form.Group className="mb-3">
                             <Form.Label htmlFor="password">{t('signup.passwordLabel')}</Form.Label>
                             <Form.Control
+                              className="form-control-lg border-primary"
                               type="password"
                               name="password"
                               id="password"
@@ -108,6 +110,7 @@ const SignUpForm = () => {
                               {t('signup.repeatPasswordLabel')}
                             </Form.Label>
                             <Form.Control
+                              className="form-control-lg border-primary"
                               type="password"
                               name="confirmPassword"
                               id="confirmPassword"
