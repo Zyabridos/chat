@@ -28,7 +28,7 @@
     "wrongEmailOrPassword": "Feil brukernavn eller passord",
     "errors": {
       "alreadyExists": "En bruker med dette brukernavnet eksisterer allerede",
-      "unknown": "En feil oppstod under registrering",
+      "unknown": "En feil oppstod under registrering. Prøv igjen senere",
       "profanityError": "Brukernavnet inneholder upassende ord. Vennligst velg et gyldig navn."
     }
   },
@@ -53,6 +53,7 @@
     "enterChannelName": "Skriv inn kanalnavn",
     "addNewChannel": "Legg til ny kanal",
     "cancel": "Avbryt",
+    "send": "Sende",
     "add": "Legg til",
     "modal": {
       "delete": "Slett",

@@ -28,7 +28,7 @@
     "wrongEmailOrPassword": "Incorrect username or password",
     "errors": {
       "alreadyExists": "User with this username already exists",
-      "unknown": "Error during sign up has occured",
+      "unknown": "Error during sign up has occured. Please, try again later",
       "profanityError": "The username contains inappropriate words. Please choose a valid name."
     }
   },
@@ -54,6 +54,7 @@
     "addNewChannel": "Add new channel",
     "cancel": "Cancel",
     "add": "Add",
+    "send": "Send",
     "modal": {
       "delete": "Delete",
       "rename": "Rename",

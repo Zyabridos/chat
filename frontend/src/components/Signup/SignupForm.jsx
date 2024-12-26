@@ -32,7 +32,7 @@ const SignUpForm = () => {
         navigate(routes.mainPage());
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

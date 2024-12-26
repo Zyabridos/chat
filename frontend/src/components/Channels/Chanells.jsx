@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import addSymbol from '../../assets/add-symbol.png';
 import Container from 'react-bootstrap/Container';
 import ListGroup from 'react-bootstrap/ListGroup';
 import c from 'classnames';
@@ -7,9 +6,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { Dropdown } from 'react-bootstrap';
 import leoProfanity from 'leo-profanity';
-import './Channels.css';
 import { toast } from 'react-toastify';
 import axios from 'axios';
+import addSymbol from '../../assets/add-symbol.png';
 import { fetchChannels } from '../../API/channels.js';
 import EditChannelModal from './Modals/EditChannelModal.jsx';
 import AddChannelModal from './Modals/AddChannellModal.jsx';
@@ -127,11 +126,7 @@ const Channels = () => {
     if (channel.removable) {
       return (
         <Dropdown align="end">
-          <Dropdown.Toggle
-            variant="link"
-            id={`dropdown-${channel.id}`}
-            className="btn btn-anthracite"
-          >
+          <Dropdown.Toggle variant="outline-dark" id={`dropdown-${channel.id}`}>
             <span className="visually-hidden">{t('channel.management')}</span>
           </Dropdown.Toggle>
           <Dropdown.Menu>

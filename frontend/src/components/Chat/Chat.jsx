@@ -2,13 +2,13 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import React from 'react';
-import MainWindow from './MainWindow/MainWindow.jsx';
+import MessagesContainer from '../Messages/MessagesContainer.jsx';
 import Navbar from '../Navbar/Navbar.jsx';
 import Channels from '../Channels/Chanells.jsx';
 import './Chat.css';
 
 const Chat = () => {
-  document.body.classList.add('h-100', 'bg-light');
+  // document.body.classList.add('h-100', 'bg-light');
   return (
     <Container fluid className="chat-container">
       <Navbar />
@@ -20,7 +20,7 @@ const Chat = () => {
           <Channels />
         </Col>
         <Col xs={12} md={9} lg={10} className="p-0 d-flex flex-column">
-          <MainWindow />
+          <MessagesContainer />
         </Col>
       </Row>
     </Container>
