@@ -1,7 +1,7 @@
 import React from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import { useTranslation } from 'react-i18next';
-import validationCreateChannel from '../../../validationSchemas/validationCreateChannel.jsx';
+import { useValidationSchemas } from '../../../contexts/validationContex.jsx';
 import { handleAddChannel } from '../buttonHandlers.js';
 
 const AddChannelModal = ({
@@ -13,7 +13,7 @@ const AddChannelModal = ({
   token,
 }) => {
   const { t } = useTranslation();
-
+  const { validationChannelSchema } = useValidationSchemas(); // get schemas from contex
   // If the modal is not open, do not render anything
   if (!isModalOpen) return null;
 
@@ -31,7 +31,7 @@ const AddChannelModal = ({
           <div className="modal-body">
             <Formik
               initialValues={{ name: '' }}
-              validationSchema={validationCreateChannel(t)}
+              validationSchema={validationChannelSchema}
               onSubmit={(values, actions) =>
                 handleAddChannel(
                   values,
@@ -65,7 +65,7 @@ const AddChannelModal = ({
                       className="me-2 btn btn-secondary"
                       onClick={handleCloseModal}
                     >
-                      {t('channels.cancel')} {/* Cancel button (translated) */}
+                      {t('channels.cancel')} {/* Cancel button */}
                     </button>
                     <button
                       type="submit"

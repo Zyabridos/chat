@@ -1,7 +1,7 @@
 import React from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import { useTranslation } from 'react-i18next';
-import validationCreateChannel from '../../../validationSchemas/validationCreateChannel.jsx';
+import { useValidationSchemas } from '../../../contexts/validationContex.jsx';
 
 const EditChannelModal = ({
   isEditModalOpen,
@@ -10,6 +10,7 @@ const EditChannelModal = ({
   handleEditChannel,
 }) => {
   const { t } = useTranslation();
+  const { validationChannelSchema } = useValidationSchemas();
 
   // If the modal is not open, do not render anything
   if (!isEditModalOpen) return null;
@@ -32,7 +33,7 @@ const EditChannelModal = ({
             {/* Modal body containing the form */}
             <Formik
               initialValues={{ name: editingChannel?.name || '' }}
-              validationSchema={validationCreateChannel(t)}
+              validationSchema={validationChannelSchema}
               onSubmit={handleEditChannel}
             >
               {({ isSubmitting }) => (

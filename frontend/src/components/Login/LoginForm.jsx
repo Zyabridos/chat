@@ -8,12 +8,12 @@ import LoginFooter from './Footer.jsx';
 import Navbar from '../Navbar/Navbar.jsx';
 import { LoginPicture } from '../Attachments.jsx';
 import { LoginButton } from '../Buttons/Buttons.jsx';
-import validationLoginSchema from '../../validationSchemas/validationLoginSchema.jsx';
 import { FieldError } from '../styles.jsx';
 import { StyledCardBody } from './styles.jsx';
+import { useValidationSchemas } from '../../contexts/validationContex.jsx';
 import routes from '../../routes.js';
 
-const LoginForm = () => {
+const LoginForm = ({ isSubmitting, setIsSubmitting }) => {
   document.body.classList.add('h-100', 'bg-light');
   const { logIn } = useContext(AuthContext);
   const [authFailed, setAuthFailed] = useState(false); // State for tracking authentication failure
@@ -21,8 +21,10 @@ const LoginForm = () => {
   const inputRef = useRef(null); // Reference to the username input field
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { validationLoginSchema } = useValidationSchemas();
 
   const handleSubmit = async (formikValues) => {
+    setIsSubmitting(true); // start sending process
     try {
       const response = await logIn(
         formikValues.username,
@@ -37,6 +39,8 @@ const LoginForm = () => {
       }
     } catch (error) {
       console.error('Login failed', error);
+    } finally {
+      setIsSubmitting(false); // end sending process
     }
   };
 
@@ -45,7 +49,7 @@ const LoginForm = () => {
       username: '',
       password: '',
     },
-    validationSchema: validationLoginSchema(t),
+    validationSchema: validationLoginSchema,
     onSubmit: handleSubmit,
   });
 
@@ -87,13 +91,13 @@ const LoginForm = () => {
                           isInvalid={authFailed}
                           required
                           ref={inputRef}
+                          disabled={isSubmitting} // block field while sending
                         />
                         {/* Display username validation error container */}
                         {formik.touched.username && formik.errors.username && (
                           <FieldError>{formik.errors.username}</FieldError>
                         )}
                       </Form.Group>
-
                       <Form.Group>
                         {/* Password Input */}
                         <Form.Label htmlFor="password" className="form-label">
@@ -110,6 +114,7 @@ const LoginForm = () => {
                           value={formik.values.password}
                           isInvalid={authFailed}
                           required
+                          disabled={isSubmitting}
                         />
                         {/* Display password validation error container */}
                         {formik.touched.password && formik.errors.password && (
@@ -120,7 +125,7 @@ const LoginForm = () => {
                           {authFailed && errorMessage && <FieldError>{errorMessage}</FieldError>}
                         </Form.Control.Feedback>
                       </Form.Group>
-                      <LoginButton />
+                      <LoginButton disabled={isSubmitting} /> {/* block buttun while sending */}
                     </fieldset>
                   </Form>
                   <LoginFooter />

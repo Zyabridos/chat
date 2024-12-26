@@ -1,14 +1,44 @@
+import React, { createContext, useContext } from 'react';
+import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
-// надо ошибки валидации переделать - выдается сообщение в зависимости от того, какой параметр пришел (минимум {count} симполов)
+const ValidationSchemasContext = createContext();
+
 const USERNAME_MIN_LENGTH = 3;
 const PASSWORD_MIN_LENGTH = 6;
 const PASSWORD_REGEX_LOWERCASE = /^(?=.*[a-z])/;
 const PASSWORD_REGEX_UPPERCASE = /^(?=.*[A-Z])/;
 const PASSWORD_REGEX_SYMBOL = /^(?=.*[\W_])/;
 
-const validationSignupSchema = (t) => {
-  return yup.object({
+export const useValidationSchemas = () => useContext(ValidationSchemasContext);
+
+export const ValidationSchemasProvider = ({ children }) => {
+  const { t } = useTranslation();
+
+  const validationCreateChannel = yup.object({
+    name: yup
+      .string()
+      .min(3, t('validationErrors.min6'))
+      .max(20, t('validationErrors.max20'))
+      .required(t('validationErrors.required')),
+    // .test('is-unique', t('validationErrors.channelAlreadyExists'), function (value) {
+    //   const { channels } = this.options.context;
+    //   return !channels.some((channel) => channel.name === value);
+    // }),
+  });
+
+  const validationLoginSchema = yup.object().shape({
+    username: yup
+      .string()
+      .max(20, t('validationErrors.max20'))
+      .required(t('validationErrors.required')),
+    password: yup
+      .string()
+      .max(20, t('validationErrors.max20'))
+      .required(t('validationErrors.required')),
+  });
+
+  const validationSignupSchema = yup.object({
     username: yup
       .string()
       // надо ошибки валидации переделать - выдается сообщение в зависимости от того, какой параметр пришел (минимум {count} симполов)
@@ -31,6 +61,16 @@ const validationSignupSchema = (t) => {
       .oneOf([yup.ref('password'), null], t('validationErrors.mismatchPasswords'))
       .required(t('validationErrors.required')),
   });
-};
 
-export default validationSignupSchema;
+  return (
+    <ValidationSchemasContext.Provider
+      value={{
+        validationCreateChannel,
+        validationLoginSchema,
+        validationSignupSchema,
+      }}
+    >
+      {children}
+    </ValidationSchemasContext.Provider>
+  );
+};

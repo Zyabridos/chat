@@ -1,7 +1,6 @@
-// надо на все кнопки отправки поставить блок, покк они отправляются
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -19,6 +18,7 @@ import AuthProvider from './contexts/index.jsx';
 import 'react-toastify/dist/ReactToastify.css';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import forbiddenWords from './dictionary/index.js';
+import { ValidationSchemasProvider } from './contexts/validationContex.jsx';
 
 const rollbarConfig = {
   accessToken: import.meta.env.VITE_AUTH_TOKEN,
@@ -26,11 +26,14 @@ const rollbarConfig = {
 };
 
 const App = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false); // Состояние загрузки для блокировки кнопок
+
   // Initialize leoProfanity dictionary once when the app starts
   useEffect(() => {
     leoProfanity.loadDictionary('ru');
     forbiddenWords.forEach((word) => leoProfanity.add(word)); // Add custom forbidden words
   }, []); // Empty dependency array ensures it runs only once on mount
+
   return (
     <RollbarProvider config={rollbarConfig}>
       <ErrorBoundary>
@@ -39,19 +42,37 @@ const App = () => {
             <Provider store={store}>
               <PersistGate loading={null} persistor={persistor}>
                 <AuthProvider>
-                  <Routes>
-                    <Route
-                      path="/"
-                      element={
-                        <ProtectedRoute>
-                          <Chat />
-                        </ProtectedRoute>
-                      }
-                    />
-                    <Route path="/login" element={<LoginForm />} />
-                    <Route path="/signup" element={<SignUpForm />} />
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
+                  <ValidationSchemasProvider>
+                    <Routes>
+                      <Route
+                        path="/"
+                        element={
+                          <ProtectedRoute>
+                            <Chat />
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path="/login"
+                        element={
+                          <LoginForm
+                            isSubmitting={isSubmitting}
+                            setIsSubmitting={setIsSubmitting}
+                          />
+                        }
+                      />
+                      <Route
+                        path="/signup"
+                        element={
+                          <SignUpForm
+                            isSubmitting={isSubmitting}
+                            setIsSubmitting={setIsSubmitting}
+                          />
+                        }
+                      />
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
+                  </ValidationSchemasProvider>
                   <ToastContainer
                     position="top-right"
                     autoClose={5000}
