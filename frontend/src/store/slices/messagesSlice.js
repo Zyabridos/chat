@@ -1,4 +1,6 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import axios from 'axios';
+import routes from '../../routes.js';
 
 const initialState = {
   messages: [], // Stores the list of messages
@@ -6,29 +8,57 @@ const initialState = {
   error: null, // Stores any error that occurs during message operations
 };
 
+// Async thunk for fetching messages from API
+export const fetchMessages = createAsyncThunk(
+  'messages/fetchMessages',
+  async (channelId, { rejectWithValue }) => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    const token = user?.token;
+
+    if (!token) {
+      return rejectWithValue('Token not found');
+    }
+
+    try {
+      const response = await axios.get(`${routes.messagesPath()}?channelId=${channelId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || 'Failed to fetch messages');
+    }
+  }
+);
+
 const messagesSlice = createSlice({
   name: 'messages',
   initialState,
   reducers: {
-    // add a new message to the 'messages' list
     addMessage: (state, action) => {
       state.messages.push(action.payload);
     },
-    // set the messages data in the store
     setMessages: (state, action) => {
       state.messages = action.payload;
     },
-    // set the loading state (indicating if data is being fetched)
-    setLoading: (state, action) => {
-      state.loading = action.payload;
-    },
-    // set an error message in the state
-    setError: (state, action) => {
-      state.error = action.payload;
-    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchMessages.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchMessages.fulfilled, (state, action) => {
+        state.loading = false;
+        state.messages = action.payload;
+      })
+      .addCase(fetchMessages.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
   },
 });
 
-export const { addMessage, setMessages, setLoading, setError } = messagesSlice.actions;
-
+export const { addMessage, setMessages } = messagesSlice.actions;
 export default messagesSlice.reducer;

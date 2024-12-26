@@ -3,10 +3,10 @@ import { Form } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
+import leoProfanity from 'leo-profanity';
 import { addMessage } from '../../store/slices/messagesSlice.js';
 import routes from '../../routes.js';
 import { SendMessageButton } from '../Buttons/Buttons.jsx';
-import { handleLoginErrors } from '../../utils.js';
 
 const EnterMessageForm = () => {
   const dispatch = useDispatch();
@@ -23,11 +23,13 @@ const EnterMessageForm = () => {
     const token = user?.token;
     const userName = user?.username;
 
+    // Check auth token
     if (!token) {
       setError(t('channelsFormErrors.tokenNotFound'));
       return;
     }
 
+    // Check active channel
     if (!activeChannel) {
       setError(t('channelsFormErrors.noActiveChannel'));
       return;
@@ -37,14 +39,15 @@ const EnterMessageForm = () => {
       setError(t('channelsFormErrors.emptyMessage'));
       return;
     }
+    const cleanedMessage = leoProfanity.clean(messageBody);
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
 
     try {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-
       const response = await axios.post(
         routes.messagesPath(),
         {
@@ -54,22 +57,22 @@ const EnterMessageForm = () => {
         },
         config
       );
+      console.log(response);
 
       dispatch(
         addMessage({
           id: response.data.id,
-          body: messageBody,
+          body: cleanedMessage, // Store the cleaned message
           userName,
           channelId: activeChannel.id,
         })
       );
 
-      setMessageBody('');
-      setError('');
+      setMessageBody(''); // If successful, empty input
+      setError(''); // And error state
     } catch (err) {
-      const errorMessage = handleLoginErrors(err, t);
-      setError(errorMessage);
-      console.error('Error during message sending:', err);
+      console.error('Error sending message:', err);
+      setError(t('channelsFormErrors.sendingFailed'));
     }
   };
 
