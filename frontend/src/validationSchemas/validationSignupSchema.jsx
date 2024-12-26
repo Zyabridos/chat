@@ -12,8 +12,11 @@ const validationSignupSchema = (t) => {
     username: yup
       .string()
       // надо ошибки валидации переделать - выдается сообщение в зависимости от того, какой параметр пришел (минимум {count} симполов)
-      .min(USERNAME_MIN_LENGTH, t('validationErrors.min3'))
-      .max(20, t('validationErrors.max20'))
+      // .min(USERNAME_MIN_LENGTH, t('validationErrors.min3'))
+      // .max(20, t('validationErrors.max20'))
+      .test('fromMinToMax', t('validationErrors.from3To20'), (value) => {
+        return value && value.length >= 3 && value.length <= 20;
+      })
       .required(t('validationErrors.required')),
     password: yup
       .string()
