@@ -8,6 +8,7 @@ import leoProfanity from 'leo-profanity';
 import { closeModal } from '../../../store/slices/modalSlice';
 import routes from '../../../routes';
 import { updateChannel } from '../../../store/slices/channelsSlice';
+// import validationChannelSchema from './validationChannelSchema.js';
 
 const EditChannelModal = ({ channelId }) => {
   const { t } = useTranslation();
@@ -96,7 +97,7 @@ const EditChannelModal = ({ channelId }) => {
           <div className="modal-body">
             <Formik
               initialValues={initialValues}
-              // validationSchema={validationChannelSchema}
+              // validationSchema={validationChannelSchema(t)}
               onSubmit={(values, actions) => handleEditChannel(values, actions)}
             >
               {({ isSubmitting }) => (
