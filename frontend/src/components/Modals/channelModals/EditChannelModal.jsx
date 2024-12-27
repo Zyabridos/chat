@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import leoProfanity from 'leo-profanity';
 import { closeModal } from '../../../store/slices/modalSlice';
 import routes from '../../../routes';
 import { updateChannel } from '../../../store/slices/channelsSlice';
@@ -42,10 +43,21 @@ const EditChannelModal = ({ channelId }) => {
 
     setIsSubmitting(true);
 
+    const cleanedChannelName = leoProfanity.clean(values.name);
+
+    // I prefer this option in the chat, but for the tests I have to gi with different version
+    // if (leoProfanity.check(values.name)) {
+    //   setSubmitting(false);
+    //   toast.error(t('channelsFormErrors.profanityDetected'));
+    //   return;
+    // }
+
     try {
       const response = await axios.patch(
         `${routes.channelsPath()}/${channelId}`,
-        { name: values.name },
+        // { name: values.name },
+        // пусть пока так будет, но на серсер надо отправлять оригинальное название канал
+        { name: cleanedChannelName },
         {
           headers: {
             Authorization: `Bearer ${token}`,

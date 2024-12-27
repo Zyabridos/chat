@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import Message from './Message.jsx';
-import fetchMessages from '../../API/fetchMessages.js';
+import fetchMessages from '../../../API/fetchMessages.js';
 
 const MessagesList = () => {
   const dispatch = useDispatch();

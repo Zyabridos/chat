@@ -8,14 +8,13 @@ import { Dropdown } from 'react-bootstrap';
 import leoProfanity from 'leo-profanity';
 import { toast } from 'react-toastify';
 import axios from 'axios';
-import addSymbol from '../../assets/add-symbol.png';
-import fetchChannels from '../../API/fetchChannels.js';
-// import { fetchMessages } from '../../store/slices/channelsSlice.js';
-import { setChannels, setActiveChannel } from '../../store/slices/channelsSlice';
-import { openModal } from '../../store/slices/modalSlice';
-import routes from '../../routes';
-import forbiddenWords from '../../dictionary';
-import { LoadingBar } from '../Attachments';
+import addSymbol from '../../../assets/add-symbol.png';
+import fetchChannels from '../../../API/fetchChannels.js';
+import { setChannels, setActiveChannel } from '../../../store/slices/channelsSlice';
+import { openModal } from '../../../store/slices/modalSlice';
+import routes from '../../../routes';
+import forbiddenWords from '../../../dictionary';
+import { LoadingBar } from '../../Attachments';
 
 const Channels = () => {
   const { t } = useTranslation();

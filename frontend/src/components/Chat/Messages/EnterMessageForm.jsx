@@ -4,9 +4,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import leoProfanity from 'leo-profanity';
-import { addMessage } from '../../store/slices/messagesSlice.js';
-import routes from '../../routes.js';
-import { SendMessageButton } from '../Buttons/Buttons.jsx';
+import { addMessage } from '../../../store/slices/messagesSlice.js';
+import routes from '../../../routes.js';
+import { SendMessageButton } from '../../Buttons/Buttons.jsx';
 
 const EnterMessageForm = () => {
   const dispatch = useDispatch();

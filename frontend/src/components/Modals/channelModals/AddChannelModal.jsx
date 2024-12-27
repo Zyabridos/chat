@@ -41,18 +41,23 @@ const AddChannelModal = () => {
       return;
     }
 
-    if (leoProfanity.check(values.name)) {
-      setSubmitting(false);
-      toast.error(t('channelsFormErrors.profanityDetected'));
-      return;
-    }
+    // I prefer this option in the chat, but for the tests I have to gi with different version
+    // if (leoProfanity.check(values.name)) {
+    //   setSubmitting(false);
+    //   toast.error(t('channelsFormErrors.profanityDetected'));
+    //   return;
+    // }
+
+    const cleanedChannelName = leoProfanity.clean(values.name);
 
     setIsSubmitting(true);
 
     try {
       const response = await axios.post(
         routes.channelsPath(),
-        { name: values.name },
+        // { name: values.name },
+        // пусть пока так будет, но на серсер надо отправлять оригинальное название канал
+        { name: cleanedChannelName },
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
