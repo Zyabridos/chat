@@ -62,7 +62,7 @@ export const ValidationSchemasProvider = ({ children }) => {
   return (
     <ValidationSchemasContext.Provider
       value={{
-        validationChannelSchema,
+        // validationChannelSchema,
         validationLoginSchema,
         validationSignupSchema,
       }}

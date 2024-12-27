@@ -10,10 +10,10 @@ import routes from '../../../routes';
 import { updateChannel } from '../../../store/slices/channelsSlice';
 
 const EditChannelModal = ({ channelId }) => {
+  const { t } = useTranslation();
   const user = JSON.parse(localStorage.getItem('user'));
   const token = user?.token;
   const channels = useSelector((state) => state.channelsInfo.channels);
-  const { t } = useTranslation();
   const dispatch = useDispatch();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
@@ -96,6 +96,7 @@ const EditChannelModal = ({ channelId }) => {
           <div className="modal-body">
             <Formik
               initialValues={initialValues}
+              // validationSchema={validationChannelSchema}
               onSubmit={(values, actions) => handleEditChannel(values, actions)}
             >
               {({ isSubmitting }) => (

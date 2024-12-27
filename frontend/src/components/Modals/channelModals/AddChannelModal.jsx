@@ -92,6 +92,7 @@ const AddChannelModal = () => {
           <div className="modal-body">
             <Formik
               initialValues={initialValues}
+              // validationSchema={validationChannelSchema}
               onSubmit={(values, actions) => handleAddChannel(values, actions)}
             >
               {({ isSubmitting }) => (
