@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next';
-import './Buttons.css';
 import { Button } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import LanguageSwitcher from '../LanguageSwitcher.jsx';

@@ -1,11 +1,7 @@
 import axios from 'axios';
 import routes from '../routes.js';
 
-/**
- * @param {string} token - Authorization token.
- * @returns {Promise<Object>} - Returns the response data if successful.
- */
-export const fetchChannels = async (token) => {
+export default async (token) => {
   try {
     const response = await axios.get(routes.channelsPath(), {
       headers: {

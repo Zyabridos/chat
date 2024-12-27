@@ -1,9 +1,9 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { closeModal } from '../../../store/slices/modalSlice.js';
-import AddChannelModal from './AddChannelModal.jsx';
-import EditChannelModal from './EditChannelModal.jsx';
-import DeleteChannelModal from './DeleteChannelModal.jsx';
+import { closeModal } from '../../store/slices/modalSlice.js';
+import AddChannelModal from './channelModals/AddChannelModal.jsx';
+import EditChannelModal from './channelModals/EditChannelModal.jsx';
+import DeleteChannelModal from './channelModals/DeleteChannelModal.jsx';
 
 const ModalManager = () => {
   const { isOpen, type, props } = useSelector((state) => state.modal);
@@ -15,7 +15,6 @@ const ModalManager = () => {
     dispatch(closeModal());
   };
 
-  // modalSlice.js, initialState.type
   const renderModalContent = () => {
     switch (type) {
       case 'addChannel':

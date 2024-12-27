@@ -1,18 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
-import { useValidationSchemas } from '../../../contexts/validationContex.jsx';
-// надо все handleAdd/Delete/EditChannel перенести в ../../API/channels
-import { handleAddChannel } from '../buttonHandlers.js';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import leoProfanity from 'leo-profanity';
 import { closeModal } from '../../../store/slices/modalSlice';
+import routes from '../../../routes';
+import { setChannels } from '../../../store/slices/channelsSlice';
 
-const AddChannelModal = ({ channels, setError, token }) => {
+const AddChannelModal = () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  const token = user?.token;
+  const channels = useSelector((state) => state.channelsInfo.channels);
   const { t } = useTranslation();
-  // const { validationChannelSchema } = useValidationSchemas(); // ща перестала работать валидация...
   const dispatch = useDispatch();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState(null);
 
   const checkDuplicate = (channelName) => {
     return channels.some(
@@ -21,21 +26,50 @@ const AddChannelModal = ({ channels, setError, token }) => {
   };
 
   const handleClose = () => {
-    dispatch(closeModal()); // now we can close modal via reedux :)
+    dispatch(closeModal());
   };
 
   const initialValues = { name: '' };
 
-  const onSubmit = (values, actions) => {
-    setIsSubmitting(true);
+  const handleAddChannel = async (values, actions) => {
+    const { setSubmitting } = actions;
+
     if (checkDuplicate(values.name)) {
       setError(t('validationErrors.duplicate'));
-      actions.setSubmitting(false);
+      setSubmitting(false);
       setIsSubmitting(false);
       return;
     }
 
-    handleAddChannel(values, actions, channels, dispatch, handleClose, setError, token, t);
+    if (leoProfanity.check(values.name)) {
+      setSubmitting(false);
+      toast.error(t('channelsFormErrors.profanityDetected'));
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const response = await axios.post(
+        routes.channelsPath(),
+        { name: values.name },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      if (response.data) {
+        dispatch(setChannels([...channels, response.data]));
+        toast.success(t('toast.channelCreated'));
+        handleClose();
+      } else {
+        throw new Error('Error while creating the channel.');
+      }
+    } catch (err) {
+      console.error('Error while creating the channel:', err);
+      setError(err.response?.data?.message || t('error.addChannelFailed'));
+    } finally {
+      setIsSubmitting(false);
+      setSubmitting(false);
+    }
   };
 
   useEffect(() => {
@@ -47,14 +81,13 @@ const AddChannelModal = ({ channels, setError, token }) => {
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title">{t('modals.add')}</h5>
+            <h5 className="modal-title">{t('channels.modals.titles.addChannel')}</h5>
             <button type="button" className="btn-close" onClick={handleClose} />
           </div>
           <div className="modal-body">
             <Formik
               initialValues={initialValues}
-              // validationSchema={validationChannelSchema}
-              onSubmit={onSubmit}
+              onSubmit={(values, actions) => handleAddChannel(values, actions)}
             >
               {({ isSubmitting }) => (
                 <Form>
@@ -70,16 +103,13 @@ const AddChannelModal = ({ channels, setError, token }) => {
                       placeholder={t('channels.channelNamePlaceholder')}
                     />
                     <ErrorMessage name="name" component="div" className="text-danger" />
+                    {error && <div className="text-danger mt-2">{error}</div>}
                   </div>
                   <div className="d-flex justify-content-end">
                     <button type="button" className="me-2 btn btn-secondary" onClick={handleClose}>
                       {t('modals.cancel')}
                     </button>
-                    <button
-                      type="submit"
-                      className="btn btn-primary"
-                      disabled={isSubmitting} // Disable the button while submitting
-                    >
+                    <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
                       {t('modals.add')}
                     </button>
                   </div>
@@ -94,14 +124,3 @@ const AddChannelModal = ({ channels, setError, token }) => {
 };
 
 export default AddChannelModal;
-
-// "modals": {
-//       "placeholders": {
-//         "typeChannelName": "Введите название канала"
-//       },
-//       "labels": {
-//         "typeNewChannelName": "Введите название нового канала",
-//         "rename": "Отредактируйте название канала"
-//       },
-//       "confirmDeletingChannel": "Вы действительно хотите удалить канал?"
-//     }

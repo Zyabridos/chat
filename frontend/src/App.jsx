@@ -19,7 +19,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import forbiddenWords from './dictionary/index.js';
 import { ValidationSchemasProvider } from './contexts/validationContex.jsx';
-import ModalManager from './components/Channels/Modals/ModalManager.jsx';
+import ModalManager from './components/Modals/ModalManager.jsx';
 
 const rollbarConfig = {
   accessToken: import.meta.env.VITE_AUTH_TOKEN,
@@ -28,11 +28,11 @@ const rollbarConfig = {
 
 const App = () => {
   const [isSubmitting, setIsSubmitting] = useState(false); // state for blocking buttons while loading
+  const [error, setError] = useState(null);
 
-  // Initialize leoProfanity dictionary once when the app starts
   useEffect(() => {
     leoProfanity.loadDictionary('ru');
-    forbiddenWords.forEach((word) => leoProfanity.add(word)); // Add custom forbidden words
+    forbiddenWords.forEach((word) => leoProfanity.add(word));
   }, []); // Empty dependency array ensures it runs only once on mount
 
   return (
@@ -42,7 +42,11 @@ const App = () => {
           <BrowserRouter>
             <Provider store={store}>
               <PersistGate loading={null} persistor={persistor}>
-                <ModalManager />
+                <ModalManager
+                  modalProps={{
+                    setError,
+                  }}
+                />
                 <AuthProvider>
                   <ValidationSchemasProvider>
                     <Routes>

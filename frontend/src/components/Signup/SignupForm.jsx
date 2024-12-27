@@ -9,7 +9,7 @@ import { useValidationSchemas } from '../../contexts/validationContex.jsx';
 import { FieldError } from '../Login/styles.jsx';
 import { SignupButton } from '../Buttons/Buttons.jsx';
 import { SugnupPicture } from '../Attachments.jsx';
-import Navbar from '../Navbar/Navbar.jsx';
+import Navbar from '../Navbar.jsx';
 import 'react-toastify/dist/ReactToastify.css';
 import routes from '../../routes.js';
 

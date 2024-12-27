@@ -5,10 +5,9 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../contexts/index.jsx';
 import LoginFooter from './Footer.jsx';
-import Navbar from '../Navbar/Navbar.jsx';
+import Navbar from '../Navbar.jsx';
 import { LoginPicture } from '../Attachments.jsx';
 import { LoginButton } from '../Buttons/Buttons.jsx';
-import { FieldError } from '../styles.jsx';
 import { StyledCardBody } from './styles.jsx';
 import { useValidationSchemas } from '../../contexts/validationContex.jsx';
 import routes from '../../routes.js';
@@ -95,7 +94,9 @@ const LoginForm = ({ isSubmitting, setIsSubmitting }) => {
                         />
                         {/* Display username validation error container */}
                         {formik.touched.username && formik.errors.username && (
-                          <FieldError>{formik.errors.username}</FieldError>
+                          <Form.Control.Feedback type="invalid">
+                            {formik.errors.username}
+                          </Form.Control.Feedback>
                         )}
                       </Form.Group>
                       <Form.Group>
@@ -118,11 +119,17 @@ const LoginForm = ({ isSubmitting, setIsSubmitting }) => {
                         />
                         {/* Display password validation error container */}
                         {formik.touched.password && formik.errors.password && (
-                          <FieldError>{formik.errors.password}</FieldError>
+                          <Form.Control.Feedback type="invalid">
+                            {formik.errors.password}
+                          </Form.Control.Feedback>
                         )}
                         {/* Display Network error */}
                         <Form.Control.Feedback type="invalid">
-                          {authFailed && errorMessage && <FieldError>{errorMessage}</FieldError>}
+                          {authFailed && errorMessage && (
+                            <Form.Control.Feedback type="invalid">
+                              {errorMessage}
+                            </Form.Control.Feedback>
+                          )}
                         </Form.Control.Feedback>
                       </Form.Group>
                       <LoginButton disabled={isSubmitting} /> {/* block buttun while sending */}

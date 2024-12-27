@@ -50,10 +50,28 @@ const channelsSlice = createSlice({
       const activeChannel = state.channels.find((channel) => channel.id === action.payload);
       state.activeChannel = activeChannel || state.channels[0];
     },
+    updateChannel: (state, action) => {
+      const updatedChannel = action.payload;
+      if (!updatedChannel || !updatedChannel.id) {
+        console.error('Invalid channel data:', updatedChannel);
+        return; // Do nothing if channel data is invalid
+      }
+
+      state.channels = state.channels.map((channel) =>
+        channel.id === updatedChannel.id ? { ...channel, name: updatedChannel.name } : channel
+      );
+    },
   },
 });
 
-export const { setChannels, addChannel, removeChannel, setError, setLoading, setActiveChannel } =
-  channelsSlice.actions;
+export const {
+  setChannels,
+  addChannel,
+  removeChannel,
+  setError,
+  setLoading,
+  setActiveChannel,
+  updateChannel,
+} = channelsSlice.actions;
 
 export default channelsSlice.reducer;

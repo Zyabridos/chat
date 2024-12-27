@@ -1,85 +1,95 @@
 {
   "language": {
     "changeToEnglish": "Switch to English",
-    "changeToRussian": "Переключиться на русский"
+    "changeToRussian": "Switch to Russian"
   },
   "login": {
     "title": "Login",
-    "usernameLabel": "Username",
-    "usernamePlaceholder": "Enter your username",
+    "usernameLabel": "Your username",
+    "usernamePlaceholder": "Your username",
     "passwordLabel": "Password",
-    "passwordPlaceholder": "Enter your password",
-    "wrongEmailOrPassword": "Wrong username or password",
+    "passwordPlaceholder": "Password",
     "loginButton": "Login",
+    "wrongEmailOrPassword": "Incorrect username or password",
     "footer": {
-      "noAccount?": "You don`s have an account?",
-      "registration": " Registation"
+      "noAccount?": "Don't have an account?",
+      "registration": " Register"
     }
   },
   "signup": {
     "title": "Sign Up",
-    "usernameLabel": "Your Username",
-    "usernamePlaceholder": "Enter your username",
+    "usernameLabel": "Username",
+    "usernamePlaceholder": "Username",
     "passwordLabel": "Password",
-    "passwordPlaceholder": "Enter your password",
-    "repeatPasswordLabel": "Repeat Password",
-    "repeatPasswordPlaceholder": "Re-enter your password",
+    "passwordPlaceholder": "Password",
+    "repeatPasswordLabel": "Confirm password",
+    "repeatPasswordPlaceholder": "Confirm password",
     "signupButton": "Sign Up",
     "wrongEmailOrPassword": "Incorrect username or password",
     "errors": {
-      "alreadyExists": "User with this username already exists",
-      "unknown": "Error during sign up has occured. Please, try again later",
-      "profanityError": "The username contains inappropriate words. Please choose a valid name."
+      "alreadyExists": "A user with this name already exists",
+      "unknown": "Error creating user. Please try again later",
+      "profanityError": "The username contains inappropriate words. Please choose a valid username."
     }
   },
   "validationErrors": {
-    "min3": "Minimum 3 characters",
-    "min6": "Minimum 6 characters",
+    "min3": "At least 3 characters",
+    "min6": "At least 6 characters",
     "max20": "Maximum 20 characters",
     "required": "Required field",
+    "from3To20": "From 3 to 20 characters",
     "mismatchPasswords": "Passwords must match",
-    "passwordSymbol": "Password must contain at least one special character",
+    "passwordSymbol": "Password must contain at least one symbol",
     "passwordUppercase": "Password must contain at least one uppercase letter",
     "passwordLowercase": "Password must contain at least one lowercase letter",
-    "channelAlreadyExists": "Channel with this name already exists"
+    "channelAlreadyExists": "A channel with this name already exists"
+  },
+  "networkErrors": {
+    "generalError": "Error sending message. Please try again.",
+    "badRequest": "Invalid request. Check the data and try again.",
+    "unauthorized": "Incorrect username or password",
+    "serverError": "Server error. Please try again later.",
+    "error": "Error",
+    "connectionError": "Connection error",
+    "unknownError": "An error occurred",
+    "unknown": "Unknown error"
   },
   "notFound": {
-    "title": "Page Not Found",
-    "message": "But you can go to the",
-    "linkText": "Home page"
+    "title": "Page not found",
+    "message": "But you can go to",
+    "linkText": "the main page"
   },
   "channels": {
     "title": "Channels",
     "channelNamePlaceholder": "Enter channel name",
-    "addNewChannel": "Add new channel",
+    "addNewChannel": "Add channel",
     "cancel": "Cancel",
     "add": "Add",
     "send": "Send",
     "modals": {
-      "renameChannel": "Rename channel",
-      "typeNewChannelName": "Enter new channel name",
-      "typeChannelName": "Enter name for new channel",
+      "titles": {
+        "renameChannel": "Rename channel",
+        "addChannel": "Add channel",
+        "deleteChannel": "Delete channel"
+      },
+      "placeholders": {
+        "typeChannelName": "Enter channel name"
+      },
+      "labels": {
+        "typeNewChannelName": "Enter new channel name",
+        "rename": "Edit channel name"
+      },
       "confirmDeletingChannel": "Are you sure you want to delete the channel?"
     }
   },
   "loading": {
     "loadingChannels": "Loading channels..."
   },
-  "networkErrors": {
-    "generalError": "Error sending the message. Please try again.",
-    "badRequest": "Bad request. Check the data and try again.",
-    "unauthorized": "Wrong username or password.",
-    "serverError": "Server error. Please try later.",
-    "error": "Error",
-    "connectionError": "Connection error. Check your internet connection.",
-    "unknownError": "An error occurred",
-    "unknown": "Unknown error"
-  },
   "error": {
     "tokenNotFound": "Token not found. Please log in again.",
     "fetchChannels": "Error loading channels",
     "addChannel": "Error adding channel",
-    "editChannelFailed": "Error during renaming of channel"
+    "editChannelFailed": "Error renaming channel"
   },
   "channelsFormErrors": {
     "tokenNotFound": "Token not found. Please log in again.",
@@ -87,29 +97,36 @@
     "connectionError": "Connection error. Please check your internet connection.",
     "unknownError": "An error occurred. Please try again.",
     "profanityDetected": "The channel name contains inappropriate words. Please choose a valid name.",
-    "emptyChannelName": "Channel name can not be empty"
+    "emptyChannelName": "Channel name cannot be empty"
   },
   "channelsForm": {
     "newMessage": "New message",
-    "enterMessage": "Enter your message...",
+    "enterMessage": "Enter message...",
     "noMessages": "There are no messages on this channel yet"
   },
   "channelsHeader": {
-    "channelName": "# Channel name here",
-    "messageCount": "There are {{count}} {{count, plural, =0 {messages} =1 {message} other {messages}}} here"
+    "channelName": "# {{channelName}}", 
+    "messageCount1": {
+      "zero": "There are no messages here",
+      "one": "There is 1 message here",
+      "few": "There are {{count}} messages here",
+      "many": "There are {{count}} messages here"
+    },
+    "messageCount": "There are {{count}} {{count, plural, =0 {no messages} =1 {message} =2 {messages} =3 {messages} =4 {messages} other {messages}}}"
   },
   "navbar": {
     "chatname": "Hexlet Chat",
     "exit": "Exit"
   },
   "toast": {
-    "channelCreated": "Channel was successfully created",
-    "channelRenamed": "Channel was successfully renamed",
-    "channelDeleted": "Channel was successfully deleted"
+    "channelCreated": "Channel created",
+    "channelRenamed": "Channel renamed",
+    "channelDeleted": "Channel deleted"
   },
   "modals": {
-      "delete": "Delete",
-      "rename": "Rename",
-      "add": "Add"
-    }
+    "delete": "Delete",
+    "rename": "Rename",
+    "add": "Add",
+    "cancel": "Cancel"
+  }
 }

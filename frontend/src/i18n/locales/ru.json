@@ -67,6 +67,11 @@
     "add": "Добавить",
     "send": "Отправить",
     "modals": {
+      "titles": {
+        "renameChannel": "Переименовать канал",
+        "addChannel": "Добавить канал",
+        "deleteChannel": "Удалить канал"
+      },
       "placeholders": {
         "typeChannelName": "Введите название канала"
       },

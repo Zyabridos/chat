@@ -5,111 +5,128 @@
   },
   "login": {
     "title": "Logg inn",
-    "usernameLabel": "Brukernavn",
-    "usernamePlaceholder": "Skriv inn brukernavnet ditt",
+    "usernameLabel": "Ditt brukernavn",
+    "usernamePlaceholder": "Ditt brukernavn",
     "passwordLabel": "Passord",
-    "passwordPlaceholder": "Skriv inn passordet ditt",
-    "wrongEmailOrPassword": "Feil brukernavn eller passord",
+    "passwordPlaceholder": "Passord",
     "loginButton": "Logg inn",
+    "wrongEmailOrPassword": "Feil brukernavn eller passord",
     "footer": {
       "noAccount?": "Har du ikke en konto?",
-      "registration": " Registrering"
+      "registration": " Registrer deg"
     }
   },
   "signup": {
     "title": "Registrer deg",
-    "usernameLabel": "Ditt brukernavn",
-    "usernamePlaceholder": "Skriv inn brukernavnet ditt",
+    "usernameLabel": "Brukernavn",
+    "usernamePlaceholder": "Brukernavn",
     "passwordLabel": "Passord",
-    "passwordPlaceholder": "Skriv inn passordet ditt",
-    "repeatPasswordLabel": "Gjenta passord",
-    "repeatPasswordPlaceholder": "Skriv inn passordet ditt på nytt",
+    "passwordPlaceholder": "Passord",
+    "repeatPasswordLabel": "Bekreft passord",
+    "repeatPasswordPlaceholder": "Bekreft passord",
     "signupButton": "Registrer deg",
     "wrongEmailOrPassword": "Feil brukernavn eller passord",
     "errors": {
-      "alreadyExists": "En bruker med dette brukernavnet eksisterer allerede",
-      "unknown": "En feil oppstod under registrering. Prøv igjen senere",
-      "profanityError": "Brukernavnet inneholder upassende ord. Vennligst velg et gyldig navn."
+      "alreadyExists": "En bruker med dette navnet eksisterer allerede",
+      "unknown": "Feil ved oppretting av bruker. Vennligst prøv igjen senere",
+      "profanityError": "Brukernavnet inneholder uakseptable ord. Vennligst velg et gyldig brukernavn."
     }
   },
   "validationErrors": {
-    "min3": "Minimum 3 tegn",
-    "min6": "Minimum 6 tegn",
-    "max20": "Maksimum 20 tegn",
-    "required": "Dette feltet er obligatorisk",
-    "mismatchPasswords": "Passordene må samsvare",
-    "passwordSymbol": "Passordet må inneholde minst ett spesialtegn",
+    "min3": "Minst 3 tegn",
+    "min6": "Minst 6 tegn",
+    "max20": "Maksimalt 20 tegn",
+    "required": "Obligatorisk felt",
+    "from3To20": "Fra 3 til 20 tegn",
+    "mismatchPasswords": "Passordene må matche",
+    "passwordSymbol": "Passordet må inneholde minst ett symbol",
     "passwordUppercase": "Passordet må inneholde minst én stor bokstav",
     "passwordLowercase": "Passordet må inneholde minst én liten bokstav",
     "channelAlreadyExists": "En kanal med dette navnet eksisterer allerede"
   },
+  "networkErrors": {
+    "generalError": "Feil ved sending av melding. Vennligst prøv igjen.",
+    "badRequest": "Ugyldig forespørsel. Sjekk dataene og prøv igjen.",
+    "unauthorized": "Feil brukernavn eller passord",
+    "serverError": "Serverfeil. Vennligst prøv igjen senere.",
+    "error": "Feil",
+    "connectionError": "Tilkoblingsfeil",
+    "unknownError": "En feil oppstod",
+    "unknown": "Ukjent feil"
+  },
   "notFound": {
     "title": "Siden ble ikke funnet",
     "message": "Men du kan gå til",
-    "linkText": "Hjemmesiden"
+    "linkText": "hovedsiden"
   },
   "channels": {
     "title": "Kanaler",
     "channelNamePlaceholder": "Skriv inn kanalnavn",
-    "addNewChannel": "Legg til ny kanal",
+    "addNewChannel": "Legg til kanal",
     "cancel": "Avbryt",
-    "send": "Sende",
     "add": "Legg til",
+    "send": "Send",
     "modals": {
-      "renameChannel": "Gi nytt navn til kanalen",
-      "typeNewChannelName": "Skriv inn nytt kanalnavn",
-      "typeChannelName": "Skriv inn navn for ny kanal",
+      "titles": {
+        "renameChannel": "Omdøp kanal",
+        "addChannel": "Legg til kanal",
+        "deleteChannel": "Slett kanal"
+      },
+      "placeholders": {
+        "typeChannelName": "Skriv inn kanalnavn"
+      },
+      "labels": {
+        "typeNewChannelName": "Skriv inn nytt kanalnavn",
+        "rename": "Rediger kanalnavn"
+      },
       "confirmDeletingChannel": "Er du sikker på at du vil slette kanalen?"
     }
   },
   "loading": {
-    "loadingChannels": "Laster inn kanaler..."
-  },
-  "networkErrors": {
-    "generalError": "Feil ved sending av meldingen. Prøv igjen.",
-    "badRequest": "Ugyldig forespørsel. Sjekk dataene og prøv igjen.",
-    "unauthorized": "Feil brukernavn eller passord.",
-    "serverError": "Serverfeil. Prøv igjen senere.",
-    "error": "Feil",
-    "connectionError": "Tilkoblingsfeil. Sjekk internettforbindelsen.",
-    "unknownError": "En ukjent feil oppstod",
-    "unknown": "Ukjent feil"
+    "loadingChannels": "Laster kanaler..."
   },
   "error": {
-    "tokenNotFound": "Token ble ikke funnet. Logg inn igjen.",
+    "tokenNotFound": "Token ikke funnet. Vennligst logg inn igjen.",
     "fetchChannels": "Feil ved lasting av kanaler",
-    "addChannel": "Feil ved oppretting av kanal",
-    "editChannelFailed": "Feil ved endring av kanalnavn"
+    "addChannel": "Feil ved tillegg av kanal",
+    "editChannelFailed": "Feil ved omdøping av kanal"
   },
   "channelsFormErrors": {
-    "tokenNotFound": "Token ble ikke funnet. Logg inn igjen.",
-    "emptyMessage": "Meldingen kan ikke være tom.",
-    "connectionError": "Tilkoblingsfeil. Sjekk internettforbindelsen.",
-    "unknownError": "En feil oppstod. Prøv igjen.",
-    "profanityDetected": "Kanalnavnet inneholder upassende ord. Vennligst velg et gyldig navn.",
-    "emptyChannelName": "Kanalnavnet kan ikke være tomt"
+    "tokenNotFound": "Token ikke funnet. Vennligst logg inn igjen.",
+    "emptyMessage": "Melding kan ikke være tom.",
+    "connectionError": "Tilkoblingsfeil. Vennligst sjekk internettforbindelsen.",
+    "unknownError": "En feil oppstod. Vennligst prøv igjen.",
+    "profanityDetected": "Kanalnavnet inneholder uakseptable ord. Vennligst velg et gyldig navn.",
+    "emptyChannelName": "Kanalnavn kan ikke være tomt"
   },
   "channelsForm": {
     "newMessage": "Ny melding",
-    "enterMessage": "Skriv inn meldingen din...",
+    "enterMessage": "Skriv inn melding...",
     "noMessages": "Det er ingen meldinger på denne kanalen ennå"
   },
   "channelsHeader": {
-    "channelName": "# Kanalnavn her",
-    "messageCount": "Det er {{count}} {{count, plural, =0 {meldinger} =1 {melding} other {meldinger}}} her"
+    "channelName": "# {{channelName}}", 
+    "messageCount1": {
+      "zero": "Det er ingen meldinger her",
+      "one": "Det er 1 melding her",
+      "few": "Det er {{count}} meldinger her",
+      "many": "Det er {{count}} meldinger her"
+    },
+    "messageCount": "Det er {{count}} {{count, plural, =0 {ingen meldinger} =1 {melding} =2 {meldinger} =3 {meldinger} =4 {meldinger} other {meldinger}}}"
   },
   "navbar": {
     "chatname": "Hexlet Chat",
     "exit": "Logg ut"
   },
   "toast": {
-    "channelCreated": "Kanalen ble opprettet",
-    "channelRenamed": "Kanalen ble omdøpt",
-    "channelDeleted": "Kanalen ble slettet"
+    "channelCreated": "Kanal opprettet",
+    "channelRenamed": "Kanal omdøpt",
+    "channelDeleted": "Kanal slettet"
   },
   "modals": {
-      "delete": "Delete",
-      "rename": "Rename",
-      "add": "Legg til"
-    }
+    "delete": "Slett",
+    "rename": "Omdøp",
+    "add": "Legg til",
+    "cancel": "Avbryt"
+  }
 }

@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import Message from './Message.jsx';
-import { fetchMessages } from '../../store/slices/messagesSlice.js';
+import fetchMessages from '../../API/fetchMessages.js';
 
 const MessagesList = () => {
   const dispatch = useDispatch();
@@ -12,13 +12,24 @@ const MessagesList = () => {
   const activeChannel = useSelector((state) => state.channelsInfo.activeChannel);
   const loading = useSelector((state) => state.messagesInfo.loading);
   const error = useSelector((state) => state.messagesInfo.error);
+  const [fetchingError, setFetchingError] = useState(null);
 
   // Load messages when active channel changes
   useEffect(() => {
     if (activeChannel) {
-      dispatch(fetchMessages(activeChannel.id));
+      const fetchMessagesData = async () => {
+        try {
+          const token = JSON.parse(localStorage.getItem('user'))?.token;
+          const data = await fetchMessages(activeChannel.id, token);
+          dispatch({ type: 'messages/setMessages', payload: data });
+        } catch (err) {
+          setFetchingError(t('errorLoadingMessages'));
+          console.error('Error fetching messages:', err);
+        }
+      };
+      fetchMessagesData();
     }
-  }, [activeChannel, dispatch]);
+  }, [activeChannel, dispatch, t]);
 
   // Filter messages for the active channel
   const filteredMessages = messages.filter((msg) => msg.channelId === activeChannel?.id);
@@ -27,8 +38,8 @@ const MessagesList = () => {
     return <div>{t('loading')}</div>;
   }
 
-  if (error) {
-    return <div className="text-danger">{t('errorLoadingMessages')}</div>;
+  if (fetchingError || error) {
+    return <div className="text-danger">{fetchingError || t('errorLoadingMessages')}</div>;
   }
 
   return (

@@ -9,7 +9,8 @@ import leoProfanity from 'leo-profanity';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import addSymbol from '../../assets/add-symbol.png';
-import { fetchChannels } from '../../API/channels';
+import fetchChannels from '../../API/fetchChannels.js';
+// import { fetchMessages } from '../../store/slices/channelsSlice.js';
 import { setChannels, setActiveChannel } from '../../store/slices/channelsSlice';
 import { openModal } from '../../store/slices/modalSlice';
 import routes from '../../routes';
@@ -20,14 +21,13 @@ const Channels = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  const channels = useSelector((state) => state.channelsInfo.channels); // Каналы из Redux
-  const activeChannel = useSelector((state) => state.channelsInfo.activeChannel); // Активный канал
+  const channels = useSelector((state) => state.channelsInfo.channels); // channels from Redux
+  const activeChannel = useSelector((state) => state.channelsInfo.activeChannel);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Получение информации о пользователе из localStorage
     const user = JSON.parse(localStorage.getItem('user'));
     const token = user?.token;
 
@@ -37,7 +37,6 @@ const Channels = () => {
       return;
     }
 
-    // Загрузка каналов
     const loadChannels = async () => {
       try {
         const data = await fetchChannels(token); // Получаем каналы
@@ -53,7 +52,6 @@ const Channels = () => {
   }, [dispatch, t]);
 
   useEffect(() => {
-    // Загрузка словаря для фильтрации нежелательных слов
     leoProfanity.loadDictionary('ru');
     forbiddenWords.forEach((word) => leoProfanity.add(word));
   }, []);
@@ -62,10 +60,9 @@ const Channels = () => {
     dispatch(setActiveChannel(channel.id));
   };
 
-  const user = JSON.parse(localStorage.getItem('user')); // Получаем пользователя
-  const token = user?.token; // Получаем токен пользователя
+  const user = JSON.parse(localStorage.getItem('user'));
+  const token = user?.token;
 
-  // Удаление канала
   const handleDeleteChannel = async (channelId) => {
     try {
       await axios.delete(`${routes.channelsPath()}/${channelId}`, {
@@ -78,7 +75,6 @@ const Channels = () => {
     }
   };
 
-  // Рендер кнопок управления каналом (удаление/переименование)
   const renderManagementButton = (channel) => {
     if (channel.removable) {
       return (
@@ -98,7 +94,7 @@ const Channels = () => {
                 )
               }
             >
-              {t('channels.modal.delete')}
+              {t('modals.delete')}
             </Dropdown.Item>
             <Dropdown.Item
               as="button"
@@ -111,7 +107,7 @@ const Channels = () => {
                 )
               }
             >
-              {t('channels.modal.rename')}
+              {t('modals.rename')}
             </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
@@ -120,7 +116,6 @@ const Channels = () => {
     return null;
   };
 
-  // Рендер загрузки или ошибки
   const renderLoadingOrError = () => {
     if (loading) return <LoadingBar t={t} />;
     if (error) return <div>{error}</div>;
@@ -153,7 +148,7 @@ const Channels = () => {
           <span className="visually-hidden">+</span>
         </button>
       </Container>
-      {renderLoadingOrError()} {/* Загрузка или ошибка */}
+      {renderLoadingOrError()}
       <ListGroup
         as="ul"
         className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block position-relative"
