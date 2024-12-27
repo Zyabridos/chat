@@ -50,17 +50,16 @@
   },
   "channels": {
     "title": "Kanaler",
-    "enterChannelName": "Skriv inn kanalnavn",
+    "channelNamePlaceholder": "Skriv inn kanalnavn",
     "addNewChannel": "Legg til ny kanal",
     "cancel": "Avbryt",
     "send": "Sende",
     "add": "Legg til",
-    "modal": {
-      "delete": "Slett",
-      "rename": "Gi nytt navn",
-      "renameChannel": "Gi kanalen et nytt navn",
-      "typeNewChannelName": "Skriv inn et nytt kanalnavn",
-      "typeChannelName": "Skriv inn et navn for ny kanal"
+    "modals": {
+      "renameChannel": "Gi nytt navn til kanalen",
+      "typeNewChannelName": "Skriv inn nytt kanalnavn",
+      "typeChannelName": "Skriv inn navn for ny kanal",
+      "confirmDeletingChannel": "Er du sikker på at du vil slette kanalen?"
     }
   },
   "loading": {
@@ -107,5 +106,10 @@
     "channelCreated": "Kanalen ble opprettet",
     "channelRenamed": "Kanalen ble omdøpt",
     "channelDeleted": "Kanalen ble slettet"
-  }
+  },
+  "modals": {
+      "delete": "Delete",
+      "rename": "Rename",
+      "add": "Legg til"
+    }
 }

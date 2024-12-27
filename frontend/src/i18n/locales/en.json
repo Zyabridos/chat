@@ -50,17 +50,16 @@
   },
   "channels": {
     "title": "Channels",
-    "enterChannelName": "Enter channel name",
+    "channelNamePlaceholder": "Enter channel name",
     "addNewChannel": "Add new channel",
     "cancel": "Cancel",
     "add": "Add",
     "send": "Send",
-    "modal": {
-      "delete": "Delete",
-      "rename": "Rename",
+    "modals": {
       "renameChannel": "Rename channel",
       "typeNewChannelName": "Enter new channel name",
-      "typeChannelName": "Enter name for new channel"
+      "typeChannelName": "Enter name for new channel",
+      "confirmDeletingChannel": "Are you sure you want to delete the channel?"
     }
   },
   "loading": {
@@ -107,5 +106,10 @@
     "channelCreated": "Channel was successfully created",
     "channelRenamed": "Channel was successfully renamed",
     "channelDeleted": "Channel was successfully deleted"
-  }
+  },
+  "modals": {
+      "delete": "Delete",
+      "rename": "Rename",
+      "add": "Add"
+    }
 }

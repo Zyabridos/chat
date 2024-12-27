@@ -51,18 +51,18 @@ const EnterMessageForm = () => {
       const response = await axios.post(
         routes.messagesPath(),
         {
-          body: messageBody,
+          // пока так для тестов body: messageBody,
+          body: cleanedMessage,
           channelId: activeChannel.id,
           userName,
         },
         config
       );
-      console.log(response);
 
       dispatch(
         addMessage({
           id: response.data.id,
-          body: cleanedMessage, // Store the cleaned message
+          body: cleanedMessage,
           userName,
           channelId: activeChannel.id,
         })

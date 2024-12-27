@@ -1,9 +1,8 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import leoProfanity from 'leo-profanity';
 import routes from '../../routes';
 import { setChannels } from '../../store/slices/channelsSlice';
-import leoProfanity from 'leo-profanity';
-
 
 /**
  * @param {string} channelId - channelId to edit/delete
@@ -26,7 +25,7 @@ export const handleDeleteChannel = async (channelId, dispatch, channels, token, 
   try {
     const response = await axios.delete(`${routes.channelsPath()}/${channelId}`, {
       headers: {
-        'Authorization': `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
     });
 
@@ -43,7 +42,16 @@ export const handleDeleteChannel = async (channelId, dispatch, channels, token, 
   }
 };
 
-export const handleAddChannel = async (values, { setSubmitting }, channels, dispatch, handleCloseModal, setError, token, t) => {
+export const handleAddChannel = async (
+  values,
+  { setSubmitting },
+  channels,
+  dispatch,
+  handleCloseModal,
+  setError,
+  token,
+  t
+) => {
   if (leoProfanity.check(values.name)) {
     setSubmitting(false);
     toast.error(t('channelsFormErrors.profanityDetected'));
@@ -54,7 +62,7 @@ export const handleAddChannel = async (values, { setSubmitting }, channels, disp
     const response = await axios.post(
       routes.channelsPath(),
       { name: values.name },
-      { headers: { 'Authorization': `Bearer ${token}` } }
+      { headers: { Authorization: `Bearer ${token}` } }
     );
 
     if (response.data) {
@@ -72,10 +80,8 @@ export const handleAddChannel = async (values, { setSubmitting }, channels, disp
   }
 };
 
-
-
 export const handleEditChannel = async (
-  values, 
+  values,
   { setSubmitting },
   channels,
   dispatch,
@@ -85,7 +91,7 @@ export const handleEditChannel = async (
   t
 ) => {
   if (leoProfanity.check(values.name)) {
-    setSubmitting(false); 
+    setSubmitting(false);
     toast.error(t('channelsFormErrors.profanityDetected'));
     return;
   }
@@ -94,13 +100,13 @@ export const handleEditChannel = async (
     const response = await axios.put(
       `${routes.channelsPath()}/${editingChannelId}`,
       { name: values.name },
-      { headers: { 'Authorization': `Bearer ${token}` } }
+      { headers: { Authorization: `Bearer ${token}` } }
     );
 
     if (response.data) {
       dispatch({
         type: 'SET_CHANNELS',
-        payload: channels.map(channel =>
+        payload: channels.map((channel) =>
           channel.id === editingChannelId ? { ...channel, name: values.name } : channel
         ),
       });
@@ -112,6 +118,6 @@ export const handleEditChannel = async (
     console.error('Error while editing the channel:', err);
     setError(err.response ? err.response.data.message : t('error.editChannelFailed'));
   } finally {
-    setSubmitting(false); 
+    setSubmitting(false);
   }
 };

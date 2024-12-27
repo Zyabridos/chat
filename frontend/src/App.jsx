@@ -19,6 +19,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import forbiddenWords from './dictionary/index.js';
 import { ValidationSchemasProvider } from './contexts/validationContex.jsx';
+import ModalManager from './components/Channels/Modals/ModalManager.jsx';
 
 const rollbarConfig = {
   accessToken: import.meta.env.VITE_AUTH_TOKEN,
@@ -26,7 +27,7 @@ const rollbarConfig = {
 };
 
 const App = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false); // Состояние загрузки для блокировки кнопок
+  const [isSubmitting, setIsSubmitting] = useState(false); // state for blocking buttons while loading
 
   // Initialize leoProfanity dictionary once when the app starts
   useEffect(() => {
@@ -41,6 +42,7 @@ const App = () => {
           <BrowserRouter>
             <Provider store={store}>
               <PersistGate loading={null} persistor={persistor}>
+                <ModalManager />
                 <AuthProvider>
                   <ValidationSchemasProvider>
                     <Routes>

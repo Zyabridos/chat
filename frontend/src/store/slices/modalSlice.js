@@ -2,8 +2,8 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   isOpen: false,
-  modalType: null, // 'edit', 'delete', etc.
-  modalProps: null, // but eventually can send channels
+  type: null, // addChannel, editChannel, deleteChannel etc.
+  props: {}, // xtra props
 };
 
 const modalSlice = createSlice({
@@ -11,18 +11,18 @@ const modalSlice = createSlice({
   initialState,
   reducers: {
     openModal: (state, action) => {
+      const { type, props } = action.payload;
       state.isOpen = true;
-      state.modalType = action.payload.modalType;
-      state.modalProps = action.payload.modalProps || {};
+      state.type = type;
+      state.props = props || {};
     },
     closeModal: (state) => {
       state.isOpen = false;
-      state.modalType = null;
-      state.modalProps = {};
+      state.type = null;
+      state.props = {};
     },
   },
 });
 
 export const { openModal, closeModal } = modalSlice.actions;
-
 export default modalSlice.reducer;

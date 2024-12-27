@@ -61,17 +61,20 @@
   },
   "channels": {
     "title": "Каналы",
-    "enterChannelName": "Введите название канала",
+    "channelNamePlaceholder": "Введите название канала",
     "addNewChannel": "Добавить канал",
     "cancel": "Отменить",
     "add": "Добавить",
     "send": "Отправить",
-    "modal": {
-      "delete": "Удалить",
-      "rename": "Переименовать",
-      "typeChannelName": "Введите название нового канала",
-      "typeNewChannelName": "Отредактируйте название канала",
-      "renameChannel": "Переименуйте канал"
+    "modals": {
+      "placeholders": {
+        "typeChannelName": "Введите название канала"
+      },
+      "labels": {
+        "typeNewChannelName": "Введите название нового канала",
+        "rename": "Отредактируйте название канала"
+      },
+      "confirmDeletingChannel": "Вы действительно хотите удалить канал?"
     }
   },
   "loading": {
@@ -114,5 +117,11 @@
     "channelCreated": "Канал создан",
     "channelRenamed": "Канал переименован",
     "channelDeleted": "Канал удалён"
-  }
+  },
+  "modals": {
+      "delete": "Удалить",
+      "rename": "Переименовать",
+      "add": "Добавить",
+      "cancel": "Отменить"
+    }
 }

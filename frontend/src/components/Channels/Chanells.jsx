@@ -9,30 +9,25 @@ import leoProfanity from 'leo-profanity';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import addSymbol from '../../assets/add-symbol.png';
-import { fetchChannels } from '../../API/channels.js';
-import EditChannelModal from './Modals/EditChannelModal.jsx';
-import AddChannelModal from './Modals/AddChannellModal.jsx';
-import { handleDeleteChannel } from './buttonHandlers.js';
-import forbiddenWords from '../../dictionary/index.js';
-import { setChannels, setActiveChannel } from '../../store/slices/channelsSlice.js';
-import routes from '../../routes.js';
-import { LoadingBar } from '../Attachments.jsx';
+import { fetchChannels } from '../../API/channels';
+import { setChannels, setActiveChannel } from '../../store/slices/channelsSlice';
+import { openModal } from '../../store/slices/modalSlice';
+import routes from '../../routes';
+import forbiddenWords from '../../dictionary';
+import { LoadingBar } from '../Attachments';
 
 const Channels = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  const channels = useSelector((state) => state.channelsInfo.channels); // Channels from Redux store
-  const activeChannel = useSelector((state) => state.channelsInfo.activeChannel); // Currently active channel from Redux store
+  const channels = useSelector((state) => state.channelsInfo.channels); // Каналы из Redux
+  const activeChannel = useSelector((state) => state.channelsInfo.activeChannel); // Активный канал
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false); // State to handle Add Channel modal visibility
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false); // State to handle Edit Channel modal visibility
-  const [editingChannel, setEditingChannel] = useState(null); // State to store the channel being edited
 
   useEffect(() => {
-    // Get user information from localStorage to authenticate API calls
+    // Получение информации о пользователе из localStorage
     const user = JSON.parse(localStorage.getItem('user'));
     const token = user?.token;
 
@@ -42,13 +37,12 @@ const Channels = () => {
       return;
     }
 
-    // Function to fetch channels from the server
+    // Загрузка каналов
     const loadChannels = async () => {
       try {
-        const data = await fetchChannels(token); // Fetch channels using the API
-        dispatch(setChannels(data)); // Store channels in Redux
+        const data = await fetchChannels(token); // Получаем каналы
+        dispatch(setChannels(data)); // Сохраняем в Redux
       } catch (err) {
-        // Set error message if fetching channels fails
         setError(err.response ? err.response.data.message : t('error.fetchChannels'));
       } finally {
         setLoading(false);
@@ -59,6 +53,7 @@ const Channels = () => {
   }, [dispatch, t]);
 
   useEffect(() => {
+    // Загрузка словаря для фильтрации нежелательных слов
     leoProfanity.loadDictionary('ru');
     forbiddenWords.forEach((word) => leoProfanity.add(word));
   }, []);
@@ -67,61 +62,23 @@ const Channels = () => {
     dispatch(setActiveChannel(channel.id));
   };
 
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
+  const user = JSON.parse(localStorage.getItem('user')); // Получаем пользователя
+  const token = user?.token; // Получаем токен пользователя
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleOpenEditModal = (channel) => {
-    setEditingChannel(channel);
-    setIsEditModalOpen(true);
-  };
-
-  const handleCloseEditModal = () => {
-    setIsEditModalOpen(false);
-    setEditingChannel(null);
-  };
-
-  const user = JSON.parse(localStorage.getItem('user')); // Get user info from localStorage
-  const token = user?.token; // Get token from user data
-
-  // Handle the editing of a channel (renaming the channel)
-  const handleEditChannel = async (values, { setSubmitting }) => {
+  // Удаление канала
+  const handleDeleteChannel = async (channelId) => {
     try {
-      const editedChannel = { name: values.name };
-      const response = await axios.patch(
-        `${routes.channelsPath()}/${editingChannel.id}`,
-        editedChannel,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
-      console.log(response.data);
-      if (response.data) {
-        dispatch(
-          setChannels(
-            channels.map((channel) =>
-              channel.id === editingChannel.id ? { ...channel, name: values.name } : channel
-            )
-          )
-        );
-        toast.success(t('toast.channelRenamed'));
-        handleCloseEditModal();
-      } else {
-        throw new Error('Error editing the channel.');
-      }
+      await axios.delete(`${routes.channelsPath()}/${channelId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      dispatch(setChannels(channels.filter((channel) => channel.id !== channelId)));
+      toast.success(t('toast.channelDeleted'));
     } catch (err) {
-      // Handle any errors during channel edit
-      console.error('Error editing the channel:', err);
-      setError(err.response ? err.response.data.message : t('error.editChannelFailed'));
-    } finally {
-      setSubmitting(false);
+      setError(err.response ? err.response.data.message : t('error.deleteChannelFailed'));
     }
   };
 
-  // Render management buttons (delete, rename) for each channel if the user has permissions
+  // Рендер кнопок управления каналом (удаление/переименование)
   const renderManagementButton = (channel) => {
     if (channel.removable) {
       return (
@@ -133,12 +90,27 @@ const Channels = () => {
             <Dropdown.Item
               as="button"
               onClick={() =>
-                handleDeleteChannel(channel.id, dispatch, channels, user?.token, setError, t)
+                dispatch(
+                  openModal({
+                    type: 'deleteChannel',
+                    props: { channelId: channel.id, handleDeleteChannel },
+                  })
+                )
               }
             >
               {t('channels.modal.delete')}
             </Dropdown.Item>
-            <Dropdown.Item as="button" onClick={() => handleOpenEditModal(channel)}>
+            <Dropdown.Item
+              as="button"
+              onClick={() =>
+                dispatch(
+                  openModal({
+                    type: 'editChannel',
+                    props: { channelId: channel.id, channelName: channel.name },
+                  })
+                )
+              }
+            >
               {t('channels.modal.rename')}
             </Dropdown.Item>
           </Dropdown.Menu>
@@ -148,7 +120,7 @@ const Channels = () => {
     return null;
   };
 
-  // Render loading or error messages based on component state
+  // Рендер загрузки или ошибки
   const renderLoadingOrError = () => {
     if (loading) return <LoadingBar t={t} />;
     if (error) return <div>{error}</div>;
@@ -162,7 +134,14 @@ const Channels = () => {
         <button
           type="button"
           className="p-0 text-primary btn btn-group-vertical"
-          onClick={handleOpenModal}
+          onClick={() =>
+            dispatch(
+              openModal({
+                type: 'addChannel',
+                props: { channels, token },
+              })
+            )
+          }
         >
           <img
             src={addSymbol}
@@ -171,10 +150,10 @@ const Channels = () => {
             width="20px"
             height="20px"
           />
-          <span className="visually-hidden">+</span> {/* Add channel button */}
+          <span className="visually-hidden">+</span>
         </button>
       </Container>
-      {renderLoadingOrError()} {/* Display loading or error message */}
+      {renderLoadingOrError()} {/* Загрузка или ошибка */}
       <ListGroup
         as="ul"
         className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block position-relative"
@@ -185,7 +164,7 @@ const Channels = () => {
               <button
                 type="button"
                 className={c('w-100 rounded-0 text-start btn', {
-                  'btn-secondary': activeChannel === channel.id, // Highlight active channel
+                  'btn-secondary': activeChannel === channel.id,
                   'btn-light': activeChannel !== channel.id,
                 })}
                 onClick={() => handleChannelClick(channel)}
@@ -193,28 +172,11 @@ const Channels = () => {
                 <span className="me-1">#</span>
                 {channel.name}
               </button>
-              {renderManagementButton(channel)}{' '}
-              {/* Render management buttons, i.e. delete or rename channel */}
+              {renderManagementButton(channel)}
             </div>
           </ListGroup.Item>
         ))}
       </ListGroup>
-      {/* Modal for adding channel */}
-      <AddChannelModal
-        isModalOpen={isModalOpen}
-        handleCloseModal={handleCloseModal}
-        channels={channels}
-        dispatch={dispatch}
-        setError={setError}
-        token={token}
-      />
-      {/* Modal for editing channel */}
-      <EditChannelModal
-        isEditModalOpen={isEditModalOpen}
-        handleCloseEditModal={handleCloseEditModal}
-        editingChannel={editingChannel}
-        handleEditChannel={handleEditChannel}
-      />
     </>
   );
 };
