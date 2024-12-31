@@ -76,7 +76,7 @@
         "typeChannelName": "Введите название канала"
       },
       "labels": {
-        "typeNewChannelName": "Введите название нового канала",
+        "typeNewChannelName": "Имя канала",
         "rename": "Отредактируйте название канала"
       },
       "confirmDeletingChannel": "Вы действительно хотите удалить канал?"
