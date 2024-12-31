@@ -23,8 +23,14 @@ const EditChannelModal = ({ channelId }) => {
   const validationChannelSchema = yup.object({
     name: yup
       .string()
-      .min(3, t('validationErrors.from3To20'))
-      .max(20, t('validationErrors.from3To20'))
+      .min(3, (value) => {
+        console.log('Min Validation Triggered:', value);
+        return t('validationErrors.from3To20');
+      })
+      .max(20, (value) => {
+        console.log('Max Validation Triggered:', value);
+        return t('validationErrors.from3To20');
+      })
       .required(t('validationErrors.required')),
   });
 
@@ -42,6 +48,7 @@ const EditChannelModal = ({ channelId }) => {
   };
 
   const handleEditChannel = async (values, actions) => {
+    console.log('aa');
     const { setSubmitting } = actions;
 
     if (checkDuplicate(values.name)) {
