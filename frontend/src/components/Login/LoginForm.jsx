@@ -96,13 +96,13 @@ const LoginForm = ({ isSubmitting, setIsSubmitting }) => {
                         />
                         {/* Display username validation error container */}
                         {formik.touched.username && formik.errors.username && (
-                          <Form.Control.Feedback type="invalid">
+                          <Form.Control.Feedback type="invalid" className="invalid-tooltip">
                             {formik.errors.username}
                           </Form.Control.Feedback>
                         )}
                         {/* Display authentication failure error */}
                         {authFailed && !formik.errors.username && (
-                          <Form.Control.Feedback type="invalid">
+                          <Form.Control.Feedback type="invalid" className="invalid-tooltip">
                             {errorMessage}
                           </Form.Control.Feedback>
                         )}
