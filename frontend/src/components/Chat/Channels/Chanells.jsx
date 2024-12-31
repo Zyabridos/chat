@@ -158,8 +158,8 @@ const Channels = () => {
               <button
                 type="button"
                 className={c('w-100 rounded-0 text-start btn', {
-                  'btn-secondary': activeChannel === channel.id,
-                  'btn-light': activeChannel !== channel.id,
+                  'btn-secondary': activeChannel?.id === channel.id,
+                  'btn-light': activeChannel?.id !== channel.id,
                 })}
                 onClick={() => handleChannelClick(channel)}
               >
