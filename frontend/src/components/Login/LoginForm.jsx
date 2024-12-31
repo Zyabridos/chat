@@ -87,23 +87,15 @@ const LoginForm = ({ isSubmitting, setIsSubmitting }) => {
                           autoComplete="username"
                           onChange={formik.handleChange}
                           value={formik.values.username}
-                          isInvalid={
-                            formik.touched.username && (formik.errors.username || authFailed)
-                          }
+                          isInvalid={authFailed}
                           required
                           ref={inputRef}
                           disabled={isSubmitting} // block field while sending
                         />
                         {/* Display username validation error container */}
                         {formik.touched.username && formik.errors.username && (
-                          <Form.Control.Feedback type="invalid" className="invalid-tooltip">
+                          <Form.Control.Feedback type="invalid">
                             {formik.errors.username}
-                          </Form.Control.Feedback>
-                        )}
-                        {/* Display authentication failure error */}
-                        {authFailed && !formik.errors.username && (
-                          <Form.Control.Feedback type="invalid" className="invalid-tooltip">
-                            {errorMessage}
                           </Form.Control.Feedback>
                         )}
                       </Form.Group>
@@ -121,9 +113,7 @@ const LoginForm = ({ isSubmitting, setIsSubmitting }) => {
                           placeholder={t('login.passwordPlaceholder')}
                           onChange={formik.handleChange}
                           value={formik.values.password}
-                          isInvalid={
-                            formik.touched.password && (formik.errors.password || authFailed)
-                          }
+                          isInvalid={authFailed}
                           required
                           disabled={isSubmitting}
                         />
@@ -133,12 +123,14 @@ const LoginForm = ({ isSubmitting, setIsSubmitting }) => {
                             {formik.errors.password}
                           </Form.Control.Feedback>
                         )}
-                        {/* Display authentication failure error */}
-                        {authFailed && !formik.errors.password && (
-                          <Form.Control.Feedback type="invalid">
-                            {errorMessage}
-                          </Form.Control.Feedback>
-                        )}
+                        {/* Display Network error */}
+                        <Form.Control.Feedback type="invalid">
+                          {authFailed && errorMessage && (
+                            <Form.Control.Feedback type="invalid">
+                              {errorMessage}
+                            </Form.Control.Feedback>
+                          )}
+                        </Form.Control.Feedback>
                       </Form.Group>
                       <LoginButton disabled={isSubmitting} /> {/* block buttun while sending */}
                     </fieldset>
