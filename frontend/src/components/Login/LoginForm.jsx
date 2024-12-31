@@ -87,14 +87,16 @@ const LoginForm = ({ isSubmitting, setIsSubmitting }) => {
                           autoComplete="username"
                           onChange={formik.handleChange}
                           value={formik.values.username}
-                          isInvalid={authFailed}
+                          isInvalid={
+                            formik.touched.username && (formik.errors.username || authFailed)
+                          }
                           required
                           ref={inputRef}
                           disabled={isSubmitting} // block field while sending
                         />
                         {/* Display username validation error container */}
                         {formik.touched.username && formik.errors.username && (
-                          <Form.Control.Feedback type="invalid">
+                          <Form.Control.Feedback type="invalid" className="invalid-tooltip">
                             {formik.errors.username}
                           </Form.Control.Feedback>
                         )}
@@ -113,7 +115,9 @@ const LoginForm = ({ isSubmitting, setIsSubmitting }) => {
                           placeholder={t('login.passwordPlaceholder')}
                           onChange={formik.handleChange}
                           value={formik.values.password}
-                          isInvalid={authFailed}
+                          isInvalid={
+                            formik.touched.password && (formik.errors.password || authFailed)
+                          }
                           required
                           disabled={isSubmitting}
                         />
@@ -123,14 +127,12 @@ const LoginForm = ({ isSubmitting, setIsSubmitting }) => {
                             {formik.errors.password}
                           </Form.Control.Feedback>
                         )}
-                        {/* Display Network error */}
-                        <Form.Control.Feedback type="invalid">
-                          {authFailed && errorMessage && (
-                            <Form.Control.Feedback type="invalid">
-                              {errorMessage}
-                            </Form.Control.Feedback>
-                          )}
-                        </Form.Control.Feedback>
+                        {/* Display authentication failure error */}
+                        {authFailed && !formik.errors.password && (
+                          <Form.Control.Feedback type="invalid">
+                            {errorMessage}
+                          </Form.Control.Feedback>
+                        )}
                       </Form.Group>
                       <LoginButton disabled={isSubmitting} /> {/* block buttun while sending */}
                     </fieldset>
