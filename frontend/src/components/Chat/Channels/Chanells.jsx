@@ -79,7 +79,7 @@ const Channels = () => {
       return (
         <Dropdown align="end">
           <Dropdown.Toggle variant="outline-dark" id={`dropdown-${channel.id}`}>
-            <span className="visually-hidden">{t('channel.management')}</span>
+            <span className="visually-hidden">{t('channels.modals.managment')}</span>
           </Dropdown.Toggle>
           <Dropdown.Menu>
             <Dropdown.Item
