@@ -12,7 +12,7 @@ This is a 3-page chat application where users can log in, sign up, and participa
 - **Channel Management**: Users can rename or delete channels they have created.
 
 # Deployed version
-[Deployed project](slack-chat-jade.vercel.app)
+[Deployed project](https://slack-chat-we18.onrender.com/login)
 Login: admin, password: admin. Or alternativelly you can Sign in by creating an account
 
 # Project Setup
@@ -44,26 +44,6 @@ To start both the frontend and backend in development mode, run:
 make develop
 ```
 
-### Starting the Frontend
-
-To start the frontend separately:
-
-```bash
-make start-frontend
-```
-
-This will navigate to the `frontend` directory and run `npm run dev`.
-
-### Starting the Backend
-
-To start the backend separately:
-
-```bash
-make start-backend
-```
-
-This will navigate to the `frontend` directory and run `npx start-server`.
-
 ## Building the Project
 
 To build the frontend for production, run:
@@ -77,20 +57,22 @@ This will:
 1. Remove the existing `frontend/dist` directory.
 2. Build the frontend using `npm run build`.
 
-## Cleaning Up
+## Start the Project
 
-Ensure the `dist` directory is cleaned before building:
+To start the built app, run:
 
 ```bash
-rm -rf frontend/dist
+make start
 ```
+
+This command will launch the app. By default, it should be accessible at localhost:5001. If you cannot access the app at this address, check the terminal output for the correct URL or any errors related to the server startup.
+
 
 ## Summary of Makefile Commands
 
 | Command               | Description                                        |
 |-------------------    |----------------------------------------------------|
-| `make install`        | Installs dependencies using `npm ci`.              |
-| `make start-frontend` | Starts the frontend development server.            |
-| `make start-backend`  | Starts the backend server.                         |
+| `make install`        | Installs dependencies using `npm ci`.              |               |
 | `make develop`        | Runs both the frontend and backend simultaneously. |
 | `make build`          | Builds the frontend for production.                |
+| `make start`          | Starts the built application.                |
