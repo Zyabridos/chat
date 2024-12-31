@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import leoProfanity from 'leo-profanity';
+import * as yup from 'yup';
 import { closeModal } from '../../../store/slices/modalSlice';
 import routes from '../../../routes';
 import { updateChannel } from '../../../store/slices/channelsSlice';
@@ -18,6 +19,14 @@ const EditChannelModal = ({ channelId }) => {
   const dispatch = useDispatch();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
+
+  const validationChannelSchema = yup.object({
+    name: yup
+      .string()
+      .min(3, t('validationErrors.from3To20'))
+      .max(20, t('validationErrors.from3To20'))
+      .required(t('validationErrors.required')),
+  });
 
   const channelToEdit = channels.find((channel) => channel.id === channelId);
   const initialValues = { name: channelToEdit ? channelToEdit.name : '' };
@@ -97,7 +106,7 @@ const EditChannelModal = ({ channelId }) => {
           <div className="modal-body">
             <Formik
               initialValues={initialValues}
-              // validationSchema={validationChannelSchema(t)}
+              validationSchema={validationChannelSchema}
               onSubmit={(values, actions) => handleEditChannel(values, actions)}
             >
               {({ isSubmitting }) => (

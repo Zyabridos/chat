@@ -20,8 +20,8 @@ const AddChannelModal = () => {
   const validationChannelSchema = yup.object({
     name: yup
       .string()
-      .min(3, t('validationErrors.min6'))
-      .max(20, t('validationErrors.max20'))
+      .min(3, t('validationErrors.from3To20'))
+      .max(20, t('validationErrors.from3To20'))
       .required(t('validationErrors.required')),
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
