@@ -1,4 +1,4 @@
-import React, { createContext, useEffect } from 'react';
+import React, { createContext, useEffect, useMemo } from 'react';
 import { io } from 'socket.io-client';
 import { store } from '../store/store.js';
 import { addChannel, removeChannel, updateChannel } from '../store/slices/channelsSlice.js';
@@ -7,36 +7,47 @@ import { addMessage } from '../store/slices/messagesSlice.js';
 export const SocketContext = createContext(null);
 
 export const SocketProvider = ({ children }) => {
-  const socket = io('http://localhost:5001');
+  // Ensure only one socket connection is created and used
+  const socket = useMemo(() => {
+    if (!window.socket) {
+      window.socket = io('http://localhost:5001');
+    }
+    return window.socket;
+  }, []);
 
   useEffect(() => {
-    // create subscription Socket.IO
-    socket.on('newMessage', (payload) => {
+    // Create subscription for Socket.IO events only once
+    const handleNewMessage = (payload) => {
       console.log('New message received:', payload);
       store.dispatch(addMessage(payload));
-    });
+    };
 
-    socket.on('newChannel', (payload) => {
+    const handleNewChannel = (payload) => {
       console.log('New channel created:', payload);
       store.dispatch(addChannel(payload));
-    });
+    };
 
-    socket.on('removeChannel', (payload) => {
+    const handleRemoveChannel = (payload) => {
       console.log('Channel removed:', payload);
       store.dispatch(removeChannel(payload.id));
-    });
+    };
 
-    socket.on('renameChannel', (payload) => {
+    const handleRenameChannel = (payload) => {
       console.log('Channel renamed:', payload);
       store.dispatch(updateChannel(payload));
-    });
+    };
 
-    // clean subscriptions
+    socket.on('newMessage', handleNewMessage);
+    socket.on('newChannel', handleNewChannel);
+    socket.on('removeChannel', handleRemoveChannel);
+    socket.on('renameChannel', handleRenameChannel);
+
+    // Clean up subscriptions when the component unmounts or socket changes
     return () => {
-      socket.off('newMessage');
-      socket.off('newChannel');
-      socket.off('removeChannel');
-      socket.off('renameChannel');
+      socket.off('newMessage', handleNewMessage);
+      socket.off('newChannel', handleNewChannel);
+      socket.off('removeChannel', handleRemoveChannel);
+      socket.off('renameChannel', handleRenameChannel);
     };
   }, [socket]);
 

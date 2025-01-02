@@ -11,7 +11,10 @@ const messagesSlice = createSlice({
   initialState,
   reducers: {
     addMessage: (state, action) => {
-      state.messages.push(action.payload);
+      const newMessage = action.payload;
+      if (!state.messages.some((msg) => msg.id === newMessage.id)) {
+        state.messages.push(newMessage); // Only add the message if it's not a duplicate
+      }
     },
     setMessages: (state, action) => {
       state.messages = action.payload;

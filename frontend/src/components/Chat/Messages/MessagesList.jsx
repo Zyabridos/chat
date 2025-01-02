@@ -15,15 +15,17 @@ const MessagesList = () => {
   const error = useSelector((state) => state.messagesInfo.error);
   const [fetchingError, setFetchingError] = useState(null);
   const socket = useSocket();
-  // Загрузка сообщений с сервера при изменении активного канала
+
   useEffect(() => {
     if (activeChannel) {
       const fetchMessagesData = async () => {
         try {
           const token = JSON.parse(localStorage.getItem('user'))?.token;
-          const data = await fetchMessages(activeChannel.id, token); // Запрос на сервер
-          // Добавление данных в Redux
-          dispatch({ type: 'messages/setMessages', payload: data });
+          const data = await fetchMessages(activeChannel.id, token);
+          // Dispatch only if the data is not empty or duplicates are found
+          if (data && !messages.length) {
+            dispatch({ type: 'messages/setMessages', payload: data });
+          }
         } catch (err) {
           setFetchingError(t('errorLoadingMessages'));
           console.error('Error fetching messages:', err);
@@ -32,22 +34,23 @@ const MessagesList = () => {
 
       fetchMessagesData();
     }
-  }, [activeChannel, dispatch, t]); // Зависимости без сообщений
+  }, [activeChannel, dispatch, t, messages.length]); // Added messages.length to avoid unnecessary re-fetching
 
-  // слушаем события с сокета для добавления новых сообщений
+  // Listen for new messages via socket and dispatch them to Redux
   useEffect(() => {
     if (activeChannel) {
       socket.on('newMessage', (payload) => {
         if (payload.channelId === activeChannel.id) {
-          // Проверяем, что сообщение еще не существует в Redux
+          // Check if the message is not already in Redux
           if (!messages.some((msg) => msg.id === payload.id)) {
+            console.log('duplicate');
             dispatch({ type: 'messages/addMessage', payload });
           }
         }
       });
 
       return () => {
-        socket.off('newMessage'); // Очистка подписки на событие
+        socket.off('newMessage'); // Clean up the socket event listener
       };
     }
   }, [activeChannel, dispatch, socket, messages]);
