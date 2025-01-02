@@ -40,10 +40,10 @@ const App = () => {
     <RollbarProvider config={rollbarConfig}>
       <ErrorBoundary>
         <I18nextProvider i18n={i18n}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <PersistGate loading={null} persistor={persistor}>
-                <SocketProvider>
+          <SocketProvider>
+            <BrowserRouter>
+              <Provider store={store}>
+                <PersistGate loading={null} persistor={persistor}>
                   {' '}
                   <ModalManager
                     modalProps={{
@@ -94,11 +94,10 @@ const App = () => {
                       pauseOnHover
                     />
                   </AuthProvider>
-                </SocketProvider>{' '}
-                {/* Закрываем SocketProvider */}
-              </PersistGate>
-            </Provider>
-          </BrowserRouter>
+                </PersistGate>
+              </Provider>
+            </BrowserRouter>
+          </SocketProvider>{' '}
         </I18nextProvider>
       </ErrorBoundary>
     </RollbarProvider>

@@ -16,13 +16,30 @@ const MessagesList = () => {
   const [fetchingError, setFetchingError] = useState(null);
   const socket = useSocket();
 
-  // listen to events from socket
+  // Загрузка сообщений с сервера при изменении активного канала
   useEffect(() => {
     if (activeChannel) {
-      // listen to new messages from socket
+      const fetchMessagesData = async () => {
+        try {
+          const token = JSON.parse(localStorage.getItem('user'))?.token;
+          const data = await fetchMessages(activeChannel.id, token); // Запрос на сервер
+          dispatch({ type: 'messages/setMessages', payload: data }); // Добавление в Redux
+        } catch (err) {
+          setFetchingError(t('errorLoadingMessages'));
+          console.error('Error fetching messages:', err);
+        }
+      };
+
+      fetchMessagesData();
+    }
+  }, [activeChannel, dispatch, t]);
+
+  // слушаем события с сокета для добавления новых сообщений
+  useEffect(() => {
+    if (activeChannel) {
       socket.on('newMessage', (payload) => {
         if (payload.channelId === activeChannel.id) {
-          dispatch({ type: 'messages/addMessage', payload }); // add mesages to redux
+          dispatch({ type: 'messages/addMessage', payload });
         }
       });
 
@@ -33,7 +50,6 @@ const MessagesList = () => {
     }
   }, [activeChannel, dispatch, socket]);
 
-  // Filter messages for the active channel
   const filteredMessages = messages.filter((msg) => msg.channelId === activeChannel?.id);
 
   if (loading) {

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect } from 'react';
+import React, { createContext, useEffect } from 'react';
 import { io } from 'socket.io-client';
 import { store } from '../store/store.js';
 import { addChannel, removeChannel, updateChannel } from '../store/slices/channelsSlice.js';
