@@ -48,7 +48,6 @@ const EditChannelModal = ({ channelId }) => {
   };
 
   const handleEditChannel = async (values, actions) => {
-    console.log('aa');
     const { setSubmitting } = actions;
 
     if (checkDuplicate(values.name)) {

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import Message from './Message.jsx';
 import fetchMessages from '../../../API/fetchMessages.js';
+import useSocket from '../../../hooks/useSocket.jsx';
 
 const MessagesList = () => {
   const dispatch = useDispatch();
@@ -13,23 +14,24 @@ const MessagesList = () => {
   const loading = useSelector((state) => state.messagesInfo.loading);
   const error = useSelector((state) => state.messagesInfo.error);
   const [fetchingError, setFetchingError] = useState(null);
+  const socket = useSocket();
 
-  // Load messages when active channel changes
+  // listen to events from socket
   useEffect(() => {
     if (activeChannel) {
-      const fetchMessagesData = async () => {
-        try {
-          const token = JSON.parse(localStorage.getItem('user'))?.token;
-          const data = await fetchMessages(activeChannel.id, token);
-          dispatch({ type: 'messages/setMessages', payload: data });
-        } catch (err) {
-          setFetchingError(t('errorLoadingMessages'));
-          console.error('Error fetching messages:', err);
+      // listen to new messages from socket
+      socket.on('newMessage', (payload) => {
+        if (payload.channelId === activeChannel.id) {
+          dispatch({ type: 'messages/addMessage', payload }); // add mesages to redux
         }
+      });
+
+      // once the component is unmounted, clean subscription on socket
+      return () => {
+        socket.off('newMessage');
       };
-      fetchMessagesData();
     }
-  }, [activeChannel, dispatch, t]);
+  }, [activeChannel, dispatch, socket]);
 
   // Filter messages for the active channel
   const filteredMessages = messages.filter((msg) => msg.channelId === activeChannel?.id);

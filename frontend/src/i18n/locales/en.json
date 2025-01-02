@@ -17,32 +17,33 @@
     }
   },
   "signup": {
-    "title": "Sign Up",
+    "title": "Sign up",
     "usernameLabel": "Username",
     "usernamePlaceholder": "Username",
     "passwordLabel": "Password",
     "passwordPlaceholder": "Password",
     "repeatPasswordLabel": "Confirm password",
     "repeatPasswordPlaceholder": "Confirm password",
-    "signupButton": "Sign Up",
+    "signupButton": "Sign up",
     "wrongEmailOrPassword": "Incorrect username or password",
     "errors": {
-      "alreadyExists": "A user with this name already exists",
+      "alreadyExists": "This user already exists",
       "unknown": "Error creating user. Please try again later",
-      "profanityError": "The username contains inappropriate words. Please choose a valid username."
+      "profanityError": "The username contains inappropriate words. Please choose a valid name."
     }
   },
   "validationErrors": {
     "min3": "At least 3 characters",
     "min6": "At least 6 characters",
-    "max20": "Maximum 20 characters",
+    "max20": "Up to 20 characters",
     "required": "Required field",
     "from3To20": "From 3 to 20 characters",
     "mismatchPasswords": "Passwords must match",
     "passwordSymbol": "Password must contain at least one symbol",
     "passwordUppercase": "Password must contain at least one uppercase letter",
     "passwordLowercase": "Password must contain at least one lowercase letter",
-    "channelAlreadyExists": "A channel with this name already exists"
+    "channelAlreadyExists": "A channel with this name already exists",
+    "duplicate": "Must be unique"
   },
   "networkErrors": {
     "generalError": "Error sending message. Please try again.",
@@ -57,7 +58,7 @@
   "notFound": {
     "title": "Page not found",
     "message": "But you can go to",
-    "linkText": "the main page"
+    "linkText": "the homepage"
   },
   "channels": {
     "title": "Channels",
@@ -76,10 +77,11 @@
         "typeChannelName": "Enter channel name"
       },
       "labels": {
-        "typeNewChannelName": "Enter new channel name",
+        "typeNewChannelName": "Channel name",
         "rename": "Edit channel name"
       },
-      "confirmDeletingChannel": "Are you sure you want to delete the channel?"
+      "confirmDeletingChannel": "Are you sure you want to delete the channel?",
+      "managment": "Channel management"
     }
   },
   "loading": {
@@ -102,10 +104,10 @@
   "channelsForm": {
     "newMessage": "New message",
     "enterMessage": "Enter message...",
-    "noMessages": "There are no messages on this channel yet"
+    "noMessages": "There are no messages in this channel yet"
   },
   "channelsHeader": {
-    "channelName": "# {{channelName}}", 
+    "channelName": "# {{channelName}}",
     "messageCount1": {
       "zero": "There are no messages here",
       "one": "There is 1 message here",
@@ -116,7 +118,7 @@
   },
   "navbar": {
     "chatname": "Hexlet Chat",
-    "exit": "Exit"
+    "exit": "Logout"
   },
   "toast": {
     "channelCreated": "Channel created",

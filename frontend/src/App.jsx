@@ -20,6 +20,7 @@ import ProtectedRoute from './components/ProtectedRoute.jsx';
 import forbiddenWords from './dictionary/index.js';
 import { ValidationSchemasProvider } from './contexts/validationContex.jsx';
 import ModalManager from './components/Modals/ModalManager.jsx';
+import { SocketProvider } from './contexts/socketContext.jsx';
 
 const rollbarConfig = {
   accessToken: import.meta.env.VITE_AUTH_TOKEN,
@@ -42,55 +43,59 @@ const App = () => {
           <BrowserRouter>
             <Provider store={store}>
               <PersistGate loading={null} persistor={persistor}>
-                <ModalManager
-                  modalProps={{
-                    setError,
-                  }}
-                />
-                <AuthProvider>
-                  <ValidationSchemasProvider>
-                    <Routes>
-                      <Route
-                        path="/"
-                        element={
-                          <ProtectedRoute>
-                            <Chat />
-                          </ProtectedRoute>
-                        }
-                      />
-                      <Route
-                        path="/login"
-                        element={
-                          <LoginForm
-                            isSubmitting={isSubmitting}
-                            setIsSubmitting={setIsSubmitting}
-                          />
-                        }
-                      />
-                      <Route
-                        path="/signup"
-                        element={
-                          <SignUpForm
-                            isSubmitting={isSubmitting}
-                            setIsSubmitting={setIsSubmitting}
-                          />
-                        }
-                      />
-                      <Route path="*" element={<NotFound />} />
-                    </Routes>
-                  </ValidationSchemasProvider>
-                  <ToastContainer
-                    position="top-right"
-                    autoClose={5000}
-                    hideProgressBar={false}
-                    newestOnTop={false}
-                    closeOnClick
-                    rtl={false}
-                    pauseOnFocusLoss
-                    draggable
-                    pauseOnHover
+                <SocketProvider>
+                  {' '}
+                  <ModalManager
+                    modalProps={{
+                      setError,
+                    }}
                   />
-                </AuthProvider>
+                  <AuthProvider>
+                    <ValidationSchemasProvider>
+                      <Routes>
+                        <Route
+                          path="/"
+                          element={
+                            <ProtectedRoute>
+                              <Chat />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/login"
+                          element={
+                            <LoginForm
+                              isSubmitting={isSubmitting}
+                              setIsSubmitting={setIsSubmitting}
+                            />
+                          }
+                        />
+                        <Route
+                          path="/signup"
+                          element={
+                            <SignUpForm
+                              isSubmitting={isSubmitting}
+                              setIsSubmitting={setIsSubmitting}
+                            />
+                          }
+                        />
+                        <Route path="*" element={<NotFound />} />
+                      </Routes>
+                    </ValidationSchemasProvider>
+                    <ToastContainer
+                      position="top-right"
+                      autoClose={5000}
+                      hideProgressBar={false}
+                      newestOnTop={false}
+                      closeOnClick
+                      rtl={false}
+                      pauseOnFocusLoss
+                      draggable
+                      pauseOnHover
+                    />
+                  </AuthProvider>
+                </SocketProvider>{' '}
+                {/* Закрываем SocketProvider */}
               </PersistGate>
             </Provider>
           </BrowserRouter>
