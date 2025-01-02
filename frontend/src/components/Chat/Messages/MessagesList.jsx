@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import Message from './Message.jsx';
@@ -16,6 +16,8 @@ const MessagesList = () => {
   const [fetchingError, setFetchingError] = useState(null);
   const socket = useSocket();
 
+  const messagesRef = useRef(messages); // use useRef for storage
+
   useEffect(() => {
     if (activeChannel) {
       const fetchMessagesData = async () => {
@@ -25,6 +27,7 @@ const MessagesList = () => {
           // Dispatch only if the data is not empty or duplicates are found
           if (data && !messages.length) {
             dispatch({ type: 'messages/setMessages', payload: data });
+            messagesRef.current = data; // updt ref with new messages
           }
         } catch (err) {
           setFetchingError(t('errorLoadingMessages'));
@@ -34,17 +37,16 @@ const MessagesList = () => {
 
       fetchMessagesData();
     }
-  }, [activeChannel, dispatch, t, messages.length]); // Added messages.length to avoid unnecessary re-fetching
+  }, [activeChannel, dispatch, t, messages.length]);
 
   // Listen for new messages via socket and dispatch them to Redux
   useEffect(() => {
     if (activeChannel) {
       socket.on('newMessage', (payload) => {
         if (payload.channelId === activeChannel.id) {
-          // Check if the message is not already in Redux
-          if (!messages.some((msg) => msg.id === payload.id)) {
-            console.log('duplicate');
+          if (!messagesRef.current.some((msg) => msg.id === payload.id)) {
             dispatch({ type: 'messages/addMessage', payload });
+            messagesRef.current = [...messagesRef.current, payload]; // updt ref with new messages
           }
         }
       });
@@ -53,7 +55,7 @@ const MessagesList = () => {
         socket.off('newMessage'); // Clean up the socket event listener
       };
     }
-  }, [activeChannel, dispatch, socket, messages]);
+  }, [activeChannel, dispatch, socket]);
 
   const filteredMessages = messages.filter((msg) => msg.channelId === activeChannel?.id);
 
