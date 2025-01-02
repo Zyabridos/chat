@@ -15,7 +15,6 @@ const MessagesList = () => {
   const error = useSelector((state) => state.messagesInfo.error);
   const [fetchingError, setFetchingError] = useState(null);
   const socket = useSocket();
-
   // Загрузка сообщений с сервера при изменении активного канала
   useEffect(() => {
     if (activeChannel) {
@@ -23,7 +22,8 @@ const MessagesList = () => {
         try {
           const token = JSON.parse(localStorage.getItem('user'))?.token;
           const data = await fetchMessages(activeChannel.id, token); // Запрос на сервер
-          dispatch({ type: 'messages/setMessages', payload: data }); // Добавление в Redux
+          // Добавление данных в Redux
+          dispatch({ type: 'messages/setMessages', payload: data });
         } catch (err) {
           setFetchingError(t('errorLoadingMessages'));
           console.error('Error fetching messages:', err);
@@ -32,23 +32,25 @@ const MessagesList = () => {
 
       fetchMessagesData();
     }
-  }, [activeChannel, dispatch, t]);
+  }, [activeChannel, dispatch, t]); // Зависимости без сообщений
 
   // слушаем события с сокета для добавления новых сообщений
   useEffect(() => {
     if (activeChannel) {
       socket.on('newMessage', (payload) => {
         if (payload.channelId === activeChannel.id) {
-          dispatch({ type: 'messages/addMessage', payload });
+          // Проверяем, что сообщение еще не существует в Redux
+          if (!messages.some((msg) => msg.id === payload.id)) {
+            dispatch({ type: 'messages/addMessage', payload });
+          }
         }
       });
 
-      // once the component is unmounted, clean subscription on socket
       return () => {
-        socket.off('newMessage');
+        socket.off('newMessage'); // Очистка подписки на событие
       };
     }
-  }, [activeChannel, dispatch, socket]);
+  }, [activeChannel, dispatch, socket, messages]);
 
   const filteredMessages = messages.filter((msg) => msg.channelId === activeChannel?.id);
 

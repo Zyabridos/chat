@@ -38,8 +38,8 @@ const Channels = () => {
 
     const loadChannels = async () => {
       try {
-        const data = await fetchChannels(token); // Получаем каналы
-        dispatch(setChannels(data)); // Сохраняем в Redux
+        const data = await fetchChannels(token); // Fetch channels
+        dispatch(setChannels(data)); // Save to Redux
       } catch (err) {
         setError(err.response ? err.response.data.message : t('error.fetchChannels'));
       } finally {
@@ -55,8 +55,17 @@ const Channels = () => {
     forbiddenWords.forEach((word) => leoProfanity.add(word));
   }, []);
 
+  // Восстановление активного канала из localStorage
+  useEffect(() => {
+    const storedChannelId = localStorage.getItem('activeChannelId');
+    if (storedChannelId) {
+      dispatch(setActiveChannel(storedChannelId));
+    }
+  }, [dispatch]);
+
   const handleChannelClick = (channel) => {
     dispatch(setActiveChannel(channel.id));
+    localStorage.setItem('activeChannelId', channel.id); // Save active channel ID
   };
 
   const user = JSON.parse(localStorage.getItem('user'));
@@ -158,8 +167,8 @@ const Channels = () => {
               <button
                 type="button"
                 className={c('w-100 rounded-0 text-start btn', {
-                  'btn-secondary': activeChannel?.id === channel.id,
-                  'btn-light': activeChannel?.id !== channel.id,
+                  'btn-secondary': activeChannel.id === channel.id,
+                  'btn-light': activeChannel.id !== channel.id,
                 })}
                 onClick={() => handleChannelClick(channel)}
               >

@@ -15,14 +15,14 @@ const channelsSlice = createSlice({
     setChannels: (state, action) => {
       state.channels = action.payload;
 
-      // If no active channel is set, set the first one (default to 'general')
+      // Only set the active channel to default if it's not already set
       if (!state.activeChannel && state.channels.length > 0) {
-        const defaultChannel = state.channels.find((channel) => channel.name === 'general');
-        if (defaultChannel) {
-          state.activeChannel = defaultChannel;
-        } else {
-          state.activeChannel = state.channels[0]; // Set the first channel as active
-        }
+        const storedChannelId = localStorage.getItem('activeChannelId');
+        const defaultChannel = storedChannelId
+          ? state.channels.find((channel) => channel.id === storedChannelId)
+          : state.channels.find((channel) => channel.name === 'general');
+
+        state.activeChannel = defaultChannel || state.channels[0];
       }
     },
     // Add a new channel to the 'channels' list
