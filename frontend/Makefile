@@ -9,6 +9,3 @@ build:
 
 start:
 	npx start-server -s ./frontend/dist
-
-lint:
-	npx eslint .

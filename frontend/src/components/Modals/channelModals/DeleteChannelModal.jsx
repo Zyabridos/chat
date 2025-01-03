@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
@@ -65,8 +64,7 @@ const DeleteChannelModal = ({ channelId, channelName }) => {
           </div>
           <div className="modal-body">
             <p>{t('channels.modals.confirmDeletingChannel', { channelName })} </p>
-            {/* Вывод ошибки */}
-            {error && <div className="alert alert-danger">{error}</div>}
+            {error && <div className="alert alert-danger">{error}</div>} {/* Вывод ошибки */}
           </div>
           <div className="modal-footer">
             <button type="button" className="btn btn-secondary" onClick={handleClose}>
