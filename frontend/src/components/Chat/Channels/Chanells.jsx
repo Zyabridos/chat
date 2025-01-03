@@ -166,7 +166,7 @@ const Channels = () => {
             <div className="d-flex justify-content-between align-items-center w-100">
               <button
                 type="button"
-                className={c('w-100 rounded-0 text-start btn', {
+                className={c('w-100 rounded-0 text-start text-truncate btn', {
                   'btn-secondary': activeChannel.id === channel.id,
                   'btn-light': activeChannel.id !== channel.id,
                 })}

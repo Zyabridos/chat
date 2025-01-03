@@ -28,6 +28,12 @@ const channelsSlice = createSlice({
     // Add a new channel to the 'channels' list
     addChannel: (state, action) => {
       state.channels.push(action.payload);
+
+      // Set the newly added channel as the active one
+      state.activeChannel = action.payload;
+
+      // Optionally, you can also save the new active channel ID to localStorage if needed
+      localStorage.setItem('activeChannelId', action.payload.id);
     },
     removeChannel: (state, action) => {
       const channelId = action.payload;

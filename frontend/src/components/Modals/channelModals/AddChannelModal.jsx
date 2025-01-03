@@ -8,7 +8,7 @@ import leoProfanity from 'leo-profanity';
 import * as yup from 'yup';
 import { closeModal } from '../../../store/slices/modalSlice';
 import routes from '../../../routes';
-import { setChannels } from '../../../store/slices/channelsSlice';
+import { setChannels, setActiveChannel } from '../../../store/slices/channelsSlice';
 
 const AddChannelModal = () => {
   const user = JSON.parse(localStorage.getItem('user'));
@@ -70,7 +70,8 @@ const AddChannelModal = () => {
       );
 
       if (response.data) {
-        dispatch(setChannels([...channels, response.data]));
+        dispatch(setChannels([...channels, response.data])); // Add channel to Redux
+        dispatch(setActiveChannel(response.data.id)); // Set the newly created channel as active
         toast.success(t('toast.channelCreated'));
         handleClose();
       } else {
