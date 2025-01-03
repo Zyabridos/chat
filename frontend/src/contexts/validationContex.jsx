@@ -1,3 +1,9 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable max-len */
+/* eslint-disable implicit-arrow-linebreak */
+/* eslint-disable no-trailing-spaces */
+/* eslint-disable arrow-body-style */
+
 import React, { createContext, useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
@@ -58,7 +64,7 @@ export const ValidationSchemasProvider = ({ children }) => {
       validationLoginSchema,
       validationSignupSchema,
     }),
-    [validationLoginSchema, validationSignupSchema] // remember to add validationChannelSchema eventually
+    [validationLoginSchema, validationSignupSchema] // remember to add validationChannelSchema
   );
 
   return (

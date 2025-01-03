@@ -114,8 +114,9 @@ const EditChannelModal = ({ channelId }) => {
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title">{t('channels.modals.titles.renameChannel')}</h5>
-            <span class="visually-hidden">Управление каналом
+            <span className="visually-hidden">
               <button type="button" className="btn-close" onClick={handleClose} />
+              {t('channels.editChannel')}
             </span>
           </div>
           <div className="modal-body">

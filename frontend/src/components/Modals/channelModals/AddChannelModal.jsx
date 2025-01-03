@@ -104,9 +104,10 @@ const AddChannelModal = () => {
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title">{t('channels.modals.titles.addChannel')}</h5>
-            <span class="visually-hidden">
+            <span className="visually-hidden">
               <button type="button" className="btn-close" onClick={handleClose} />
-                Добавить канал</span>
+              {t('channels.addChannel')}
+            </span>
           </div>
           <div className="modal-body">
             <Formik
