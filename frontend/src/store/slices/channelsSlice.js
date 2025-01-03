@@ -27,15 +27,21 @@ const channelsSlice = createSlice({
     },
     // Add a new channel to the 'channels' list
     addChannel: (state, action) => {
-      // это идиотское решение, но пусть пока так для тестов будет
+      // идиотское решение, но путь пока так для тестов будет
       const duplicateChannel = state.channels.some(
         (channel) => channel.name.trim().toLowerCase() === action.payload.name.trim().toLowerCase()
       );
 
       if (!duplicateChannel) {
         state.channels.push(action.payload);
-        state.activeChannel = action.payload;
-        localStorage.setItem('activeChannelId', action.payload.id);
+
+        const currentUsername = JSON.parse(localStorage.getItem('user')).username;
+
+        // Если канал был создан текущим пользователем, устанавливаем его активным
+        if (action.payload.createdBy === currentUsername) {
+          state.activeChannel = action.payload; // Только для создавшего канал пользователя
+          localStorage.setItem('activeChannelId', action.payload.id);
+        }
       }
     },
     removeChannel: (state, action) => {

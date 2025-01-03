@@ -30,12 +30,6 @@ const AddChannelModal = () => {
   const [error, setError] = useState(null);
   const socket = useSocket(); // Access the socket instance
 
-  // const checkDuplicate = (channelName) => {
-  //   return channels.some(
-  //     (channelItem) => channelItem.name.trim().toLowerCase() === channelName.trim().toLowerCase()
-  //   );
-  // };
-
   const checkDuplicate = (channelName) => {
     const normalizedChannelName = channelName.trim().toLowerCase();
     return channels.some(
@@ -50,9 +44,12 @@ const AddChannelModal = () => {
   const initialValues = { name: '' };
 
   const handleAddChannel = async (values, actions) => {
+    // const currentUserId = JSON.parse(localStorage.getItem('user')).id;
+    // const user = JSON.parse(localStorage.getItem('user'));
+    // console.log(currentUserId);
+    // console.log(user);
     const { setSubmitting } = actions;
 
-    // Check for duplicate channel name
     if (checkDuplicate(values.name)) {
       setError(t('validationErrors.duplicate'));
       setSubmitting(false);
@@ -72,12 +69,17 @@ const AddChannelModal = () => {
       );
 
       if (response.data) {
-        // Add the new channel to Redux
-        dispatch(addChannel(response.data));
-        socket.emit('newChannel', response.data); // Emit the new channel event via WebSocket
+        const newChannel = response.data;
+        dispatch(addChannel(newChannel)); // Add the new channel to Redux
+        socket.emit('newChannel', newChannel); // Emit the new channel event via WebSocket
 
-        // Set the newly added channel as the active one
-        dispatch(setActiveChannel(response.data.id));
+        // Switch to the new channel only for the current user
+        if (newChannel.createdBy === user.id) {
+          // Assume `createdBy` is the user ID of the creator
+          dispatch(setActiveChannel(newChannel.id)); // Set it as the active channel for the current user
+          localStorage.setItem('activeChannelId', newChannel.id); // Save active channel ID
+        }
+
         toast.success(t('toast.channelCreated'));
         handleClose();
       } else {
