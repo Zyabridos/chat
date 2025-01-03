@@ -72,7 +72,6 @@ export const ValidationSchemasProvider = ({ children }) => {
 
   return (
     <ValidationSchemasContext.Provider
-    {/* eslint-disable-next-line */}
       value={{
         // validationChannelSchema,
         validationLoginSchema,
