@@ -59,21 +59,21 @@ const App = () => {
                         />
                         <Route
                           path="/login"
-                          element={
+                          element={(
                             <LoginForm
-                              isSubmitting={(isSubmitting)}
-                              setIsSubmitting={(setIsSubmitting)}
+                              isSubmitting={isSubmitting}
+                              setIsSubmitting={setIsSubmitting}
                             />
-                          }
+                          )}
                         />
                         <Route
                           path="/signup"
-                          element={
+                          element={(
                             <SignUpForm
-                              isSubmitting={(isSubmitting)}
+                              isSubmitting={isSubmitting}
                               setIsSubmitting={setIsSubmitting}
                             />
-                          }
+                          )}
                         />
                         <Route path="*" element={<NotFound />} />
                       </Routes>

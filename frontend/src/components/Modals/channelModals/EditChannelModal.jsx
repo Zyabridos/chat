@@ -2,6 +2,7 @@
 /* eslint-disable object-curly-newline */
 /* eslint-disable comma-dangle */
 /* eslint-disable arrow-body-style */
+/* eslint-disable no-trailing-spaces */
 import React, { useState, useEffect } from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import { useTranslation } from 'react-i18next';

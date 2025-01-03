@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-/* eslint-disable no-shadow */
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
@@ -62,6 +61,7 @@ const DeleteChannelModal = ({ channelId, channelName }) => {
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title">{t('channels.modals.titles.deleteChannel')}</h5>
+            <label htmlFor="close-button" className="hidden"></label>
             <button type="button" className="btn-close" onClick={handleClose} />
           </div>
           <div className="modal-body">

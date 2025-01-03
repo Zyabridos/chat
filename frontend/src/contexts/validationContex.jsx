@@ -1,6 +1,9 @@
 /* eslint-disable no-unused-vars */
-/* eslint-disable max-length */
-/* eslint-disable react/jsx-curly-newline */
+/* eslint-disable max-len */
+/* eslint-disable implicit-arrow-linebreak */
+/* eslint-disable no-trailing-spaces */
+/* eslint-disable arrow-body-style */
+
 
 import React, { createContext, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
