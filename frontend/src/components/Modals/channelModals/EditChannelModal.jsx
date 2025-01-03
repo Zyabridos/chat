@@ -114,8 +114,9 @@ const EditChannelModal = ({ channelId }) => {
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title">{t('channels.modals.titles.renameChannel')}</h5>
-            <button type="button" className="btn-close" onClick={handleClose} />
-            <span class="visually-hidden">Управление каналом</span>
+            <span class="visually-hidden">Управление каналом
+              <button type="button" className="btn-close" onClick={handleClose} />
+            </span>
           </div>
           <div className="modal-body">
             <Formik

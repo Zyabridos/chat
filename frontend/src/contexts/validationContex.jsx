@@ -1,10 +1,4 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable max-len */
-/* eslint-disable implicit-arrow-linebreak */
-/* eslint-disable no-trailing-spaces */
-/* eslint-disable arrow-body-style */
-
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
@@ -44,25 +38,13 @@ export const ValidationSchemasProvider = ({ children }) => {
   const validationSignupSchema = yup.object({
     username: yup
       .string()
-      // надо ошибки валидации переделать - выдается сообщение в 
-      // зависимости от того, какой параметр пришел (минимум {count} симполов)
-      // .min(USERNAME_MIN_LENGTH, t('validationErrors.min3'))
-      // .max(20, t('validationErrors.max20'))
       .test('fromMinToMax', t('validationErrors.from3To20'), (value) => {
         return value && value.length >= 3 && value.length <= 20;
       })
       .required(t('validationErrors.required')),
     password: yup
       .string()
-      // надо ошибки валидации переделать - выдается сообщение в зависимости от того,
-      // какой параметр пришел (минимум {count} симполов)
       .min(PASSWORD_MIN_LENGTH, t('validationErrors.min6'))
-      // .test('has-lowercase', t('validationErrors.passwordLowercase'),
-      //  value => PASSWORD_REGEX_LOWERCASE.test(value)) // Проверка на строчную букву
-      // .test('has-uppercase', t('validationErrors.passwordUppercase'), 
-      // value => PASSWORD_REGEX_UPPERCASE.test(value)) // Проверка на заглавную букву
-      // .test('has-symbol', t('validationErrors.passwordSymbol'),
-      // value => PASSWORD_REGEX_SYMBOL.test(value)) // Проверка на специальный символ
       .required(t('validationErrors.required')),
     confirmPassword: yup
       .string()
@@ -70,14 +52,17 @@ export const ValidationSchemasProvider = ({ children }) => {
       .required(t('validationErrors.required')),
   });
 
+  const value = useMemo(
+    () => ({
+      // validationChannelSchema
+      validationLoginSchema,
+      validationSignupSchema,
+    }),
+    [validationLoginSchema, validationSignupSchema] // remember to add validationChannelSchema eventually
+  );
+
   return (
-    <ValidationSchemasContext.Provider
-      value={{
-        // validationChannelSchema,
-        validationLoginSchema,
-        validationSignupSchema,
-      }}
-    >
+    <ValidationSchemasContext.Provider value={value}>
       {children}
     </ValidationSchemasContext.Provider>
   );
