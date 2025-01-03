@@ -1,3 +1,4 @@
+/* eslint-disable comma-dangle */
 import React, { useState } from 'react';
 import { Form } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';

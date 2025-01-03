@@ -1,4 +1,5 @@
 /* eslint-disable object-curly-newline */
+/* eslint-disable comma-dangle */
 import React, { useRef, useState, useContext } from 'react';
 import { useFormik } from 'formik';
 import { Form, Col, Card, Row } from 'react-bootstrap';

@@ -1,3 +1,4 @@
+/* eslint-disable arrow-body-style */
 import { useTranslation } from 'react-i18next';
 import { Button } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';

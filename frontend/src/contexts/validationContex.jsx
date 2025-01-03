@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable max-length */
+/* eslint-disable react/jsx-curly-newline */
 
 import React, { createContext, useContext } from 'react';
 import { useTranslation } from 'react-i18next';

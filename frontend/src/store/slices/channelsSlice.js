@@ -1,4 +1,5 @@
 /* eslint-disable no-param-reassign */
+/* eslint-disable function-paren-newline */
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {

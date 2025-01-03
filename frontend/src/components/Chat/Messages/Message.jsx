@@ -1,3 +1,5 @@
+/* eslint-disable arrow-body-style */
+/* eslint-disable react/jsx-curly-newline */
 import React from 'react';
 
 const Message = ({ id, userName, message }) => {
