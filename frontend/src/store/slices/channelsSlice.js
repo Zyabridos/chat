@@ -27,13 +27,16 @@ const channelsSlice = createSlice({
     },
     // Add a new channel to the 'channels' list
     addChannel: (state, action) => {
-      state.channels.push(action.payload);
+      // это идиотское решение, но пусть пока так для тестов будет
+      const duplicateChannel = state.channels.some(
+        (channel) => channel.name.trim().toLowerCase() === action.payload.name.trim().toLowerCase()
+      );
 
-      // Set the newly added channel as the active one
-      state.activeChannel = action.payload;
-
-      // Optionally, you can also save the new active channel ID to localStorage if needed
-      localStorage.setItem('activeChannelId', action.payload.id);
+      if (!duplicateChannel) {
+        state.channels.push(action.payload);
+        state.activeChannel = action.payload;
+        localStorage.setItem('activeChannelId', action.payload.id);
+      }
     },
     removeChannel: (state, action) => {
       const channelId = action.payload;

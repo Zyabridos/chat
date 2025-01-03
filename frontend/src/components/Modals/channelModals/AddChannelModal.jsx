@@ -30,9 +30,16 @@ const AddChannelModal = () => {
   const [error, setError] = useState(null);
   const socket = useSocket(); // Access the socket instance
 
+  // const checkDuplicate = (channelName) => {
+  //   return channels.some(
+  //     (channelItem) => channelItem.name.trim().toLowerCase() === channelName.trim().toLowerCase()
+  //   );
+  // };
+
   const checkDuplicate = (channelName) => {
+    const normalizedChannelName = channelName.trim().toLowerCase();
     return channels.some(
-      (channelItem) => channelItem.name.trim().toLowerCase() === channelName.trim().toLowerCase()
+      (channelItem) => channelItem.name.trim().toLowerCase() === normalizedChannelName
     );
   };
 
@@ -45,6 +52,7 @@ const AddChannelModal = () => {
   const handleAddChannel = async (values, actions) => {
     const { setSubmitting } = actions;
 
+    // Check for duplicate channel name
     if (checkDuplicate(values.name)) {
       setError(t('validationErrors.duplicate'));
       setSubmitting(false);
@@ -64,9 +72,12 @@ const AddChannelModal = () => {
       );
 
       if (response.data) {
-        dispatch(addChannel(response.data)); // Add the new channel to Redux
+        // Add the new channel to Redux
+        dispatch(addChannel(response.data));
         socket.emit('newChannel', response.data); // Emit the new channel event via WebSocket
-        dispatch(setActiveChannel(response.data.id)); // Set it as the active channel
+
+        // Set the newly added channel as the active one
+        dispatch(setActiveChannel(response.data.id));
         toast.success(t('toast.channelCreated'));
         handleClose();
       } else {
