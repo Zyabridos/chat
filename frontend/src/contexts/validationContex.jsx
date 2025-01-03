@@ -3,6 +3,7 @@
 /* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable no-trailing-spaces */
 /* eslint-disable arrow-body-style */
+/* eslint-disable comma-dangle */
 
 import React, { createContext, useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
