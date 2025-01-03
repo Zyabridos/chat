@@ -26,6 +26,7 @@ const Channels = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // UseEffect for loading channels only if they are not already in Redux
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'));
     const token = user?.token;
@@ -38,8 +39,8 @@ const Channels = () => {
 
     const loadChannels = async () => {
       try {
-        const data = await fetchChannels(token); // Fetch channels
-        dispatch(setChannels(data)); // Save to Redux
+        const data = await fetchChannels(token); // Fetch channels from API
+        dispatch(setChannels(data)); // Save to Redux if no channels are loaded
       } catch (err) {
         setError(err.response ? err.response.data.message : t('error.fetchChannels'));
       } finally {
@@ -47,15 +48,19 @@ const Channels = () => {
       }
     };
 
-    loadChannels();
-  }, [dispatch, t]);
+    if (channels.length === 0) {
+      loadChannels(); // Fetch channels only if they haven't been loaded yet
+    } else {
+      setLoading(false); // If channels are already loaded, skip fetching
+    }
+  }, [dispatch, channels, t]);
 
   useEffect(() => {
     leoProfanity.loadDictionary('ru');
     forbiddenWords.forEach((word) => leoProfanity.add(word));
   }, []);
 
-  // Восстановление активного канала из localStorage
+  // Restore active channel from localStorage
   useEffect(() => {
     const storedChannelId = localStorage.getItem('activeChannelId');
     if (storedChannelId) {

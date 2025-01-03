@@ -8,7 +8,8 @@ import leoProfanity from 'leo-profanity';
 import * as yup from 'yup';
 import { closeModal } from '../../../store/slices/modalSlice';
 import routes from '../../../routes';
-import { setChannels, setActiveChannel } from '../../../store/slices/channelsSlice';
+import { setChannels, setActiveChannel, addChannel } from '../../../store/slices/channelsSlice';
+import useSocket from '../../../hooks/useSocket.jsx';
 
 const AddChannelModal = () => {
   const user = JSON.parse(localStorage.getItem('user'));
@@ -24,8 +25,10 @@ const AddChannelModal = () => {
       .max(20, t('validationErrors.from3To20'))
       .required(t('validationErrors.required')),
   });
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
+  const socket = useSocket(); // Access the socket instance
 
   const checkDuplicate = (channelName) => {
     return channels.some(
@@ -49,29 +52,21 @@ const AddChannelModal = () => {
       return;
     }
 
-    // I prefer this option in the chat, but for the tests I have to gi with different version
-    // if (leoProfanity.check(values.name)) {
-    //   setSubmitting(false);
-    //   toast.error(t('channelsFormErrors.profanityDetected'));
-    //   return;
-    // }
-
-    const cleanedChannelName = leoProfanity.clean(values.name);
+    const cleanedChannelName = leoProfanity.clean(values.name); // Clean the name from profanities
 
     setIsSubmitting(true);
 
     try {
       const response = await axios.post(
         routes.channelsPath(),
-        // { name: values.name },
-        // пусть пока так будет, но на серсер надо отправлять оригинальное название канал
         { name: cleanedChannelName },
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
       if (response.data) {
-        dispatch(setChannels([...channels, response.data])); // Add channel to Redux
-        dispatch(setActiveChannel(response.data.id)); // Set the newly created channel as active
+        dispatch(addChannel(response.data)); // Add the new channel to Redux
+        socket.emit('newChannel', response.data); // Emit the new channel event via WebSocket
+        dispatch(setActiveChannel(response.data.id)); // Set it as the active channel
         toast.success(t('toast.channelCreated'));
         handleClose();
       } else {
