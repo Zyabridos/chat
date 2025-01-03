@@ -64,8 +64,11 @@ const DeleteChannelModal = ({ channelId, channelName }) => {
             <button type="button" className="btn-close" onClick={handleClose} />
           </div>
           <div className="modal-body">
-            <p>{t('channels.modals.confirmDeletingChannel', { channelName })} </p>
-            {error && <div className="alert alert-danger">{error}</div>} {/* Вывод ошибки */}
+            <p>
+              {t('channels.modals.confirmDeletingChannel', { channelName })}
+            </p>
+            {/* Вывод ошибки */}
+            {error && <div className="alert alert-danger">{error}</div>}
           </div>
           <div className="modal-footer">
             <button type="button" className="btn btn-secondary" onClick={handleClose}>

@@ -1,4 +1,3 @@
-/* eslint-disable max-length */
 /* eslint-disable no-unused-vars */
 
 import React, { createContext, useContext } from 'react';
@@ -41,7 +40,8 @@ export const ValidationSchemasProvider = ({ children }) => {
   const validationSignupSchema = yup.object({
     username: yup
       .string()
-      // надо ошибки валидации переделать - выдается сообщение в зависимости от того, какой параметр пришел (минимум {count} симполов)
+      // надо ошибки валидации переделать - выдается сообщение в 
+      // зависимости от того, какой параметр пришел (минимум {count} симполов)
       // .min(USERNAME_MIN_LENGTH, t('validationErrors.min3'))
       // .max(20, t('validationErrors.max20'))
       .test('fromMinToMax', t('validationErrors.from3To20'), (value) => {
@@ -50,11 +50,15 @@ export const ValidationSchemasProvider = ({ children }) => {
       .required(t('validationErrors.required')),
     password: yup
       .string()
-      // надо ошибки валидации переделать - выдается сообщение в зависимости от того, какой параметр пришел (минимум {count} симполов)
+      // надо ошибки валидации переделать - выдается сообщение в зависимости от того,
+      // какой параметр пришел (минимум {count} симполов)
       .min(PASSWORD_MIN_LENGTH, t('validationErrors.min6'))
-      // .test('has-lowercase', t('validationErrors.passwordLowercase'), value => PASSWORD_REGEX_LOWERCASE.test(value)) // Проверка на строчную букву
-      // .test('has-uppercase', t('validationErrors.passwordUppercase'), value => PASSWORD_REGEX_UPPERCASE.test(value)) // Проверка на заглавную букву
-      // .test('has-symbol', t('validationErrors.passwordSymbol'), value => PASSWORD_REGEX_SYMBOL.test(value)) // Проверка на специальный символ
+      // .test('has-lowercase', t('validationErrors.passwordLowercase'),
+      //  value => PASSWORD_REGEX_LOWERCASE.test(value)) // Проверка на строчную букву
+      // .test('has-uppercase', t('validationErrors.passwordUppercase'), 
+      // value => PASSWORD_REGEX_UPPERCASE.test(value)) // Проверка на заглавную букву
+      // .test('has-symbol', t('validationErrors.passwordSymbol'),
+      // value => PASSWORD_REGEX_SYMBOL.test(value)) // Проверка на специальный символ
       .required(t('validationErrors.required')),
     confirmPassword: yup
       .string()

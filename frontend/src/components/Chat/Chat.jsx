@@ -1,11 +1,11 @@
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+// import Container from 'react-bootstrap/Container';
+// import Row from 'react-bootstrap/Row';
+// import Col from 'react-bootstrap/Col';
 import React from 'react';
 import MessagesContainer from './Messages/MessagesContainer.jsx';
 import Navbar from '../Navbar.jsx';
 import Channels from './Channels/Chanells.jsx';
-import Message from './Messages/Message.jsx';
+// import Message from './Messages/Message.jsx';
 
 // const Chat = () => {
 //   return (

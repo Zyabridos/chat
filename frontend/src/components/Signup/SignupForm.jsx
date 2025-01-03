@@ -1,3 +1,4 @@
+/* eslint-disable object-curly-newline */
 import React, { useState, useContext } from 'react';
 import { useFormik } from 'formik';
 import { Form, Col, Card, Row, Container } from 'react-bootstrap';
@@ -126,7 +127,7 @@ const SignUpForm = ({ isSubmitting, setIsSubmitting }) => {
                             </Form.Control.Feedback>
                           </Form.Group>
                           {serverError && <FieldError>{serverError}</FieldError>}
-                          <SignupButton disabled={isSubmitting} />{' '}
+                          <SignupButton disabled={isSubmitting} />
                           {/* block buttun while sending */}
                         </fieldset>
                       </Form>

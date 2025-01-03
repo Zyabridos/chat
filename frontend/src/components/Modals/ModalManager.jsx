@@ -18,11 +18,11 @@ const ModalManager = () => {
   const renderModalContent = () => {
     switch (type) {
       case 'addChannel':
-        return <AddChannelModal {...props} onClose={handleClose} />;
+        return <AddChannelModal {props} onClose={handleClose} />;
       case 'editChannel':
-        return <EditChannelModal {...props} onClose={handleClose} />;
+        return <EditChannelModal {props} onClose={handleClose} />;
       case 'deleteChannel':
-        return <DeleteChannelModal {...props} onClose={handleClose} />;
+        return <DeleteChannelModal {props} onClose={handleClose} />;
       default:
         return null;
     }

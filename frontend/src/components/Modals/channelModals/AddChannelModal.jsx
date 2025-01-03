@@ -72,8 +72,8 @@ const AddChannelModal = () => {
 
         // Switch to the new channel only for the current user
         if (newChannel.createdBy === user.id) {
-          // Assume `createdBy` is the user ID of the creator
-          dispatch(setActiveChannel(newChannel.id)); // Set it as the active channel for the current user
+          // Set it as the active channel for the current user
+          dispatch(setActiveChannel(newChannel.id));
           localStorage.setItem('activeChannelId', newChannel.id); // Save active channel ID
         }
 

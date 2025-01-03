@@ -1,8 +1,10 @@
 /* eslint-disable no-unused-vars */
+/* eslint-disable object-curly-newline */
 import React, { useState, useEffect } from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, 
+  useSelector } from 'react-redux';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import leoProfanity from 'leo-profanity';
