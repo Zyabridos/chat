@@ -72,7 +72,7 @@ This command will launch the app. By default, it should be accessible at localho
 
 | Command               | Description                                        |
 |-------------------    |----------------------------------------------------|
-| `make install`        | Installs dependencies using `npm ci`.              |               |
+| `make install`        | Installs dependencies using `npm ci`.              |               
 | `make develop`        | Runs both the frontend and backend simultaneously. |
 | `make build`          | Builds the frontend for production.                |
-| `make start`          | Starts the built application.                |
+| `make start`          | Starts the built application.                      |

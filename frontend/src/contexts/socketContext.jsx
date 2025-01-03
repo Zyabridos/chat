@@ -1,55 +1,58 @@
-import React, { createContext, useEffect, useMemo } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { io } from 'socket.io-client';
-import { store } from '../store/store.js';
-import { addChannel, removeChannel, updateChannel } from '../store/slices/channelsSlice.js';
-import { addMessage } from '../store/slices/messagesSlice.js';
+import { addMessage, setMessages } from '../store/slices/messagesSlice.js';
+import fetchMessages from '../API/fetchMessages.js';
 
 export const SocketContext = createContext(null);
 
 export const SocketProvider = ({ children }) => {
-  // Ensure only one socket connection is created and used
-  const socket = useMemo(() => {
-    if (!window.socket) {
-      window.socket = io('http://localhost:5001');
-    }
-    return window.socket;
-  }, []);
+  const [socket, setSocket] = useState(null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    // Create subscription for Socket.IO events only once
-    const handleNewMessage = (payload) => {
-      console.log('New message received:', payload);
-      store.dispatch(addMessage(payload));
+    // Инициализация сокета
+    const socketInstance = io(window.location.origin, {
+      transports: ['websocket'],
+    });
+    setSocket(socketInstance);
+
+    // Загрузка начальных данных
+    const initializeMessages = async () => {
+      try {
+        const token = JSON.parse(localStorage.getItem('user'))?.token;
+        if (token) {
+          const initialMessages = await fetchMessages(null, token); // Получаем все сообщения
+          dispatch(setMessages(initialMessages));
+        }
+      } catch (error) {
+        console.error('Failed to initialize messages:', error);
+      }
     };
 
-    const handleNewChannel = (payload) => {
-      console.log('New channel created:', payload);
-      store.dispatch(addChannel(payload));
+    initializeMessages();
+
+    // Подписка на новое сообщение
+    const handleNewMessage = (message) => {
+      dispatch(addMessage(message));
     };
 
-    const handleRemoveChannel = (payload) => {
-      console.log('Channel removed:', payload);
-      store.dispatch(removeChannel(payload.id));
-    };
+    socketInstance.on('newMessage', handleNewMessage);
 
-    const handleRenameChannel = (payload) => {
-      console.log('Channel renamed:', payload);
-      store.dispatch(updateChannel(payload));
-    };
-
-    socket.on('newMessage', handleNewMessage);
-    socket.on('newChannel', handleNewChannel);
-    socket.on('removeChannel', handleRemoveChannel);
-    socket.on('renameChannel', handleRenameChannel);
-
-    // Clean up subscriptions when the component unmounts or socket changes
+    // Очистка подписки и отключение сокета
     return () => {
-      socket.off('newMessage', handleNewMessage);
-      socket.off('newChannel', handleNewChannel);
-      socket.off('removeChannel', handleRemoveChannel);
-      socket.off('renameChannel', handleRenameChannel);
+      socketInstance.off('newMessage', handleNewMessage);
+      socketInstance.disconnect();
     };
-  }, [socket]);
+  }, [dispatch]);
 
   return <SocketContext.Provider value={socket}>{children}</SocketContext.Provider>;
+};
+
+export const useSocket = () => {
+  const context = useContext(SocketContext);
+  if (!context) {
+    throw new Error('useSocket must be used within a SocketProvider');
+  }
+  return context;
 };

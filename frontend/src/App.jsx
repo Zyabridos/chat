@@ -28,28 +28,23 @@ const rollbarConfig = {
 };
 
 const App = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false); // state for blocking buttons while loading
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     leoProfanity.loadDictionary('ru');
     forbiddenWords.forEach((word) => leoProfanity.add(word));
-  }, []); // Empty dependency array ensures it runs only once on mount
+  }, []);
 
   return (
     <RollbarProvider config={rollbarConfig}>
       <ErrorBoundary>
         <I18nextProvider i18n={i18n}>
-          <SocketProvider>
-            <BrowserRouter>
-              <Provider store={store}>
-                <PersistGate loading={null} persistor={persistor}>
-                  {' '}
-                  <ModalManager
-                    modalProps={{
-                      setError,
-                    }}
-                  />
+          <Provider store={store}>
+            <PersistGate loading={null} persistor={persistor}>
+              <BrowserRouter>
+                <SocketProvider>
+                  <ModalManager modalProps={{ setError }} />
                   <AuthProvider>
                     <ValidationSchemasProvider>
                       <Routes>
@@ -94,10 +89,10 @@ const App = () => {
                       pauseOnHover
                     />
                   </AuthProvider>
-                </PersistGate>
-              </Provider>
-            </BrowserRouter>
-          </SocketProvider>{' '}
+                </SocketProvider>
+              </BrowserRouter>
+            </PersistGate>
+          </Provider>
         </I18nextProvider>
       </ErrorBoundary>
     </RollbarProvider>
