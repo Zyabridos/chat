@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+/* eslint-disable object-curly-newline */
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { io } from 'socket.io-client';

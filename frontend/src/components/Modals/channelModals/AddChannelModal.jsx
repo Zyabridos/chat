@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+/* eslint-disable object-curly-newline */
 import React, { useState, useEffect } from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import { useTranslation } from 'react-i18next';

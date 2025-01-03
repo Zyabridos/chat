@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+/* eslint-disable max-length */
 
 import React, { createContext, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
