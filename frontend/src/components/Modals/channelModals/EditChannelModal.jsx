@@ -3,6 +3,7 @@
 /* eslint-disable comma-dangle */
 /* eslint-disable arrow-body-style */
 /* eslint-disable no-trailing-spaces */
+/* eslint-disable no-shadow */
 import React, { useState, useEffect } from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import { useTranslation } from 'react-i18next';
@@ -114,6 +115,7 @@ const EditChannelModal = ({ channelId }) => {
           <div className="modal-header">
             <h5 className="modal-title">{t('channels.modals.titles.renameChannel')}</h5>
             <button type="button" className="btn-close" onClick={handleClose} />
+            <span class="visually-hidden">Управление каналом</span>
           </div>
           <div className="modal-body">
             <Formik

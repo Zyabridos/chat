@@ -4,7 +4,6 @@
 /* eslint-disable no-trailing-spaces */
 /* eslint-disable arrow-body-style */
 
-
 import React, { createContext, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
@@ -73,6 +72,7 @@ export const ValidationSchemasProvider = ({ children }) => {
 
   return (
     <ValidationSchemasContext.Provider
+    { /* eslint-disable-next-line */}
       value={{
         // validationChannelSchema,
         validationLoginSchema,

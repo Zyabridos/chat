@@ -61,8 +61,8 @@ const DeleteChannelModal = ({ channelId, channelName }) => {
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title">{t('channels.modals.titles.deleteChannel')}</h5>
-            <label htmlFor="close-button" className="hidden"></label>
             <button type="button" className="btn-close" onClick={handleClose} />
+            <span class="visually-hidden">Удалить канал</span>
           </div>
           <div className="modal-body">
             <p>
