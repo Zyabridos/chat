@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import { useTranslation } from 'react-i18next';
@@ -8,7 +9,7 @@ import leoProfanity from 'leo-profanity';
 import * as yup from 'yup';
 import { closeModal } from '../../../store/slices/modalSlice';
 import routes from '../../../routes';
-import { setChannels, setActiveChannel, addChannel } from '../../../store/slices/channelsSlice';
+import { setActiveChannel, addChannel } from '../../../store/slices/channelsSlice';
 import useSocket from '../../../hooks/useSocket.jsx';
 
 const AddChannelModal = () => {
@@ -44,10 +45,6 @@ const AddChannelModal = () => {
   const initialValues = { name: '' };
 
   const handleAddChannel = async (values, actions) => {
-    // const currentUserId = JSON.parse(localStorage.getItem('user')).id;
-    // const user = JSON.parse(localStorage.getItem('user'));
-    // console.log(currentUserId);
-    // console.log(user);
     const { setSubmitting } = actions;
 
     if (checkDuplicate(values.name)) {
