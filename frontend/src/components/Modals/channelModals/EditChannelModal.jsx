@@ -17,6 +17,7 @@ const EditChannelModal = ({ channelId }) => {
   const token = user?.token;
   const channels = useSelector((state) => state.channelsInfo.channels);
   const dispatch = useDispatch();
+  // eslint-disable-next-line no-unused-vars
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
 

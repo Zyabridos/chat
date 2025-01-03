@@ -1,28 +1,29 @@
+/* eslint-disable max-len */
 import React, { createContext, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 const ValidationSchemasContext = createContext();
 
-const USERNAME_MIN_LENGTH = 3;
-const PASSWORD_MIN_LENGTH = 6;
-const PASSWORD_REGEX_LOWERCASE = /^(?=.*[a-z])/;
-const PASSWORD_REGEX_UPPERCASE = /^(?=.*[A-Z])/;
-const PASSWORD_REGEX_SYMBOL = /^(?=.*[\W_])/;
+// const USERNAME_MIN_LENGTH = 3;
+// const PASSWORD_MIN_LENGTH = 6;
+// const PASSWORD_REGEX_LOWERCASE = /^(?=.*[a-z])/;
+// const PASSWORD_REGEX_UPPERCASE = /^(?=.*[A-Z])/;
+// const PASSWORD_REGEX_SYMBOL = /^(?=.*[\W_])/;
 
 export const useValidationSchemas = () => useContext(ValidationSchemasContext);
 
 export const ValidationSchemasProvider = ({ children }) => {
   const { t } = useTranslation();
 
-  const validationChannelSchema = () =>
-    yup.object({
-      name: yup
-        .string()
-        .min(3, t('validationErrors.min6'))
-        .max(20, t('validationErrors.max20'))
-        .required(t('validationErrors.required')),
-    });
+  // const validationChannelSchema = () =>
+  //   yup.object({
+  //     name: yup
+  //       .string()
+  //       .min(3, t('validationErrors.min6'))
+  //       .max(20, t('validationErrors.max20'))
+  //       .required(t('validationErrors.required')),
+  //   });
 
   const validationLoginSchema = yup.object().shape({
     username: yup
