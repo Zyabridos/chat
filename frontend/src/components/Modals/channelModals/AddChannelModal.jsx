@@ -105,7 +105,12 @@ const AddChannelModal = () => {
           <div className="modal-header">
             <h5 className="modal-title">{t('channels.modals.titles.addChannel')}</h5>
             <span className="visually-hidden">
-              <button type="button" className="btn-close" onClick={handleClose} />
+              <button
+                type="button"
+                className="btn-close"
+                onClick={handleClose}
+                aria-label={t('modals.close')}
+              />
               {t('channels.addChannel')}
             </span>
           </div>
