@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { closeModal } from '../../store/slices/modalSlice.js';
@@ -18,11 +19,11 @@ const ModalManager = () => {
   const renderModalContent = () => {
     switch (type) {
       case 'addChannel':
-        return <AddChannelModal {props} onClose={handleClose} />;
+        return <AddChannelModal {...props} onClose={handleClose} />;
       case 'editChannel':
-        return <EditChannelModal {props} onClose={handleClose} />;
+        return <EditChannelModal {...props} onClose={handleClose} />;
       case 'deleteChannel':
-        return <DeleteChannelModal {props} onClose={handleClose} />;
+        return <DeleteChannelModal {...props} onClose={handleClose} />;
       default:
         return null;
     }
