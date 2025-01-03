@@ -136,7 +136,8 @@ const LoginForm = ({ isSubmitting, setIsSubmitting }) => {
                           </Form.Control.Feedback>
                         )}
                       </Form.Group>
-                      <LoginButton disabled={isSubmitting} /> {/* block buttun while sending */}
+                      {/* block buttun while sending */}
+                      <LoginButton disabled={isSubmitting} />
                     </fieldset>
                   </Form>
                   <LoginFooter />

@@ -1,5 +1,8 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable function-paren-newline */
+/* eslint-disable no-confusing-arrow */
+/* eslint-disable comma-dangle */
+/* eslint-disable implicit-arrow-linebreak */
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {

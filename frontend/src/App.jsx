@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-curly-newline */
 /* eslint-disable no-unused-vars */
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
@@ -52,18 +51,18 @@ const App = () => {
                       <Routes>
                         <Route
                           path="/"
-                          element={
+                          element={(
                             <ProtectedRoute>
                               <Chat />
                             </ProtectedRoute>
-                          }
+                            )}
                         />
                         <Route
                           path="/login"
                           element={
                             <LoginForm
-                              isSubmitting={isSubmitting}
-                              setIsSubmitting={setIsSubmitting}
+                              isSubmitting={(isSubmitting)}
+                              setIsSubmitting={(setIsSubmitting)}
                             />
                           }
                         />
@@ -71,7 +70,7 @@ const App = () => {
                           path="/signup"
                           element={
                             <SignUpForm
-                              isSubmitting={isSubmitting}
+                              isSubmitting={(isSubmitting)}
                               setIsSubmitting={setIsSubmitting}
                             />
                           }
