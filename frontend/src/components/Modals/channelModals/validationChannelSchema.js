@@ -1,13 +1,12 @@
 /* eslint-disable arrow-body-style */
-/* eslint-disable react/jsx-curly-newline */
 import * as yup from 'yup';
 
 const validationChannelSchema = ({ t }) => {
   return yup.object({
     name: yup
       .string()
-      .min(3, t('validationErrors.min6'))
-      .max(20, t('validationErrors.max20'))
+      .min(3, t('validationErrors.from3To20'))
+      .max(20, t('validationErrors.from3To20'))
       .required(t('validationErrors.required')),
   });
 };
