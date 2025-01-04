@@ -36,3 +36,9 @@ export const handleSignUpError = (error, setServerError, t) => {
     setServerError(t('signup.errors.connectionError'));
   }
 };
+
+export const getUserAndTokenFromStorage = () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  const token = user?.token;
+  return { user, token };
+};

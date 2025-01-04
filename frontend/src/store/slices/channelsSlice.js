@@ -61,7 +61,6 @@ const channelsSlice = createSlice({
         state.activeChannel = state.channels[0] || null;
       }
     },
-    // Set an error message in the state
     setError: (state, action) => {
       state.error = action.payload;
     },

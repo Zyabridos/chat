@@ -8,6 +8,7 @@ import leoProfanity from 'leo-profanity';
 import { addMessage } from '../../../store/slices/messagesSlice.js';
 import routes from '../../../routes.js';
 import { SendMessageButton } from '../../Buttons/Buttons.jsx';
+import { getUserAndTokenFromStorage } from '../../../utils.js';
 
 const EnterMessageForm = () => {
   const dispatch = useDispatch();
@@ -22,8 +23,8 @@ const EnterMessageForm = () => {
 
     setError(null);
 
-    const user = JSON.parse(localStorage.getItem('user'));
-    const token = user?.token;
+    const { user, token } = getUserAndTokenFromStorage();
+
     const userName = user?.username;
 
     // Check auth token
@@ -38,6 +39,7 @@ const EnterMessageForm = () => {
       return;
     }
 
+    // Check if there is a message
     if (!messageBody.trim()) {
       setError(t('channelsFormErrors.emptyMessage'));
       return;

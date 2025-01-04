@@ -10,7 +10,6 @@ import LoginFooter from './Footer.jsx';
 import Navbar from '../Navbar.jsx';
 import { LoginPicture } from '../Attachments.jsx';
 import { LoginButton } from '../Buttons/Buttons.jsx';
-import { StyledCardBody } from './styles.jsx';
 import { useValidationSchemas } from '../../contexts/validationContex.jsx';
 import routes from '../../routes.js';
 
@@ -62,7 +61,7 @@ const LoginForm = ({ isSubmitting, setIsSubmitting }) => {
           <Row className="row justify-content-center align-content-center h-100">
             <Col className="col-12 col-md-8 col-xxl-6">
               <Card className="card shadow-sm">
-                <StyledCardBody
+                <Card
                   className="card-body row"
                   style={{
                     padding: '4.5rem',
@@ -141,7 +140,7 @@ const LoginForm = ({ isSubmitting, setIsSubmitting }) => {
                     </fieldset>
                   </Form>
                   <LoginFooter />
-                </StyledCardBody>
+                </Card>
               </Card>
             </Col>
           </Row>

@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router-dom';
 import leoProfanity from 'leo-profanity';
 import { AuthContext } from '../../contexts/index.jsx';
 import { useValidationSchemas } from '../../contexts/validationContex.jsx';
-import { FieldError } from '../Login/styles.jsx';
 import { SignupButton } from '../Buttons/Buttons.jsx';
 import { SugnupPicture } from '../Attachments.jsx';
 import Navbar from '../Navbar.jsx';
@@ -126,7 +125,11 @@ const SignUpForm = ({ isSubmitting, setIsSubmitting }) => {
                               {formik.errors.confirmPassword}
                             </Form.Control.Feedback>
                           </Form.Group>
-                          {serverError && <FieldError>{serverError}</FieldError>}
+                          {serverError && (
+                            <Form.Control.Feedback className="invalid">
+                              {serverError}
+                            </Form.Control.Feedback>
+                          )}
                           <SignupButton disabled={isSubmitting} />
                           {/* block buttun while sending */}
                         </fieldset>
