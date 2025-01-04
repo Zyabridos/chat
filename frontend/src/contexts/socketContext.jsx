@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { io } from 'socket.io-client';
 import { addMessage, setMessages } from '../store/slices/messagesSlice.js';
 import { setChannels, addChannel } from '../store/slices/channelsSlice';
-import fetchMessages from '../API/fetchMessages.js';
+import fetchMessages from '../API/messagesAPI.js';
 
 export const SocketContext = createContext(null);
 
@@ -50,7 +50,7 @@ export const SocketProvider = ({ children }) => {
     // Cleanup on component unmount
     return () => {
       socketInstance.off('newMessage', handleNewMessage);
-      socketInstance.off('newChannel', handleNewChannel); // Remove the new channel listener
+      socketInstance.off('newChannel', handleNewChannel);
       socketInstance.disconnect();
     };
   }, [dispatch]);

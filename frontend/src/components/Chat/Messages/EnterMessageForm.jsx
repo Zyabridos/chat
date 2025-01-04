@@ -20,6 +20,8 @@ const EnterMessageForm = () => {
   const handleSendMessage = async (e) => {
     e.preventDefault();
 
+    setError(null);
+
     const user = JSON.parse(localStorage.getItem('user'));
     const token = user?.token;
     const userName = user?.username;

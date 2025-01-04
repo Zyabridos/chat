@@ -15,7 +15,6 @@ const userSlice = createSlice({
       state.token = token;
       state.username = username;
     },
-    // clearUser: (state) => {
     logout: (state) => {
       state.token = null;
       state.username = null;

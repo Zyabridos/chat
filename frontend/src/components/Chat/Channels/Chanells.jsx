@@ -12,7 +12,7 @@ import leoProfanity from 'leo-profanity';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import addSymbol from '../../../assets/add-symbol.png';
-import fetchChannels from '../../../API/fetchChannels.js';
+import fetchChannels from '../../../API/channelsAPI.js';
 import { setChannels, setActiveChannel } from '../../../store/slices/channelsSlice';
 import { openModal } from '../../../store/slices/modalSlice';
 import routes from '../../../routes';
