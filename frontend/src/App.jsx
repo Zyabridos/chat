@@ -15,7 +15,7 @@ import SignUpForm from './components/Signup/SignupForm.jsx';
 import Chat from './components/Chat/Chat.jsx';
 import i18n from './i18n/i18n.js';
 import { store, persistor } from './store/store.js';
-import AuthProvider from './contexts/index.jsx';
+import AuthProvider from './contexts/authContext.jsx';
 import 'react-toastify/dist/ReactToastify.css';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import forbiddenWords from './dictionary/index.js';

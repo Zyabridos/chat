@@ -7,16 +7,14 @@
 import React, { useState, useEffect } from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, 
-  useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import leoProfanity from 'leo-profanity';
-import * as yup from 'yup';
 import { closeModal } from '../../../store/slices/modalSlice';
 import routes from '../../../routes';
 import { updateChannel } from '../../../store/slices/channelsSlice';
-// import validationChannelSchema from './validationChannelSchema.js';
+import validationChannelSchema from './validationChannelSchema.js';
 
 const EditChannelModal = ({ channelId }) => {
   const { t } = useTranslation();
@@ -26,20 +24,6 @@ const EditChannelModal = ({ channelId }) => {
   const dispatch = useDispatch();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
-
-  const validationChannelSchema = yup.object({
-    name: yup
-      .string()
-      .min(3, (value) => {
-        console.log('Min Validation Triggered:', value);
-        return t('validationErrors.from3To20');
-      })
-      .max(20, (value) => {
-        console.log('Max Validation Triggered:', value);
-        return t('validationErrors.from3To20');
-      })
-      .required(t('validationErrors.required')),
-  });
 
   const channelToEdit = channels.find((channel) => channel.id === channelId);
   const initialValues = { name: channelToEdit ? channelToEdit.name : '' };
@@ -127,7 +111,7 @@ const EditChannelModal = ({ channelId }) => {
           <div className="modal-body">
             <Formik
               initialValues={initialValues}
-              validationSchema={validationChannelSchema}
+              validationSchema={validationChannelSchema({ t })}
               onSubmit={(values, actions) => handleEditChannel(values, actions)}
             >
               {({ isSubmitting }) => (

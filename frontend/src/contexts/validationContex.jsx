@@ -22,14 +22,14 @@ export const useValidationSchemas = () => useContext(ValidationSchemasContext);
 export const ValidationSchemasProvider = ({ children }) => {
   const { t } = useTranslation();
 
-  const validationChannelSchema = () =>
-    yup.object({
-      name: yup
-        .string()
-        .min(3, t('validationErrors.min6'))
-        .max(20, t('validationErrors.max20'))
-        .required(t('validationErrors.required')),
-    });
+  // const validationChannelSchema = () =>
+  //   yup.object({
+  //     name: yup
+  //       .string()
+  //       .min(3, t('validationErrors.min6'))
+  //       .max(20, t('validationErrors.max20'))
+  //       .required(t('validationErrors.required')),
+  //   });
 
   const validationLoginSchema = yup.object().shape({
     username: yup
@@ -61,7 +61,7 @@ export const ValidationSchemasProvider = ({ children }) => {
 
   const value = useMemo(
     () => ({
-      // validationChannelSchema
+      // validationChannelSchema,
       validationLoginSchema,
       validationSignupSchema,
     }),
@@ -69,8 +69,6 @@ export const ValidationSchemasProvider = ({ children }) => {
   );
 
   return (
-    <ValidationSchemasContext.Provider value={value}>
-      {children}
-    </ValidationSchemasContext.Provider>
+    <ValidationSchemasContext.Provider value={value}>{children}</ValidationSchemasContext.Provider>
   );
 };

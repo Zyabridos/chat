@@ -5,7 +5,7 @@ import { Form, Col, Card, Row, Container } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import leoProfanity from 'leo-profanity';
-import { AuthContext } from '../../contexts/index.jsx';
+import { AuthContext } from '../../contexts/authContext.jsx';
 import { useValidationSchemas } from '../../contexts/validationContex.jsx';
 import { SignupButton } from '../Buttons/Buttons.jsx';
 import { SugnupPicture } from '../Attachments.jsx';

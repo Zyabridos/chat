@@ -5,7 +5,7 @@ import { useFormik } from 'formik';
 import { Form, Col, Card, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../../contexts/index.jsx';
+import { AuthContext } from '../../contexts/authContext.jsx';
 import LoginFooter from './Footer.jsx';
 import Navbar from '../Navbar.jsx';
 import { LoginPicture } from '../Attachments.jsx';

@@ -9,11 +9,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import leoProfanity from 'leo-profanity';
-import * as yup from 'yup';
+// import * as yup from 'yup';
 import { closeModal } from '../../../store/slices/modalSlice';
 import routes from '../../../routes';
 import { setActiveChannel, addChannel } from '../../../store/slices/channelsSlice';
 import useSocket from '../../../hooks/useSocket.jsx';
+// import { useValidationSchemas } from '../../../contexts/validationContex.jsx';
+import validationChannelSchema from './validationChannelSchema.js';
 
 const AddChannelModal = () => {
   const user = JSON.parse(localStorage.getItem('user'));
@@ -22,13 +24,13 @@ const AddChannelModal = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  const validationChannelSchema = yup.object({
-    name: yup
-      .string()
-      .min(3, t('validationErrors.from3To20'))
-      .max(20, t('validationErrors.from3To20'))
-      .required(t('validationErrors.required')),
-  });
+  // const validationChannelSchema = yup.object({
+  //   name: yup
+  //     .string()
+  //     .min(3, t('validationErrors.from3To20'))
+  //     .max(20, t('validationErrors.from3To20'))
+  //     .required(t('validationErrors.required')),
+  // });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
@@ -117,7 +119,7 @@ const AddChannelModal = () => {
           <div className="modal-body">
             <Formik
               initialValues={initialValues}
-              validationSchema={validationChannelSchema}
+              validationSchema={validationChannelSchema({ t })}
               onSubmit={(values, actions) => handleAddChannel(values, actions)}
             >
               {({ isSubmitting }) => (

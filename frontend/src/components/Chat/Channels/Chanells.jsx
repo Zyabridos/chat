@@ -18,6 +18,7 @@ import { openModal } from '../../../store/slices/modalSlice';
 import routes from '../../../routes';
 import forbiddenWords from '../../../dictionary';
 import { LoadingBar } from '../../Attachments';
+import { getUserAndTokenFromStorage } from '../../../utils.js';
 
 const Channels = () => {
   const { t } = useTranslation();
@@ -29,11 +30,10 @@ const Channels = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const { user, token } = getUserAndTokenFromStorage();
+
   // UseEffect for loading channels only if they are not already in Redux
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem('user'));
-    const token = user?.token;
-
     if (!token) {
       setError(t('error.tokenNotFound'));
       setLoading(false);
@@ -75,9 +75,6 @@ const Channels = () => {
     dispatch(setActiveChannel(channel.id));
     localStorage.setItem('activeChannelId', channel.id); // Save active channel ID
   };
-
-  const user = JSON.parse(localStorage.getItem('user'));
-  const token = user?.token;
 
   const handleDeleteChannel = async (channelId) => {
     try {
