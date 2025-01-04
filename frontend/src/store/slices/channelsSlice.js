@@ -32,21 +32,25 @@ const channelsSlice = createSlice({
     },
     // Add a new channel to the 'channels' list
     addChannel: (state, action) => {
-      // идиотское решение, но путь пока так для тестов будет
-      const duplicateChannel = state.channels.some(
-        (channel) => channel.name.trim().toLowerCase() === action.payload.name.trim().toLowerCase()
+      const { name, createdBy, id } = action.payload;
+      const currentUsername = JSON.parse(localStorage.getItem('user')).username;
+
+      const formattedName = name.trim().toLowerCase();
+      const isDuplicate = state.channels.some(
+        (channel) => channel.name.trim().toLowerCase() === formattedName
       );
 
-      if (!duplicateChannel) {
-        state.channels.push(action.payload);
+      if (isDuplicate) {
+        return;
+      }
 
-        const currentUsername = JSON.parse(localStorage.getItem('user')).username;
+      // If not a duplacate, add the channel
+      state.channels.push(action.payload);
 
-        // Если канал был создан текущим пользователем, устанавливаем его активным
-        if (action.payload.createdBy === currentUsername) {
-          state.activeChannel = action.payload; // Только для создавшего канал пользователя
-          localStorage.setItem('activeChannelId', action.payload.id);
-        }
+      // Set channel as an active for a person that has created channel
+      if (createdBy === currentUsername) {
+        state.activeChannel = action.payload;
+        localStorage.setItem('activeChannelId', id);
       }
     },
     removeChannel: (state, action) => {
