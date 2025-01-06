@@ -8,7 +8,6 @@ import c from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { Dropdown } from 'react-bootstrap';
-import leoProfanity from 'leo-profanity';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import addSymbol from '../../../assets/add-symbol.png';
@@ -16,52 +15,39 @@ import fetchChannels from '../../../API/channelsAPI.js';
 import { setChannels, setActiveChannel } from '../../../store/slices/channelsSlice';
 import { openModal } from '../../../store/slices/modalSlice';
 import routes from '../../../routes';
-import forbiddenWords from '../../../dictionary';
 import { LoadingBar } from '../../Attachments';
-import { getUserAndTokenFromStorage } from '../../../utils.js';
+import { getUserAndTokenFromStorage } from '../../../utils/storage.js';
 
 const Channels = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  const channels = useSelector((state) => state.channelsInfo.channels); // channels from Redux
+  const channels = useSelector((state) => state.channelsInfo.channels);
   const activeChannel = useSelector((state) => state.channelsInfo.activeChannel);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const { user, token } = getUserAndTokenFromStorage();
+  const { token } = getUserAndTokenFromStorage();
 
-  // UseEffect for loading channels only if they are not already in Redux
   useEffect(() => {
-    if (!token) {
-      setError(t('error.tokenNotFound'));
-      setLoading(false);
-      return;
-    }
-
     const loadChannels = async () => {
       try {
-        const data = await fetchChannels(token); // Fetch channels from API
-        dispatch(setChannels(data)); // Save to Redux if no channels are loaded
+        if (!token) {
+          throw new Error(t('error.tokenNotFound'));
+        }
+
+        const data = await fetchChannels(token);
+        dispatch(setChannels(data));
       } catch (err) {
-        setError(err.response ? err.response.data.message : t('error.fetchChannels'));
+        setError(err.response?.data?.message || t('error.fetchChannels'));
       } finally {
         setLoading(false);
       }
     };
 
-    if (channels.length === 0) {
-      loadChannels(); // Fetch channels only if they haven't been loaded yet
-    } else {
-      setLoading(false); // If channels are already loaded, skip fetching
-    }
-  }, [dispatch, channels, t]);
-
-  useEffect(() => {
-    leoProfanity.loadDictionary('ru');
-    forbiddenWords.forEach((word) => leoProfanity.add(word));
-  }, []);
+    loadChannels();
+  }, [dispatch, t, token]);
 
   // Restore active channel from localStorage
   useEffect(() => {
@@ -73,7 +59,7 @@ const Channels = () => {
 
   const handleChannelClick = (channel) => {
     dispatch(setActiveChannel(channel.id));
-    localStorage.setItem('activeChannelId', channel.id); // Save active channel ID
+    localStorage.setItem('activeChannelId', channel.id);
   };
 
   const handleDeleteChannel = async (channelId) => {
@@ -84,7 +70,7 @@ const Channels = () => {
       dispatch(setChannels(channels.filter((channel) => channel.id !== channelId)));
       toast.success(t('toast.channelDeleted'));
     } catch (err) {
-      setError(err.response ? err.response.data.message : t('error.deleteChannelFailed'));
+      setError(err.response?.data?.message || t('error.deleteChannelFailed'));
     }
   };
 
@@ -131,7 +117,7 @@ const Channels = () => {
 
   const renderLoadingOrError = () => {
     if (loading) return <LoadingBar t={t} />;
-    if (error) return <div>{error}</div>;
+    if (error) return <div className="text-danger">{error}</div>;
     return null;
   };
 

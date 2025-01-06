@@ -5,7 +5,7 @@ const PASSWORD_MIN_LENGTH = 6;
 // const PASSWORD_REGEX_UPPERCASE = /^(?=.*[A-Z])/;
 // const PASSWORD_REGEX_SYMBOL = /^(?=.*[\W_])/;
 
-const createValidationSignupSchema = (t) =>
+const createValidationSignupSchema = (t) => {
   yup.object({
     username: yup
       .string()
@@ -22,5 +22,7 @@ const createValidationSignupSchema = (t) =>
       .oneOf([yup.ref('password'), null], t('validationErrors.mismatchPasswords'))
       .required(t('validationErrors.required')),
   });
+
+};
 
 export default createValidationSignupSchema;

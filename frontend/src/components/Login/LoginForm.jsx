@@ -12,29 +12,25 @@ import routes from '../../routes.js';
 import createValidationLoginSchema from '../../validationsSchemas/loginSchema.js';
 
 const LoginForm = () => {
-  const { logIn } = useContext(AuthContext);
+  const { logIn } = useContext(AuthContext); // Получение функции логина из контекста
   const [authFailed, setAuthFailed] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const inputRef = useRef(null);
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const validationSchema = createValidationLoginSchema(t)
+
+  const validationSchema = createValidationLoginSchema(t);
 
   const handleSubmit = async (formikValues) => {
     try {
-      const response = await logIn(
+      await logIn(
         formikValues.username,
         formikValues.password,
         setErrorMessage,
         setAuthFailed
       );
-      if (response && response.data) {
-        const { token, username } = response.data;
-        localStorage.setItem('user', JSON.stringify({ token, username }));
-        navigate(routes.mainPage());
-      }
     } catch (error) {
-      console.error('Login failed', error);
+      console.error('Login failed:', error);
     }
   };
 

@@ -27,7 +27,7 @@ const messagesSlice = createSlice({
 export const selectFilteredMessages = createSelector(
   (state) => state.messagesInfo.messages,
   (state) => state.channelsInfo.activeChannel,
-  (messages, activeChannel) => messages.filter((msg) => msg.channelId === activeChannel?.id)
+  (messages, activeChannel) => messages.filter((msg) => msg.channelId === activeChannel?.id),
 );
 
 export const { addMessage, setMessages } = messagesSlice.actions;

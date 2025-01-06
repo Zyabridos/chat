@@ -35,30 +35,28 @@ rules:
   functional/no-throw-statements: 0
   functional/no-return-void: 0
   no-underscore-dangle: [2, { 'allow': ['__filename', '__dirname'] }]
-  react/function-component-definition:
-    [2, { 'namedComponents': 'arrow-function' }]
+  react/function-component-definition: [2, { 'namedComponents': 'arrow-function' }]
   testing-library/no-debug: 0
   react/jsx-filename-extension: [1, { 'extensions': ['.js', '.jsx'] }]
   object-curly-newline: [2, { multiline: true, consistent: true }] # object-curly-newline
-  react/jsx-wrap-multilines: [2, { declaration: true, assignment: true, return: true, arrow: true }] # react/jsx-one-expression-per-line
+  react/jsx-wrap-multilines: [2, { declaration: true, assignment: true, return: true, arrow: true }] # react/jsx-wrap-multilines
   comma-dangle: [2, { arrays: 'always-multiline', objects: 'always-multiline', imports: 'always-multiline', exports: 'always-multiline', functions: 'ignore' }]
-  # Assignment to property of function parameter 'state' 
-  # no-param-reassign:
-    # [2, { 'props': true, 'ignorePropertyModificationsFor': ['state'] }]
-
-
-  prettier/prettier: [
-      'error',
-      {
-        'semi': true,
-        'singleQuote': true,
-        'trailingComma': 'always-multiline', # Aligned with comma-dangle
-        'tabWidth': 2,
-        'useTabs': false,
-        'bracketSpacing': true, # Matches object-curly-newline
-        'printWidth': 100,
-        'arrowParens': 'always',
-        'jsxSingleQuote': true, 
-        'proseWrap': 'preserve', # Keeps existing line breaks
-      },
-    ]
+  no-unused-vars: [2, { vars: 'all', args: 'after-used', ignoreRestSiblings: true }] Prevent unused vars
+  no-trailing-spaces: 2 
+  semi: [2, 'always'] 
+  react/jsx-indent: [2, 2] # Ensure consistent indentation in JSX
+  eol-last: [2, 'always'] # Require newline at the end of files
+  implicit-arrow-linebreak: [2, 'beside'] # Control arrow function formatting
+  arrow-body-style: [2, 'as-needed'] # Enforce concise arrow functions
+  prettier/prettier:
+    - error
+    - semi: true
+      singleQuote: true
+      trailingComma: always-multiline
+      tabWidth: 2
+      useTabs: false
+      bracketSpacing: true
+      printWidth: 100
+      arrowParens: always
+      jsxSingleQuote: true
+      proseWrap: preserve

@@ -8,7 +8,7 @@ import leoProfanity from 'leo-profanity';
 import { addMessage } from '../../../store/slices/messagesSlice.js';
 import routes from '../../../routes.js';
 import { SendMessageButton } from '../../Buttons/Buttons.jsx';
-import { getUserAndTokenFromStorage } from '../../../utils.js';
+import { getUserAndTokenFromStorage } from '../../../utils/storage.js';
 
 const EnterMessageForm = () => {
   const dispatch = useDispatch();

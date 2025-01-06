@@ -25,19 +25,22 @@ const ProtectedRoute = ({ children }) => {
 
 export default ProtectedRoute;
 
+// /* eslint-disable consistent-return */
 // import React from 'react';
-// import { Navigate } from 'react-router-dom';
+// import { Navigate, Outlet } from 'react-router-dom';
+// import { useAuth } from '../contexts/authContext';
 // import routes from '../routes.js';
 
-// const ProtectedRoute = ({ children }) => {
-//   const { user } = useContext(AuthContext);
+// const ProtectedRoute = () => {
+//   const { user } = useAuth();
 
+//   // Если пользователь не авторизован, перенаправить на страницу входа
 //   if (!user) {
 //     return <Navigate to={routes.loginPage()} />;
 //   }
 
-//   // Если авторизован, отображаем дочерние элементы
-//   return children;
+//   // Если пользователь авторизован, рендерить дочерние элементы
+//   return <Outlet />;
 // };
 
 // export default ProtectedRoute;
