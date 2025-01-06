@@ -1,5 +1,3 @@
-/* eslint-disable object-curly-newline */
-/* eslint-disable comma-dangle */
 import React, { useRef, useState, useContext } from 'react';
 import { useFormik } from 'formik';
 import { Form, Col, Card, Row } from 'react-bootstrap';
@@ -14,18 +12,17 @@ import { useValidationSchemas } from '../../contexts/validationContex.jsx';
 import routes from '../../routes.js';
 
 const LoginForm = () => {
-  document.body.classList.add('h-100', 'bg-light');
   const { logIn } = useContext(AuthContext);
-  const [authFailed, setAuthFailed] = useState(false); // State for tracking authentication failure
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(''); // State for storing error message on failed login
-  const inputRef = useRef(null); // Reference to the username input field
+  const [authFailed, setAuthFailed] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false); // Локальное состояние
+  const [errorMessage, setErrorMessage] = useState('');
+  const inputRef = useRef(null);
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { validationLoginSchema } = useValidationSchemas();
 
   const handleSubmit = async (formikValues) => {
-    setIsSubmitting(true); // start sending process
+    setIsSubmitting(true);
     try {
       const response = await logIn(
         formikValues.username,
@@ -41,7 +38,7 @@ const LoginForm = () => {
     } catch (error) {
       console.error('Login failed', error);
     } finally {
-      setIsSubmitting(false); // end sending process
+      setIsSubmitting(false);
     }
   };
 

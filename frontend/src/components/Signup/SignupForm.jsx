@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { useFormik } from 'formik';
 import { Form, Col, Card, Row, Container } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
@@ -16,29 +16,7 @@ const SignUpForm = () => {
   const navigate = useNavigate();
   const { signUp, serverError } = useContext(AuthContext);
   const [usernameError, setUsernameError] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const { validationSignupSchema } = useValidationSchemas();
-
-  const handleSubmit = async (formikValues) => {
-    if (leoProfanity.check(formikValues.username)) {
-      setUsernameError(t('signup.errors.profanityError'));
-      return;
-    }
-
-    setIsSubmitting(true);
-    try {
-      const response = await signUp(formikValues.username, formikValues.password);
-      if (response && response.data) {
-        const { token, username } = response.data;
-        localStorage.setItem('user', JSON.stringify({ token, username }));
-        navigate(routes.mainPage());
-      }
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   const formik = useFormik({
     initialValues: {
@@ -46,8 +24,27 @@ const SignUpForm = () => {
       password: '',
       confirmPassword: '',
     },
-    onSubmit: handleSubmit,
     validationSchema: validationSignupSchema,
+    onSubmit: async (values, { setSubmitting, setFieldError }) => {
+      if (leoProfanity.check(values.username)) {
+        setUsernameError(t('signup.errors.profanityError'));
+        setSubmitting(false);
+        return;
+      }
+
+      try {
+        const response = await signUp(values.username, values.password);
+        if (response && response.data) {
+          const { token, username } = response.data;
+          localStorage.setItem('user', JSON.stringify({ token, username }));
+          navigate(routes.mainPage());
+        }
+      } catch (error) {
+        setFieldError('username', t('signup.errors.serverError'));
+      } finally {
+        setSubmitting(false);
+      }
+    },
   });
 
   return (
@@ -66,7 +63,7 @@ const SignUpForm = () => {
                     <Col md={7}>
                       <Form onSubmit={formik.handleSubmit}>
                         <h1 className="text-center mb-4">{t('signup.title')}</h1>
-                        <fieldset>
+                        <fieldset disabled={formik.isSubmitting}>
                           <Form.Group className="mb-3">
                             <Form.Label htmlFor="username">{t('signup.usernameLabel')}</Form.Label>
                             <Form.Control
@@ -76,11 +73,11 @@ const SignUpForm = () => {
                               id="username"
                               placeholder={t('signup.usernamePlaceholder')}
                               onChange={formik.handleChange}
+                              onBlur={formik.handleBlur}
                               value={formik.values.username}
                               isInvalid={
                                 formik.touched.username && (formik.errors.username || usernameError)
                               }
-                              disabled={isSubmitting} // Block the field while sending
                             />
                             <Form.Control.Feedback type="invalid">
                               {formik.errors.username || usernameError}
@@ -95,9 +92,9 @@ const SignUpForm = () => {
                               id="password"
                               placeholder={t('signup.passwordPlaceholder')}
                               onChange={formik.handleChange}
+                              onBlur={formik.handleBlur}
                               value={formik.values.password}
                               isInvalid={formik.touched.password && formik.errors.password}
-                              disabled={isSubmitting}
                             />
                             <Form.Control.Feedback type="invalid">
                               {formik.errors.password}
@@ -114,11 +111,11 @@ const SignUpForm = () => {
                               id="confirmPassword"
                               placeholder={t('signup.repeatPasswordPlaceholder')}
                               onChange={formik.handleChange}
+                              onBlur={formik.handleBlur}
                               value={formik.values.confirmPassword}
                               isInvalid={
                                 formik.touched.confirmPassword && formik.errors.confirmPassword
                               }
-                              disabled={isSubmitting}
                             />
                             <Form.Control.Feedback type="invalid">
                               {formik.errors.confirmPassword}
@@ -129,7 +126,7 @@ const SignUpForm = () => {
                               {serverError}
                             </Form.Control.Feedback>
                           )}
-                          <SignupButton disabled={isSubmitting} />
+                          <SignupButton disabled={formik.isSubmitting} />
                         </fieldset>
                       </Form>
                     </Col>
