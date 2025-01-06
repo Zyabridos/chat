@@ -29,9 +29,6 @@ const rollbarConfig = {
 };
 
 const App = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState(null);
-
   useEffect(() => {
     leoProfanity.loadDictionary('ru');
     forbiddenWords.forEach((word) => leoProfanity.add(word));
@@ -57,24 +54,8 @@ const App = () => {
                             </ProtectedRoute>
                           }
                         />
-                        <Route
-                          path="/login"
-                          element={
-                            <LoginForm
-                              isSubmitting={isSubmitting}
-                              setIsSubmitting={setIsSubmitting}
-                            />
-                          }
-                        />
-                        <Route
-                          path="/signup"
-                          element={
-                            <SignUpForm
-                              isSubmitting={isSubmitting}
-                              setIsSubmitting={setIsSubmitting}
-                            />
-                          }
-                        />
+                        <Route path="/login" element={<LoginForm />} />
+                        <Route path="/signup" element={<SignUpForm />} />
                         <Route path="*" element={<NotFound />} />
                       </Routes>
                     </ValidationSchemasProvider>

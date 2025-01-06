@@ -1,4 +1,3 @@
-/* eslint-disable object-curly-newline */
 import React, { useState, useContext } from 'react';
 import { useFormik } from 'formik';
 import { Form, Col, Card, Row, Container } from 'react-bootstrap';
@@ -10,14 +9,14 @@ import { useValidationSchemas } from '../../contexts/validationContex.jsx';
 import { SignupButton } from '../Buttons/Buttons.jsx';
 import { SugnupPicture } from '../Attachments.jsx';
 import Navbar from '../Navbar.jsx';
-import 'react-toastify/dist/ReactToastify.css';
 import routes from '../../routes.js';
 
-const SignUpForm = ({ isSubmitting, setIsSubmitting }) => {
+const SignUpForm = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { signUp, serverError } = useContext(AuthContext);
   const [usernameError, setUsernameError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false); // Локальное состояние
   const { validationSignupSchema } = useValidationSchemas();
 
   const handleSubmit = async (formikValues) => {
@@ -131,7 +130,6 @@ const SignUpForm = ({ isSubmitting, setIsSubmitting }) => {
                             </Form.Control.Feedback>
                           )}
                           <SignupButton disabled={isSubmitting} />
-                          {/* block buttun while sending */}
                         </fieldset>
                       </Form>
                     </Col>
