@@ -13,7 +13,7 @@ import { closeModal } from '../../../store/slices/modalSlice';
 import routes from '../../../routes';
 import { setActiveChannel, addChannel } from '../../../store/slices/channelsSlice';
 import useSocket from '../../../hooks/useSocket.jsx';
-import validationChannelSchema from '../../../validationsSchemas/channelSchema.js';
+import createValidationChannelSchema from '../../../validationsSchemas/channelSchema.js';
 
 const AddChannelModal = () => {
   const user = JSON.parse(localStorage.getItem('user'));
@@ -22,17 +22,11 @@ const AddChannelModal = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  // const validationChannelSchema = yup.object({
-  //   name: yup
-  //     .string()
-  //     .min(3, t('validationErrors.from3To20'))
-  //     .max(20, t('validationErrors.from3To20'))
-  //     .required(t('validationErrors.required')),
-  // });
-
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
   const socket = useSocket(); // Access the socket instance
+
+  const validationSchema = createValidationChannelSchema(t);
 
   const checkDuplicate = (channelName) => {
     const normalizedChannelName = channelName.trim().toLowerCase();
@@ -117,7 +111,7 @@ const AddChannelModal = () => {
           <div className="modal-body">
             <Formik
               initialValues={initialValues}
-              validationSchema={validationChannelSchema({ t })}
+              validationSchema={validationSchema}
               onSubmit={(values, actions) => handleAddChannel(values, actions)}
             >
               {({ isSubmitting }) => (

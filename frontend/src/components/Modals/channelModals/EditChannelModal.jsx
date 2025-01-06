@@ -112,7 +112,7 @@ const EditChannelModal = ({ channelId }) => {
           <div className="modal-body">
             <Formik
               initialValues={initialValues}
-              validationSchema
+              validationSchema={validationSchema}
               onSubmit={(values, actions) => handleEditChannel(values, actions)}
             >
               {({ isSubmitting }) => (
