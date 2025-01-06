@@ -13,7 +13,6 @@ export const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const [loggedIn, setLoggedIn] = useState(false); // State to track login status
   const [user, setUser] = useState(null); // State to store user data
   const [serverError, setServerError] = useState(null); // State for server error messages
   const navigate = useNavigate();
@@ -22,7 +21,6 @@ const AuthProvider = ({ children }) => {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
       setUser(JSON.parse(storedUser));
-      setLoggedIn(true);
       navigate(routes.mainPage());
     }
   }, [navigate]); // Add navigate to dependencies
@@ -34,7 +32,6 @@ const AuthProvider = ({ children }) => {
         const { token, username } = response.data;
         localStorage.setItem('user', JSON.stringify({ token, username })); // Store user data in localStorage
         setUser({ token, username }); // Set user data in state
-        setLoggedIn(true); // Update logged-in status
         navigate(routes.mainPage());
       }
       return response;
@@ -45,7 +42,6 @@ const AuthProvider = ({ children }) => {
 
   const logOut = () => {
     localStorage.removeItem('user');
-    setLoggedIn(false);
     setUser(null);
     dispatch(logout());
     navigate(routes.loginPage());
@@ -62,7 +58,7 @@ const AuthProvider = ({ children }) => {
 
   return (
     /* eslint-disable */
-    <AuthContext.Provider value={{ loggedIn, logIn, logOut, signUp, user, serverError }}>
+    <AuthContext.Provider value={{ logIn, logOut, signUp, user, serverError }}>
       {children}
     </AuthContext.Provider>
   );

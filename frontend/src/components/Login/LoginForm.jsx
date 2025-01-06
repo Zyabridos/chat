@@ -14,7 +14,7 @@ import routes from '../../routes.js';
 const LoginForm = () => {
   const { logIn } = useContext(AuthContext);
   const [authFailed, setAuthFailed] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false); // Локальное состояние
+  const [isSubmitting, setIsSubmitting] = useState(false); 
   const [errorMessage, setErrorMessage] = useState('');
   const inputRef = useRef(null);
   const { t } = useTranslation();

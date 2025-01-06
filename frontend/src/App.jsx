@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import React, { useEffect, useState } from 'react';

@@ -39,6 +39,9 @@ rules:
     [2, { 'namedComponents': 'arrow-function' }]
   testing-library/no-debug: 0
   react/jsx-filename-extension: [1, { 'extensions': ['.js', '.jsx'] }]
+  object-curly-newline: [2, { multiline: true, consistent: true }] # object-curly-newline
+  react/jsx-wrap-multilines: [2, { declaration: true, assignment: true, return: true, arrow: true }] # react/jsx-one-expression-per-line
+  comma-dangle: [2, { arrays: 'always-multiline', objects: 'always-multiline', imports: 'always-multiline', exports: 'always-multiline', functions: 'ignore' }]
   # Assignment to property of function parameter 'state' 
   # no-param-reassign:
     # [2, { 'props': true, 'ignorePropertyModificationsFor': ['state'] }]
