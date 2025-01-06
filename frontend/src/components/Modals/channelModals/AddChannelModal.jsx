@@ -6,14 +6,13 @@ import React, { useState, useEffect } from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import leoProfanity from 'leo-profanity';
 import { closeModal } from '../../../store/slices/modalSlice';
-import routes from '../../../routes';
 import { setActiveChannel, addChannel } from '../../../store/slices/channelsSlice';
 import useSocket from '../../../hooks/useSocket.jsx';
 import createValidationChannelSchema from '../../../validationsSchemas/channelSchema.js';
+import { addChannelAPI } from '../../../API/channelsAPI.js';
 
 const AddChannelModal = () => {
   const user = JSON.parse(localStorage.getItem('user'));
@@ -56,29 +55,20 @@ const AddChannelModal = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await axios.post(
-        routes.channelsPath(),
-        { name: cleanedChannelName },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const newChannel = await addChannelAPI({ name: cleanedChannelName }, token);
 
-      if (response.data) {
-        const newChannel = response.data;
-        dispatch(addChannel(newChannel)); // Add the new channel to Redux
-        socket.emit('newChannel', newChannel); // Emit the new channel event via WebSocket
+      dispatch(addChannel(newChannel)); // Add the new channel to Redux
+      socket.emit('newChannel', newChannel); // Emit the new channel event via WebSocket
 
-        // Switch to the new channel only for the current user
-        if (newChannel.createdBy === user.id) {
-          // Set it as the active channel for the current user
-          dispatch(setActiveChannel(newChannel.id));
-          localStorage.setItem('activeChannelId', newChannel.id); // Save active channel ID
-        }
-
-        toast.success(t('toast.channelCreated'));
-        handleClose();
-      } else {
-        throw new Error('Error while creating the channel.');
+      // Switch to the new channel only for the current user
+      if (newChannel.createdBy === user.id) {
+        // Set it as the active channel for the current user
+        dispatch(setActiveChannel(newChannel.id));
+        localStorage.setItem('activeChannelId', newChannel.id); // Save active channel ID
       }
+
+      toast.success(t('toast.channelCreated'));
+      handleClose();
     } catch (err) {
       console.error('Error while creating the channel:', err);
       setError(err.response?.data?.message || t('error.addChannelFailed'));

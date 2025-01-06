@@ -1,5 +1,5 @@
 /* eslint-disable consistent-return */
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import React, { createContext, useState, useContext, useEffect, useMemo } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -36,7 +36,7 @@ const AuthProvider = ({ children }) => {
       setUser(storedUser);
       navigate(routes.mainPage());
     }
-  }, [navigate]); // Add navigate to dependencies
+  }, [navigate]);
 
   const logIn = async (login, password, setErrorMessage, setAuthFailed) => {
     try {
@@ -66,12 +66,24 @@ const AuthProvider = ({ children }) => {
       const response = await axios.post(routes.signupPath(), { username: login, password });
       return response;
     } catch (error) {
-      handleSignUpError(error, setServerError, t); // Pass setServerError to handleSignUpError
+      handleSignUpError(error, setServerError, t);
     }
   };
 
+  // useMemo to prevent re-creating the context value on every render
+  const contextValue = useMemo(
+    () => ({
+      logIn,
+      logOut,
+      signUp,
+      user,
+      serverError,
+    }),
+    [logIn, logOut, signUp, user, serverError],
+  );
+
   return (
-    <AuthContext.Provider value={{ logIn, logOut, signUp, user, serverError }}>
+    <AuthContext.Provider value={contextValue}>
       {children}
     </AuthContext.Provider>
   );

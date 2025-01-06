@@ -45,11 +45,11 @@ const App = () => {
                     <Routes>
                       <Route
                         path="/"
-                        element={
+                        element={(
                           <ProtectedRoute>
                             <Chat />
                           </ProtectedRoute>
-                        }
+                        )}
                       />
                       <Route path="/login" element={<LoginForm />} />
                       <Route path="/signup" element={<SignUpForm />} />
