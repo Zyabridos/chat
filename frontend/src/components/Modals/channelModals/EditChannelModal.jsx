@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import { useTranslation } from 'react-i18next';
@@ -15,41 +16,31 @@ const EditChannelModal = ({ channelId }) => {
   const token = user?.token;
   const channels = useSelector((state) => state.channelsInfo.channels);
   const dispatch = useDispatch();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmittingState, setIsSubmittingState] = useState(false); 
   const [error, setError] = useState(null);
 
   const channelToEdit = channels.find((channel) => channel.id === channelId);
   const initialValues = { name: channelToEdit ? channelToEdit.name : '' };
   const validationSchema = createValidationChannelSchema(t);
 
-  const checkDuplicate = (channelName) => {
-    return channels.some(
-      (channel) => channel.name.trim().toLowerCase() === channelName.trim().toLowerCase()
+  const checkDuplicate = (channelName) =>
+    channels.some(
+      (channel) => channel.name.trim().toLowerCase() === channelName.trim().toLowerCase(),
     );
-  };
 
   const handleClose = () => {
     dispatch(closeModal());
   };
 
-  const handleEditChannel = async (values, actions) => {
-    const { setSubmitting } = actions;
-
+  const handleEditChannel = async (values, { setSubmitting }) => {
     if (checkDuplicate(values.name)) {
       setError(t('validationErrors.duplicate'));
       setSubmitting(false);
-      setIsSubmitting(false);
+      setIsSubmittingState(false);
       return;
     }
 
-    setIsSubmitting(true);
-
-    // I prefer this option in the chat, but for the tests I have to gi with different version
-    // if (leoProfanity.check(values.name)) {
-    //   setSubmitting(false);
-    //   toast.error(t('channelsFormErrors.profanityDetected'));
-    //   return;
-    // }
+    setIsSubmittingState(true);
 
     const cleanedChannelName = leoProfanity.clean(values.name);
 
@@ -62,13 +53,13 @@ const EditChannelModal = ({ channelId }) => {
       console.error('Error while editing the channel:', err);
       setError(err.response?.data?.message || t('error.editChannelFailed'));
     } finally {
-      setIsSubmitting(false);
+      setIsSubmittingState(false);
       setSubmitting(false);
     }
   };
 
   useEffect(() => {
-    setIsSubmitting(false);
+    setIsSubmittingState(false);
   }, [channels]);
 
   return (
@@ -77,21 +68,18 @@ const EditChannelModal = ({ channelId }) => {
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title">{t('channels.modals.titles.renameChannel')}</h5>
-            <span className="visually-hidden">
-              <button
-                type="button"
-                className="btn-close"
-                onClick={handleClose}
-                aria-label={t('modals.close')}
-              />
-              {t('channels.editChannel')}
-            </span>
+            <button
+              type="button"
+              className="btn-close"
+              onClick={handleClose}
+              aria-label={t('modals.close')}
+            />
           </div>
           <div className="modal-body">
             <Formik
               initialValues={initialValues}
               validationSchema={validationSchema}
-              onSubmit={(values, actions) => handleEditChannel(values, actions)}
+              onSubmit={handleEditChannel}
             >
               {({ isSubmitting }) => (
                 <Form>

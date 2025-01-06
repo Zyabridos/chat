@@ -3,15 +3,13 @@ import { Navigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import routes from '../routes.js';
 import { login } from '../store/slices/userSlice.js';
-import { getUserAndTokenFromStorage } from '../utils/storage.js';
 
 const ProtectedRoute = ({ children }) => {
   const dispatch = useDispatch();
-  const { token, storedUser } = getUserAndTokenFromStorage()
-  // const { token } = useSelector((state) => state.user);
+  const { token } = useSelector((state) => state.user);
 
   useEffect(() => {
-    // const storedUser = localStorage.getItem('user');
+    const storedUser = localStorage.getItem('user');
     if (storedUser) {
       const parsedUser = JSON.parse(storedUser);
       dispatch(login(parsedUser));

@@ -1,7 +1,6 @@
 import * as yup from 'yup';
 
-const createValidationChannelSchema = (t) =>
-  yup.object({
+const createValidationChannelSchema = (t) => yup.object({
     name: yup
       .string()
       .min(3, t('validationErrors.from3To20'))

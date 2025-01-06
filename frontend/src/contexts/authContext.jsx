@@ -44,7 +44,7 @@ const AuthProvider = ({ children }) => {
       if (response && response.data) {
         const { token, username } = response.data;
         const userData = { token, username };
-        saveUserToStorage(userData); // Store user data in localStorage
+        saveUserToStorage(userData);
         setUser(userData); // Set user data in state
         navigate(routes.mainPage());
       }

@@ -28,7 +28,7 @@ export const SocketProvider = ({ children }) => {
       socket.off('newChannel', handleNewChannel);
       socket.disconnect();
     };
-  }, [dispatch, socket]); // add 'socket' to deps
+  }, [dispatch, socket]); // Добавлено 'socket' в зависимости
 
   const sendMessage = (message) => {
     socket.emit('newMessage', message);
