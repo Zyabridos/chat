@@ -8,13 +8,12 @@ import React, { useState, useEffect } from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import leoProfanity from 'leo-profanity';
 import { closeModal } from '../../../store/slices/modalSlice';
-import routes from '../../../routes';
 import { updateChannel } from '../../../store/slices/channelsSlice';
 import createValidationChannelSchema from '../../../validationsSchemas/channelSchema.js';
+import { updateChannelAPI } from '../../../API/channelsAPI.js';
 
 const EditChannelModal = ({ channelId }) => {
   const { t } = useTranslation();
@@ -51,7 +50,6 @@ const EditChannelModal = ({ channelId }) => {
 
     setIsSubmitting(true);
 
-    const cleanedChannelName = leoProfanity.clean(values.name);
 
     // I prefer this option in the chat, but for the tests I have to gi with different version
     // if (leoProfanity.check(values.name)) {
@@ -60,26 +58,14 @@ const EditChannelModal = ({ channelId }) => {
     //   return;
     // }
 
-    try {
-      const response = await axios.patch(
-        `${routes.channelsPath()}/${channelId}`,
-        // { name: values.name },
-        // пусть пока так будет, но на серсер надо отправлять оригинальное название канал
-        { name: cleanedChannelName },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+    const cleanedChannelName = leoProfanity.clean(values.name);
+    
 
-      if (response.data) {
-        dispatch(updateChannel(response.data));
-        toast.success(t('toast.channelRenamed'));
-        handleClose();
-      } else {
-        throw new Error('Error while editing the channel.');
-      }
+    try {
+      const updatedChannel = await updateChannelAPI(channelId, { name: cleanedChannelName }, token);
+      dispatch(updateChannel(updatedChannel));
+      toast.success(t('toast.channelRenamed'));
+      handleClose();
     } catch (err) {
       console.error('Error while editing the channel:', err);
       setError(err.response?.data?.message || t('error.editChannelFailed'));
