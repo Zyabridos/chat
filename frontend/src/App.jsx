@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -27,8 +27,6 @@ const rollbarConfig = {
 };
 
 const App = () => {
-  const [error, setError] = useState(null);
-
   useEffect(() => {
     leoProfanity.loadDictionary('ru');
     forbiddenWords.forEach((word) => leoProfanity.add(word));
@@ -42,22 +40,21 @@ const App = () => {
             <PersistGate loading={null} persistor={persistor}>
               <BrowserRouter>
                 <SocketProvider>
-                  <ModalManager modalProps={{ setError }} />
                   <AuthProvider>
-                    
-                      <Routes>
-                        <Route
-                          path="/"
-                          element={
-                            <ProtectedRoute>
-                              <Chat />
-                            </ProtectedRoute>
-                          }
-                        />
-                        <Route path="/login" element={<LoginForm />} />
-                        <Route path="/signup" element={<SignUpForm />} />
-                        <Route path="*" element={<NotFound />} />
-                      </Routes>
+                    <ModalManager />
+                    <Routes>
+                      <Route
+                        path="/"
+                        element={
+                          <ProtectedRoute>
+                            <Chat />
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route path="/login" element={<LoginForm />} />
+                      <Route path="/signup" element={<SignUpForm />} />
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
                     <ToastContainer
                       position="top-right"
                       autoClose={3000}

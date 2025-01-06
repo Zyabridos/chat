@@ -1,7 +1,11 @@
 import React, { useContext, useState } from 'react';
 import { useFormik } from 'formik';
-import { 
-  Form, Col, Card, Row, Container
+import {
+  Form,
+  Col,
+  Card,
+  Row,
+  Container,
 } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -18,8 +22,8 @@ const SignUpForm = () => {
   const navigate = useNavigate();
   const { signUp, serverError } = useContext(AuthContext);
   const [usernameError, setUsernameError] = useState('');
-  
-  const validationSchema = createValidationSignupSchema(t); 
+
+  const validationSchema = createValidationSignupSchema(t);
 
   const formik = useFormik({
     initialValues: {

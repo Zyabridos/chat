@@ -108,7 +108,7 @@
   },
  "channelsHeader": {
     "channelName": "# {{channelName}}", 
-    "messageCount": "Количество сообщений в чате: {{count}}"
+    "messageCount": "Количество сообщений на этом канале: {{count}}"
   },
   "navbar": {
     "chatname": "Hexlet Chat",

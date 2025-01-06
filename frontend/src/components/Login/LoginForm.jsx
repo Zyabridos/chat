@@ -1,14 +1,17 @@
 import React, { useRef, useState, useContext } from 'react';
+import {
+  Form,
+  Col,
+  Card,
+  Row,
+} from 'react-bootstrap';
 import { useFormik } from 'formik';
-import { Form, Col, Card, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../contexts/authContext.jsx';
 import LoginFooter from './Footer.jsx';
 import Navbar from '../Navbar.jsx';
 import { LoginPicture } from '../Attachments.jsx';
 import { LoginButton } from '../Buttons/Buttons.jsx';
-import routes from '../../routes.js';
 import createValidationLoginSchema from '../../validationsSchemas/loginSchema.js';
 
 const LoginForm = () => {
@@ -17,7 +20,6 @@ const LoginForm = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const inputRef = useRef(null);
   const { t } = useTranslation();
-  const navigate = useNavigate();
 
   const validationSchema = createValidationLoginSchema(t);
 
@@ -27,7 +29,7 @@ const LoginForm = () => {
         formikValues.username,
         formikValues.password,
         setErrorMessage,
-        setAuthFailed
+        setAuthFailed,
       );
     } catch (error) {
       console.error('Login failed:', error);
