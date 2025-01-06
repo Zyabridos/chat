@@ -5,18 +5,19 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import leoProfanity from 'leo-profanity';
 import { AuthContext } from '../../contexts/authContext.jsx';
-import { useValidationSchemas } from '../../contexts/validationContex.jsx';
 import { SignupButton } from '../Buttons/Buttons.jsx';
 import { SugnupPicture } from '../Attachments.jsx';
 import Navbar from '../Navbar.jsx';
 import routes from '../../routes.js';
+import createValidationSignupSchema from '../../validationsSchemas/signupSchema.js';
 
 const SignUpForm = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { signUp, serverError } = useContext(AuthContext);
   const [usernameError, setUsernameError] = useState('');
-  const { validationSignupSchema } = useValidationSchemas();
+
+  const validationSchema = createValidationSignupSchema(t); 
 
   const formik = useFormik({
     initialValues: {
@@ -24,7 +25,7 @@ const SignUpForm = () => {
       password: '',
       confirmPassword: '',
     },
-    validationSchema: validationSignupSchema,
+    validationSchema,
     onSubmit: async (values, { setSubmitting, setFieldError }) => {
       if (leoProfanity.check(values.username)) {
         setUsernameError(t('signup.errors.profanityError'));

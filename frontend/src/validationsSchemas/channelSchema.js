@@ -1,7 +1,6 @@
-/* eslint-disable arrow-body-style */
 import * as yup from 'yup';
 
-const validationChannelSchema = ({ t }) => {
+const createValidationChannelSchema = (t) => {
   return yup.object({
     name: yup
       .string()
@@ -11,4 +10,4 @@ const validationChannelSchema = ({ t }) => {
   });
 };
 
-export default validationChannelSchema;
+export default createValidationChannelSchema;

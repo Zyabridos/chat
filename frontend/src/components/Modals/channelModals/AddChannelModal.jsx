@@ -9,13 +9,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import leoProfanity from 'leo-profanity';
-// import * as yup from 'yup';
 import { closeModal } from '../../../store/slices/modalSlice';
 import routes from '../../../routes';
 import { setActiveChannel, addChannel } from '../../../store/slices/channelsSlice';
 import useSocket from '../../../hooks/useSocket.jsx';
-// import { useValidationSchemas } from '../../../contexts/validationContex.jsx';
-import validationChannelSchema from './validationChannelSchema.js';
+import validationChannelSchema from '../../../validationsSchemas/channelSchema.js';
 
 const AddChannelModal = () => {
   const user = JSON.parse(localStorage.getItem('user'));

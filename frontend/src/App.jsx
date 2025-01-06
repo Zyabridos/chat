@@ -18,7 +18,6 @@ import AuthProvider from './contexts/authContext.jsx';
 import 'react-toastify/dist/ReactToastify.css';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import forbiddenWords from './dictionary/index.js';
-import { ValidationSchemasProvider } from './contexts/validationContex.jsx';
 import ModalManager from './components/Modals/ModalManager.jsx';
 import { SocketProvider } from './contexts/socketContext.jsx';
 
@@ -45,7 +44,7 @@ const App = () => {
                 <SocketProvider>
                   <ModalManager modalProps={{ setError }} />
                   <AuthProvider>
-                    <ValidationSchemasProvider>
+                    
                       <Routes>
                         <Route
                           path="/"
@@ -59,7 +58,6 @@ const App = () => {
                         <Route path="/signup" element={<SignUpForm />} />
                         <Route path="*" element={<NotFound />} />
                       </Routes>
-                    </ValidationSchemasProvider>
                     <ToastContainer
                       position="top-right"
                       autoClose={3000}

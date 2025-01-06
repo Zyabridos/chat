@@ -52,12 +52,13 @@ rules:
       {
         'semi': true,
         'singleQuote': true,
-        'trailingComma': 'es5',
+        'trailingComma': 'always-multiline', # Aligned with comma-dangle
         'tabWidth': 2,
         'useTabs': false,
-        'bracketSpacing': true,
-        'jsxBracketSameLine': false,
+        'bracketSpacing': true, # Matches object-curly-newline
         'printWidth': 100,
         'arrowParens': 'always',
+        'jsxSingleQuote': true, 
+        'proseWrap': 'preserve', # Keeps existing line breaks
       },
     ]

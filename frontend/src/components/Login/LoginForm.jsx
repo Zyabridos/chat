@@ -8,8 +8,8 @@ import LoginFooter from './Footer.jsx';
 import Navbar from '../Navbar.jsx';
 import { LoginPicture } from '../Attachments.jsx';
 import { LoginButton } from '../Buttons/Buttons.jsx';
-import { useValidationSchemas } from '../../contexts/validationContex.jsx';
 import routes from '../../routes.js';
+import createValidationLoginSchema from '../../validationsSchemas/loginSchema.js';
 
 const LoginForm = () => {
   const { logIn } = useContext(AuthContext);
@@ -19,7 +19,7 @@ const LoginForm = () => {
   const inputRef = useRef(null);
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { validationLoginSchema } = useValidationSchemas();
+  const validationSchema = createValidationLoginSchema(t)
 
   const handleSubmit = async (formikValues) => {
     setIsSubmitting(true);
@@ -47,7 +47,7 @@ const LoginForm = () => {
       username: '',
       password: '',
     },
-    validationSchema: validationLoginSchema,
+    validationSchema,
     onSubmit: handleSubmit,
   });
 

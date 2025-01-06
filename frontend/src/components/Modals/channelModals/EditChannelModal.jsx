@@ -14,7 +14,7 @@ import leoProfanity from 'leo-profanity';
 import { closeModal } from '../../../store/slices/modalSlice';
 import routes from '../../../routes';
 import { updateChannel } from '../../../store/slices/channelsSlice';
-import validationChannelSchema from './validationChannelSchema.js';
+import createValidationChannelSchema from '../../../validationsSchemas/channelSchema.js';
 
 const EditChannelModal = ({ channelId }) => {
   const { t } = useTranslation();
@@ -27,6 +27,7 @@ const EditChannelModal = ({ channelId }) => {
 
   const channelToEdit = channels.find((channel) => channel.id === channelId);
   const initialValues = { name: channelToEdit ? channelToEdit.name : '' };
+  const validationSchema = createValidationChannelSchema(t);
 
   const checkDuplicate = (channelName) => {
     return channels.some(
@@ -111,7 +112,7 @@ const EditChannelModal = ({ channelId }) => {
           <div className="modal-body">
             <Formik
               initialValues={initialValues}
-              validationSchema={validationChannelSchema({ t })}
+              validationSchema
               onSubmit={(values, actions) => handleEditChannel(values, actions)}
             >
               {({ isSubmitting }) => (

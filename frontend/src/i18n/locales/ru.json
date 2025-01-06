@@ -108,13 +108,7 @@
   },
  "channelsHeader": {
     "channelName": "# {{channelName}}", 
-    "messageCount1": {
-      "zero": "Здесь нет сообщений",
-      "one": "Здесь 1 сообщение",
-      "few": "Здесь {{count}} сообщения",
-      "many": "Здесь {{count}} сообщений"
-    },
-    "messageCount": "Здесь {{count}} {{count, plural, =0 {нет сообщений} =1 {сообщение} =2 {сообщения} =3 {сообщения} =4 {сообщения} other {сообщений}}}"
+    "messageCount": "Количество сообщений в чате: {{count}}"
   },
   "navbar": {
     "chatname": "Hexlet Chat",
