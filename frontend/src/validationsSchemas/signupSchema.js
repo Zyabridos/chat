@@ -6,7 +6,7 @@ const PASSWORD_MIN_LENGTH = 6;
 // const PASSWORD_REGEX_SYMBOL = /^(?=.*[\W_])/;
 
 const createValidationSignupSchema = (t) => {
-  yup.object({
+  return yup.object({
     username: yup
       .string()
       .test('fromMinToMax', t('validationErrors.from3To20'), (value) => {
