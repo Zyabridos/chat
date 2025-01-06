@@ -16,7 +16,7 @@ const SignUpForm = () => {
   const navigate = useNavigate();
   const { signUp, serverError } = useContext(AuthContext);
   const [usernameError, setUsernameError] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false); // Локальное состояние
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { validationSignupSchema } = useValidationSchemas();
 
   const handleSubmit = async (formikValues) => {

@@ -29,6 +29,8 @@ const rollbarConfig = {
 };
 
 const App = () => {
+  const [error, setError] = useState(null);
+
   useEffect(() => {
     leoProfanity.loadDictionary('ru');
     forbiddenWords.forEach((word) => leoProfanity.add(word));
