@@ -1,7 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable object-curly-newline */
-/* eslint-disable comma-dangle */
-/* eslint-disable no-shadow */
 import React, { useState, useEffect } from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import { useTranslation } from 'react-i18next';
@@ -9,8 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import leoProfanity from 'leo-profanity';
 import { closeModal } from '../../../store/slices/modalSlice';
-import { setActiveChannel, addChannel } from '../../../store/slices/channelsSlice';
-import useSocket from '../../../hooks/useSocket.jsx';
+import { setActiveChannel } from '../../../store/slices/channelsSlice';
 import createValidationChannelSchema from '../../../validationsSchemas/channelSchema.js';
 import { addChannelAPI } from '../../../API/channelsAPI.js';
 
@@ -23,7 +18,6 @@ const AddChannelModal = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
-  const socket = useSocket(); // Access the socket instance
 
   const validationSchema = createValidationChannelSchema(t);
 
@@ -57,15 +51,9 @@ const AddChannelModal = () => {
     try {
       const newChannel = await addChannelAPI({ name: cleanedChannelName }, token);
 
-      dispatch(addChannel(newChannel)); // Add the new channel to Redux
-      socket.emit('newChannel', newChannel); // Emit the new channel event via WebSocket
-
-      // Switch to the new channel only for the current user
-      if (newChannel.createdBy === user.id) {
-        // Set it as the active channel for the current user
-        dispatch(setActiveChannel(newChannel.id));
-        localStorage.setItem('activeChannelId', newChannel.id); // Save active channel ID
-      }
+      // Сервер отправляет уведомление через WebSocket, поэтому вручную добавлять канал не нужно
+      dispatch(setActiveChannel(newChannel.id)); // Установить новый канал как активный
+      localStorage.setItem('activeChannelId', newChannel.id); // Сохранить активный канал в localStorage
 
       toast.success(t('toast.channelCreated'));
       handleClose();

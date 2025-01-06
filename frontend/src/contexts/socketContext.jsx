@@ -1,67 +1,59 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable object-curly-newline */
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { io } from 'socket.io-client';
 import { addMessage, setMessages } from '../store/slices/messagesSlice.js';
 import { setChannels, addChannel } from '../store/slices/channelsSlice';
-import fetchMessages from '../API/messagesAPI.js';
 
-export const SocketContext = createContext(null);
+const SocketContext = createContext(null);
 
 export const SocketProvider = ({ children }) => {
-  const [socket, setSocket] = useState(null);
   const dispatch = useDispatch();
+  const socket = io(window.location.origin, { transports: ['websocket'] });
 
   useEffect(() => {
-    // Initialize socket connection
-    const socketInstance = io(window.location.origin, {
-      transports: ['websocket'],
-    });
-    setSocket(socketInstance);
-
-    // Load initial messages and channels
-    const initializeMessages = async () => {
-      try {
-        const token = JSON.parse(localStorage.getItem('user'))?.token;
-        if (token) {
-          const initialMessages = await fetchMessages(null, token);
-          dispatch(setMessages(initialMessages));
-        }
-      } catch (error) {
-        console.error('Failed to initialize messages:', error);
-      }
-    };
-
-    initializeMessages();
-
-    // Subscribe to new messages and new channels
+    // Обработчик новых сообщений
     const handleNewMessage = (message) => {
       dispatch(addMessage(message));
     };
 
+    // Обработчик новых каналов
     const handleNewChannel = (channel) => {
-      dispatch(addChannel(channel)); // Update Redux with the new channel
+      dispatch(addChannel(channel));
     };
 
-    socketInstance.on('newMessage', handleNewMessage);
-    socketInstance.on('newChannel', handleNewChannel); // Listen for new channels
+    // Подписки на события сокета
+    socket.on('newMessage', handleNewMessage);
+    socket.on('newChannel', handleNewChannel);
 
-    // Cleanup on component unmount
+    // Очистка на размонтировании
     return () => {
-      socketInstance.off('newMessage', handleNewMessage);
-      socketInstance.off('newChannel', handleNewChannel);
-      socketInstance.disconnect();
+      socket.off('newMessage', handleNewMessage);
+      socket.off('newChannel', handleNewChannel);
+      socket.disconnect();
     };
   }, [dispatch]);
 
-  return <SocketContext.Provider value={socket}>{children}</SocketContext.Provider>;
+  // Абстракции для компонентов
+  const sendMessage = (message) => {
+    socket.emit('newMessage', message);
+  };
+
+  const createChannel = (channel) => {
+    socket.emit('newChannel', channel);
+  };
+
+  const value = {
+    sendMessage,
+    createChannel,
+  };
+
+  return <SocketContext.Provider value={value}>{children}</SocketContext.Provider>;
 };
 
 export const useSocket = () => {
   const context = useContext(SocketContext);
   if (!context) {
-    throw new Error('useSocket must be used within a SocketProvider');
+    throw new Error('useSocket must be used within a SocketProvider - check where it is defined in App.jsx');
   }
   return context;
 };
