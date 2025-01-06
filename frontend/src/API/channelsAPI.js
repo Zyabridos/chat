@@ -20,7 +20,6 @@ export default async (token) => {
   }
 };
 
-
 export const addChannelAPI = async (channelData, token) => {
   try {
     const response = await axios.post(routes.channelsPath(), channelData, {
@@ -40,7 +39,6 @@ export const addChannelAPI = async (channelData, token) => {
   }
 };
 
-
 export const updateChannelAPI = async (channelId, channelData, token) => {
   try {
     const response = await axios.patch(
@@ -50,7 +48,7 @@ export const updateChannelAPI = async (channelId, channelData, token) => {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
+      },
     );
 
     if (!response.data) {
@@ -63,4 +61,3 @@ export const updateChannelAPI = async (channelId, channelData, token) => {
     throw err;
   }
 };
-

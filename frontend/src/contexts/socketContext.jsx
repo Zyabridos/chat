@@ -1,8 +1,8 @@
-import React, { createContext, useContext, useEffect } from 'react';
+import React, { createContext, useContext, useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { io } from 'socket.io-client';
-import { addMessage, setMessages } from '../store/slices/messagesSlice.js';
-import { setChannels, addChannel } from '../store/slices/channelsSlice';
+import { addMessage } from '../store/slices/messagesSlice.js';
+import { addChannel } from '../store/slices/channelsSlice.js';
 
 const SocketContext = createContext(null);
 
@@ -11,29 +11,25 @@ export const SocketProvider = ({ children }) => {
   const socket = io(window.location.origin, { transports: ['websocket'] });
 
   useEffect(() => {
-    // Обработчик новых сообщений
     const handleNewMessage = (message) => {
       dispatch(addMessage(message));
     };
 
-    // Обработчик новых каналов
     const handleNewChannel = (channel) => {
       dispatch(addChannel(channel));
     };
 
-    // Подписки на события сокета
     socket.on('newMessage', handleNewMessage);
     socket.on('newChannel', handleNewChannel);
 
-    // Очистка на размонтировании
+    // Cleanup after unmounting
     return () => {
       socket.off('newMessage', handleNewMessage);
       socket.off('newChannel', handleNewChannel);
       socket.disconnect();
     };
-  }, [dispatch]);
+  }, [dispatch, socket]); // add 'socket' to deps
 
-  // Абстракции для компонентов
   const sendMessage = (message) => {
     socket.emit('newMessage', message);
   };
@@ -42,10 +38,11 @@ export const SocketProvider = ({ children }) => {
     socket.emit('newChannel', channel);
   };
 
-  const value = {
+  // useMemo для предотвращения пересоздания объекта на каждом рендере
+  const value = useMemo(() => ({
     sendMessage,
     createChannel,
-  };
+  }), [sendMessage, createChannel]);
 
   return <SocketContext.Provider value={value}>{children}</SocketContext.Provider>;
 };

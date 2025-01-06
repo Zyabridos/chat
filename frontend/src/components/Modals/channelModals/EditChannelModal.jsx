@@ -1,9 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable object-curly-newline */
-/* eslint-disable comma-dangle */
-/* eslint-disable arrow-body-style */
-/* eslint-disable no-trailing-spaces */
-/* eslint-disable no-shadow */
 import React, { useState, useEffect } from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import { useTranslation } from 'react-i18next';
@@ -50,7 +44,6 @@ const EditChannelModal = ({ channelId }) => {
 
     setIsSubmitting(true);
 
-
     // I prefer this option in the chat, but for the tests I have to gi with different version
     // if (leoProfanity.check(values.name)) {
     //   setSubmitting(false);
@@ -59,7 +52,6 @@ const EditChannelModal = ({ channelId }) => {
     // }
 
     const cleanedChannelName = leoProfanity.clean(values.name);
-    
 
     try {
       const updatedChannel = await updateChannelAPI(channelId, { name: cleanedChannelName }, token);

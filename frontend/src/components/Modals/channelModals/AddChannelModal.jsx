@@ -16,7 +16,7 @@ const AddChannelModal = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmittingState, setIsSubmittingState] = useState(false);
   const [error, setError] = useState(null);
 
   const validationSchema = createValidationChannelSchema(t);
@@ -24,7 +24,7 @@ const AddChannelModal = () => {
   const checkDuplicate = (channelName) => {
     const normalizedChannelName = channelName.trim().toLowerCase();
     return channels.some(
-      (channelItem) => channelItem.name.trim().toLowerCase() === normalizedChannelName
+      (channelItem) => channelItem.name.trim().toLowerCase() === normalizedChannelName,
     );
   };
 
@@ -34,26 +34,23 @@ const AddChannelModal = () => {
 
   const initialValues = { name: '' };
 
-  const handleAddChannel = async (values, actions) => {
-    const { setSubmitting } = actions;
-
+  const handleAddChannel = async (values, { setSubmitting }) => {
     if (checkDuplicate(values.name)) {
       setError(t('validationErrors.duplicate'));
       setSubmitting(false);
-      setIsSubmitting(false);
+      setIsSubmittingState(false);
       return;
     }
 
-    const cleanedChannelName = leoProfanity.clean(values.name); // Clean the name from profanities
+    const cleanedChannelName = leoProfanity.clean(values.name);
 
-    setIsSubmitting(true);
+    setIsSubmittingState(true);
 
     try {
       const newChannel = await addChannelAPI({ name: cleanedChannelName }, token);
 
-      // Сервер отправляет уведомление через WebSocket, поэтому вручную добавлять канал не нужно
-      dispatch(setActiveChannel(newChannel.id)); // Установить новый канал как активный
-      localStorage.setItem('activeChannelId', newChannel.id); // Сохранить активный канал в localStorage
+      dispatch(setActiveChannel(newChannel.id));
+      localStorage.setItem('activeChannelId', newChannel.id);
 
       toast.success(t('toast.channelCreated'));
       handleClose();
@@ -61,13 +58,13 @@ const AddChannelModal = () => {
       console.error('Error while creating the channel:', err);
       setError(err.response?.data?.message || t('error.addChannelFailed'));
     } finally {
-      setIsSubmitting(false);
+      setIsSubmittingState(false);
       setSubmitting(false);
     }
   };
 
   useEffect(() => {
-    setIsSubmitting(false);
+    setIsSubmittingState(false);
   }, [channels]);
 
   return (
@@ -76,21 +73,18 @@ const AddChannelModal = () => {
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title">{t('channels.modals.titles.addChannel')}</h5>
-            <span className="visually-hidden">
-              <button
-                type="button"
-                className="btn-close"
-                onClick={handleClose}
-                aria-label={t('modals.close')}
-              />
-              {t('channels.addChannel')}
-            </span>
+            <button
+              type="button"
+              className="btn-close"
+              onClick={handleClose}
+              aria-label={t('modals.close')}
+            />
           </div>
           <div className="modal-body">
             <Formik
               initialValues={initialValues}
               validationSchema={validationSchema}
-              onSubmit={(values, actions) => handleAddChannel(values, actions)}
+              onSubmit={handleAddChannel}
             >
               {({ isSubmitting }) => (
                 <Form>
