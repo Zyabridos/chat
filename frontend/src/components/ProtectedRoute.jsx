@@ -24,3 +24,20 @@ const ProtectedRoute = ({ children }) => {
 };
 
 export default ProtectedRoute;
+
+// import React from 'react';
+// import { Navigate } from 'react-router-dom';
+// import routes from '../routes.js';
+
+// const ProtectedRoute = ({ children }) => {
+//   const { user } = useContext(AuthContext);
+
+//   if (!user) {
+//     return <Navigate to={routes.loginPage()} />;
+//   }
+
+//   // Если авторизован, отображаем дочерние элементы
+//   return children;
+// };
+
+// export default ProtectedRoute;

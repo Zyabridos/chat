@@ -1,3 +1,5 @@
+const STORAGE_KEY = 'user';
+
 export const handleLoginErrors = (error, t, setErrorMessage, setAuthFailed) => {
   console.error('Login error:', error);
   if (error.response) {
@@ -38,7 +40,20 @@ export const handleSignUpError = (error, setServerError, t) => {
 };
 
 export const getUserAndTokenFromStorage = () => {
-  const user = JSON.parse(localStorage.getItem('user'));
+  const user = JSON.parse(localStorage.getItem(STORAGE_KEY));
   const token = user?.token;
   return { user, token };
+};
+
+export const getUserFromStorage = () => {
+  const user = localStorage.getItem(STORAGE_KEY);
+  return user ? JSON.parse(user) : null;
+};
+
+export const saveUserToStorage = (user) => {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
+};
+
+export const removeUserFromStorage = () => {
+  localStorage.removeItem(STORAGE_KEY);
 };

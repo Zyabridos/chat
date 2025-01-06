@@ -65,3 +65,43 @@ const AuthProvider = ({ children }) => {
 };
 
 export default AuthProvider;
+
+// /* eslint-disable consistent-return */
+// import React, { createContext, useState, useEffect } from 'react';
+// import axios from 'axios';
+// import { useNavigate } from 'react-router-dom';
+// import { useTranslation } from 'react-i18next';
+// import { useDispatch } from 'react-redux';
+// import routes from '../routes.js';
+// import { handleLoginErrors, handleSignUpError } from '../utils.js';
+// import { logout } from '../store/slices/userSlice.js';
+// import {
+//   getUserFromStorage,
+//   saveUserToStorage,
+//   removeUserFromStorage,
+// } from '../utils.js';
+
+// export const AuthContext = createContext();
+
+// const AuthProvider = ({ children }) => {
+//   const [user, setUser] = useState(() => getUserFromStorage());
+
+//   const logIn = (username, token) => {
+//     const newUser = { username, token };
+//     setUser(newUser);
+//     saveUserToStorage(newUser);
+//   };
+
+//   const logOut = () => {
+//     setUser(null);
+//     removeUserFromStorage();
+//   };
+
+//   return (
+//     <AuthContext.Provider value={{ user, logIn, logOut }}>
+//       {children}
+//     </AuthContext.Provider>
+//   );
+// };
+
+// export default AuthProvider;

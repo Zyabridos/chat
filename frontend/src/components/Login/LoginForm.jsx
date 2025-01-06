@@ -14,7 +14,6 @@ import createValidationLoginSchema from '../../validationsSchemas/loginSchema.js
 const LoginForm = () => {
   const { logIn } = useContext(AuthContext);
   const [authFailed, setAuthFailed] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false); 
   const [errorMessage, setErrorMessage] = useState('');
   const inputRef = useRef(null);
   const { t } = useTranslation();
@@ -22,7 +21,6 @@ const LoginForm = () => {
   const validationSchema = createValidationLoginSchema(t)
 
   const handleSubmit = async (formikValues) => {
-    setIsSubmitting(true);
     try {
       const response = await logIn(
         formikValues.username,
@@ -37,8 +35,6 @@ const LoginForm = () => {
       }
     } catch (error) {
       console.error('Login failed', error);
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -90,7 +86,7 @@ const LoginForm = () => {
                           }
                           required
                           ref={inputRef}
-                          disabled={isSubmitting}
+                          disabled={formik.isSubmitting}
                         />
                         {formik.touched.username && formik.errors.username && (
                           <Form.Control.Feedback type="invalid">
@@ -115,7 +111,7 @@ const LoginForm = () => {
                             formik.touched.password && (formik.errors.password || authFailed)
                           }
                           required
-                          disabled={isSubmitting}
+                          disabled={formik.isSubmitting}
                         />
                         {formik.touched.password && formik.errors.password && (
                           <Form.Control.Feedback type="invalid">
@@ -128,7 +124,7 @@ const LoginForm = () => {
                           </Form.Control.Feedback>
                         )}
                       </Form.Group>
-                      <LoginButton disabled={isSubmitting} />
+                      <LoginButton disabled={formik.isSubmitting} />
                     </fieldset>
                   </Form>
                   <LoginFooter />
