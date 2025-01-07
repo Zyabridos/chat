@@ -17,7 +17,7 @@ export const LoginPicture = ({ t }) => (
 );
 
 export const SugnupPicture = ({ t }) => (
-  <div>
+  <div className="col-12 col-md-6 d-flex align-items-center justify-content-center">
     <img src={sugnupAvatar} className="rounded-circle" alt={t('signup.title')} />
   </div>
 );
