@@ -3,19 +3,20 @@ import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { selectFilteredMessages } from '../../../store/slices/messagesSlice.js';
 import Message from './Message.jsx';
+import './styles.css';
 
 const MessagesList = () => {
   const { t } = useTranslation();
   const filteredMessages = useSelector(selectFilteredMessages);
 
   return (
-    <div id="messages-box" className="chat-messages overflow-auto px-5 flex-grow-1">
+    <div className="messages-list">
       {filteredMessages.length > 0 ? (
         filteredMessages.map((msg) => (
           <Message key={msg.id} userName={msg.userName} message={msg.body} />
         ))
       ) : (
-        <div>{t('channelsForm.noMessages')}</div>
+        <div className="no-messages">{t('channelsForm.noMessages')}</div>
       )}
     </div>
   );

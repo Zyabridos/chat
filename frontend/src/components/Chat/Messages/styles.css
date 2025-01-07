@@ -1,0 +1,53 @@
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.main-window {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.header-wrapper {
+  flex-shrink: 0;
+  border-bottom: 1px solid #ddd;
+  padding: 1rem;
+}
+
+.messages-list-wrapper {
+  flex-grow: 0.85;
+  overflow-y: auto; /* Прокрутка при переполнении */
+  padding: 1rem;
+}
+
+.message-form-wrapper {
+  flex-grow: 0.15;
+  flex-shrink: 0;
+  border-top: 1px solid #ddd;
+  padding: 1rem;
+}
+
+.message-form-wrapper form {
+  display: flex;
+  align-items: center;
+}
+
+.message-form-wrapper input {
+  flex-grow: 1;
+  border: none;
+  outline: none;
+  padding: 0.5rem;
+  border-radius: 4px;
+}
+
+.message-form-wrapper input:focus {
+  box-shadow: none;
+}
+
+.no-messages {
+  text-align: center;
+  font-style: italic;
+  color: #888;
+}

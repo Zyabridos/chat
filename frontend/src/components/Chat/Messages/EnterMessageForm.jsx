@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Form } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
@@ -8,6 +7,7 @@ import { addMessage } from '../../../store/slices/messagesSlice.js';
 import routes from '../../../routes.js';
 import { SendMessageButton } from '../../Buttons/Buttons.jsx';
 import { getUserAndTokenFromStorage } from '../../../utils/storage.js';
+import './styles.css';
 
 const EnterMessageForm = () => {
   const dispatch = useDispatch();
@@ -19,46 +19,36 @@ const EnterMessageForm = () => {
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
-
     setError(null);
 
     const { user, token } = getUserAndTokenFromStorage();
-
     const userName = user?.username;
 
-    // Check auth token
     if (!token) {
       setError(t('channelsFormErrors.tokenNotFound'));
       return;
     }
 
-    // Check active channel
     if (!activeChannel) {
       setError(t('channelsFormErrors.noActiveChannel'));
       return;
     }
 
-    // Check if there is a message
     if (!messageBody.trim()) {
       setError(t('channelsFormErrors.emptyMessage'));
       return;
     }
+
     const cleanedMessage = leoProfanity.clean(messageBody);
 
     const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: { Authorization: `Bearer ${token}` },
     };
 
     try {
       const response = await axios.post(
         routes.messagesPath(),
-        {
-          body: cleanedMessage,
-          channelId: activeChannel.id,
-          userName,
-        },
+        { body: cleanedMessage, channelId: activeChannel.id, userName },
         config,
       );
 
@@ -71,8 +61,8 @@ const EnterMessageForm = () => {
         }),
       );
 
-      setMessageBody(''); // If successful, empty input
-      setError(''); // And error state
+      setMessageBody('');
+      setError('');
     } catch (err) {
       console.error('Error sending message:', err);
       setError(t('channelsFormErrors.sendingFailed'));
@@ -80,21 +70,21 @@ const EnterMessageForm = () => {
   };
 
   return (
-    <Form onSubmit={handleSendMessage}>
-      <Form.Group className="input-group">
-        <Form.Control
-          name="body"
+    <div className="message-form">
+      <form onSubmit={handleSendMessage} className="d-flex">
+        <input
           type="text"
-          aria-label={t('channelsForm.newMessage')}
-          className="border-0 p-0 ps-2 form-control"
+          name="body"
           placeholder={t('channelsForm.enterMessage')}
           value={messageBody}
           onChange={(e) => setMessageBody(e.target.value)}
+          className="form-control border-0 px-2"
+          aria-label={t('channelsForm.newMessage')}
         />
         <SendMessageButton t={t} />
-      </Form.Group>
-      {error && <div className="text-danger">{error}</div>}
-    </Form>
+      </form>
+      {error && <div className="text-danger mt-2">{error}</div>}
+    </div>
   );
 };
 

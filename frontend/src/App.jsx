@@ -32,7 +32,7 @@ const App = () => {
     forbiddenWords.forEach((word) => leoProfanity.add(word));
   }, []);
 
-    useEffect(() => {
+  useEffect(() => {
     document.body.classList.add('h-100', 'bg-light');
   }, []);
 
