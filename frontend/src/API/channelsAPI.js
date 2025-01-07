@@ -16,7 +16,7 @@ export default async (token) => {
     return response.data;
   } catch (err) {
     console.error('Error fetching channels:', err);
-    throw err; // Re-throw the error for the calling code to handle.
+    throw err; // Re-throw the error for handling it in the component
   }
 };
 
@@ -58,6 +58,25 @@ export const updateChannelAPI = async (channelId, channelData, token) => {
     return response.data;
   } catch (err) {
     console.error('Error updating channel:', err);
+    throw err;
+  }
+};
+
+export const deleteChannelAPI = async (channelId, token) => {
+  try {
+    const response = await axios.delete(`${routes.channelsPath()}/${channelId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (response.status !== 200) {
+      throw new Error('Failed to delete channel. Invalid response status.');
+    }
+
+    return response.data;
+  } catch (err) {
+    console.error('Error while deleting the channel:', err);
     throw err;
   }
 };

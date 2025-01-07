@@ -36,7 +36,7 @@ export const SocketProvider = ({ children }) => {
     };
   }, [dispatch, socket]);
 
-  // Оборачиваем функции в useCallback, чтобы они не пересоздавались
+  // recreate funcs (sendMessage, createChannel) only when socket changes
   const sendMessage = useCallback(
     (message) => {
       socket.emit('newMessage', message);
@@ -51,7 +51,7 @@ export const SocketProvider = ({ children }) => {
     [socket],
   );
 
-  // useMemo для предотвращения пересоздания объекта value на каждом рендере
+  // useMemo to prevent re-creating the context value on every render
   const value = useMemo(
     () => ({
       sendMessage,

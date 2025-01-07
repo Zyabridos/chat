@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import { closeModal } from '../../../store/slices/modalSlice';
-import routes from '../../../routes';
+import { deleteChannelAPI } from '../../../API/channelsAPI';
 
 const DeleteChannelModal = ({ channelId, channelName }) => {
   const user = JSON.parse(localStorage.getItem('user'));
@@ -28,26 +27,17 @@ const DeleteChannelModal = ({ channelId, channelName }) => {
     setIsSubmitting(true);
 
     try {
-      const response = await axios.delete(`${routes.channelsPath()}/${channelId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+      await deleteChannelAPI(channelId, token);
+
+      dispatch({
+        type: 'channels/setChannels',
+        payload: channels.filter((channel) => channel.id !== channelId),
       });
 
-      if (response.status === 200) {
-        dispatch({
-          type: 'channels/setChannels',
-          payload: channels.filter((channel) => channel.id !== channelId),
-        });
-
-        toast.success(t('toast.channelDeleted'));
-        setError(null);
-        handleClose(); // close modal
-      } else {
-        throw new Error(t('error.deleteChannelFailed'));
-      }
+      toast.success(t('toast.channelDeleted'));
+      setError(null);
+      handleClose();
     } catch (err) {
-      console.error('Error while deleting the channel:', err);
       setError(err.response?.data?.message || t('error.deleteChannelFailed'));
     } finally {
       setIsSubmitting(false);
@@ -60,21 +50,15 @@ const DeleteChannelModal = ({ channelId, channelName }) => {
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title">{t('channels.modals.titles.deleteChannel')}</h5>
-            <span className="visually-hidden">
-              <button
-                type="button"
-                className="btn-close"
-                onClick={handleClose}
-                aria-label={t('modals.close')}
-              />
-              {t('channels.deleteChannel')}
-            </span>
+            <button
+              type="button"
+              className="btn-close"
+              onClick={handleClose}
+              aria-label={t('modals.close')}
+            />
           </div>
           <div className="modal-body">
-            <p>
-              {t('channels.modals.confirmDeletingChannel', { channelName })}
-            </p>
-            {/* Вывод ошибки */}
+            <p>{t('channels.modals.confirmDeletingChannel', { channelName })}</p>
             {error && <div className="alert alert-danger">{error}</div>}
           </div>
           <div className="modal-footer">
@@ -85,7 +69,7 @@ const DeleteChannelModal = ({ channelId, channelName }) => {
               type="button"
               className="btn btn-danger"
               onClick={handleDeleteChannel}
-              disabled={isSubmitting} // block the buttun while sending
+              disabled={isSubmitting}
             >
               {isSubmitting ? t('modals.deleting') : t('modals.delete')}
             </button>

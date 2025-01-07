@@ -45,7 +45,7 @@ const AuthProvider = ({ children }) => {
     }
   }, [navigate]);
 
-  // Wrapped functions with useCallback
+  // recreate funcs (logIn, logOut, signUp) only when dependecies changes (navigate, t, dispatch)
   const logIn = useCallback(
     async (login, password, setErrorMessage, setAuthFailed) => {
       try {
