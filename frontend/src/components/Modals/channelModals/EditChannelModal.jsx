@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import { useTranslation } from 'react-i18next';
@@ -16,7 +15,6 @@ const EditChannelModal = ({ channelId }) => {
   const token = user?.token;
   const channels = useSelector((state) => state.channelsInfo.channels);
   const dispatch = useDispatch();
-  const [isSubmittingState, setIsSubmittingState] = useState(false);
   const [error, setError] = useState(null);
 
   const channelToEdit = channels.find((channel) => channel.id === channelId);
@@ -35,11 +33,8 @@ const EditChannelModal = ({ channelId }) => {
     if (checkDuplicate(values.name)) {
       setError(t('validationErrors.duplicate'));
       setSubmitting(false);
-      setIsSubmittingState(false);
       return;
     }
-
-    setIsSubmittingState(true);
 
     const cleanedChannelName = leoProfanity.clean(values.name);
 
@@ -52,14 +47,9 @@ const EditChannelModal = ({ channelId }) => {
       console.error('Error while editing the channel:', err);
       setError(err.response?.data?.message || t('error.editChannelFailed'));
     } finally {
-      setIsSubmittingState(false);
       setSubmitting(false);
     }
   };
-
-  useEffect(() => {
-    setIsSubmittingState(false);
-  }, [channels]);
 
   return (
     <div className="modal show" style={{ display: 'block' }}>

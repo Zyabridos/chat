@@ -1,9 +1,6 @@
 import React, { useRef, useState, useContext } from 'react';
 import {
   Form,
-  Col,
-  Card,
-  Row,
 } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
@@ -15,7 +12,7 @@ import { LoginButton } from '../Buttons/Buttons.jsx';
 import createValidationLoginSchema from '../../validationsSchemas/loginSchema.js';
 
 const LoginForm = () => {
-  const { logIn } = useContext(AuthContext); // get logIn fun from contex
+  const { logIn } = useContext(AuthContext);
   const [authFailed, setAuthFailed] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const inputRef = useRef(null);
@@ -123,14 +120,12 @@ const LoginForm = () => {
                         )}
                       </Form.Group>
                       <Form.Group className="mt-3">
-  <div className="d-grid">
-    <LoginButton disabled={formik.isSubmitting} />
-  </div>
-</Form.Group>
+                        <div className="d-grid">
+                          <LoginButton disabled={formik.isSubmitting} />
+                        </div>
+                      </Form.Group>
                     </fieldset>
                   </Form>
-                  <Form.Group className="mt-3">
-                  </Form.Group>
                 </div>
                 <LoginFooter />
               </div>

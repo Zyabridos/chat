@@ -32,6 +32,10 @@ const App = () => {
     forbiddenWords.forEach((word) => leoProfanity.add(word));
   }, []);
 
+    useEffect(() => {
+    document.body.classList.add('h-100', 'bg-light');
+  }, []);
+
   return (
     <RollbarProvider config={rollbarConfig}>
       <ErrorBoundary>
