@@ -1,5 +1,12 @@
 /* eslint-disable consistent-return */
-import React, { createContext, useState, useContext, useEffect, useMemo } from 'react';
+import React, {
+  createContext,
+  useState,
+  useContext,
+  useEffect,
+  useMemo,
+  useCallback,
+} from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -26,8 +33,8 @@ export const useAuth = () => {
 const AuthProvider = ({ children }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const [user, setUser] = useState(null); // State to store user data
-  const [serverError, setServerError] = useState(null); // State for server error messages
+  const [user, setUser] = useState(null);
+  const [serverError, setServerError] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -38,37 +45,44 @@ const AuthProvider = ({ children }) => {
     }
   }, [navigate]);
 
-  const logIn = async (login, password, setErrorMessage, setAuthFailed) => {
-    try {
-      const response = await axios.post(routes.loginPath(), { username: login, password });
-      if (response && response.data) {
-        const { token, username } = response.data;
-        const userData = { token, username };
-        saveUserToStorage(userData);
-        setUser(userData); // Set user data in state
-        navigate(routes.mainPage());
+  // Wrapped functions with useCallback
+  const logIn = useCallback(
+    async (login, password, setErrorMessage, setAuthFailed) => {
+      try {
+        const response = await axios.post(routes.loginPath(), { username: login, password });
+        if (response && response.data) {
+          const { token, username } = response.data;
+          const userData = { token, username };
+          saveUserToStorage(userData);
+          setUser(userData);
+          navigate(routes.mainPage());
+        }
+        return response;
+      } catch (error) {
+        handleLoginErrors(error, t, setErrorMessage, setAuthFailed);
       }
-      return response;
-    } catch (error) {
-      handleLoginErrors(error, t, setErrorMessage, setAuthFailed);
-    }
-  };
+    },
+    [navigate, t],
+  );
 
-  const logOut = () => {
+  const logOut = useCallback(() => {
     removeUserFromStorage();
     setUser(null);
     dispatch(logout());
     navigate(routes.loginPage());
-  };
+  }, [dispatch, navigate]);
 
-  const signUp = async (login, password) => {
-    try {
-      const response = await axios.post(routes.signupPath(), { username: login, password });
-      return response;
-    } catch (error) {
-      handleSignUpError(error, setServerError, t);
-    }
-  };
+  const signUp = useCallback(
+    async (login, password) => {
+      try {
+        const response = await axios.post(routes.signupPath(), { username: login, password });
+        return response;
+      } catch (error) {
+        handleSignUpError(error, setServerError, t);
+      }
+    },
+    [t],
+  );
 
   // useMemo to prevent re-creating the context value on every render
   const contextValue = useMemo(

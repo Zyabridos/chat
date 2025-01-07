@@ -1,8 +1,19 @@
 /* eslint-disable no-unused-vars */
-import React, { useState, useEffect } from 'react';
-import { Formik, Field, Form, ErrorMessage } from 'formik';
+import React, {
+  useState,
+  useEffect,
+} from 'react';
+import {
+  Formik,
+  Field,
+  Form,
+  ErrorMessage,
+} from 'formik';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
+import {
+  useDispatch,
+  useSelector,
+} from 'react-redux';
 import { toast } from 'react-toastify';
 import leoProfanity from 'leo-profanity';
 import { closeModal } from '../../../store/slices/modalSlice';
@@ -16,7 +27,7 @@ const EditChannelModal = ({ channelId }) => {
   const token = user?.token;
   const channels = useSelector((state) => state.channelsInfo.channels);
   const dispatch = useDispatch();
-  const [isSubmittingState, setIsSubmittingState] = useState(false); 
+  const [isSubmittingState, setIsSubmittingState] = useState(false);
   const [error, setError] = useState(null);
 
   const channelToEdit = channels.find((channel) => channel.id === channelId);

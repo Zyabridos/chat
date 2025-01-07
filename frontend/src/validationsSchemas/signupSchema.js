@@ -2,8 +2,8 @@ import * as yup from 'yup';
 
 const PASSWORD_MIN_LENGTH = 6;
 
-const createValidationSignupSchema = (t) => {
-  return yup.object({
+const createValidationSignupSchema = (t) =>
+  yup.object({
     username: yup
       .string()
       .test(
@@ -21,6 +21,5 @@ const createValidationSignupSchema = (t) => {
       .oneOf([yup.ref('password'), null], t('validationErrors.mismatchPasswords'))
       .required(t('validationErrors.required')),
   });
-};
 
 export default createValidationSignupSchema;

@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useEffect, useMemo } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useCallback,
+} from 'react';
 import { useDispatch } from 'react-redux';
 import { io } from 'socket.io-client';
 import { addMessage } from '../store/slices/messagesSlice.js';
@@ -28,21 +34,31 @@ export const SocketProvider = ({ children }) => {
       socket.off('newChannel', handleNewChannel);
       socket.disconnect();
     };
-  }, [dispatch, socket]); // Добавлено 'socket' в зависимости
+  }, [dispatch, socket]);
 
-  const sendMessage = (message) => {
-    socket.emit('newMessage', message);
-  };
+  // Оборачиваем функции в useCallback, чтобы они не пересоздавались
+  const sendMessage = useCallback(
+    (message) => {
+      socket.emit('newMessage', message);
+    },
+    [socket],
+  );
 
-  const createChannel = (channel) => {
-    socket.emit('newChannel', channel);
-  };
+  const createChannel = useCallback(
+    (channel) => {
+      socket.emit('newChannel', channel);
+    },
+    [socket],
+  );
 
-  // useMemo для предотвращения пересоздания объекта на каждом рендере
-  const value = useMemo(() => ({
-    sendMessage,
-    createChannel,
-  }), [sendMessage, createChannel]);
+  // useMemo для предотвращения пересоздания объекта value на каждом рендере
+  const value = useMemo(
+    () => ({
+      sendMessage,
+      createChannel,
+    }),
+    [sendMessage, createChannel],
+  );
 
   return <SocketContext.Provider value={value}>{children}</SocketContext.Provider>;
 };

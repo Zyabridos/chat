@@ -41,7 +41,6 @@ rules:
   object-curly-newline: [2, { multiline: true, consistent: true }] # object-curly-newline
   react/jsx-wrap-multilines: [2, { declaration: true, assignment: true, return: true, arrow: true }] # react/jsx-wrap-multilines
   comma-dangle: [2, { arrays: 'always-multiline', objects: 'always-multiline', imports: 'always-multiline', exports: 'always-multiline', functions: 'ignore' }]
-  no-unused-vars: [2, { vars: 'all', args: 'after-used', ignoreRestSiblings: true }] Prevent unused vars
   no-trailing-spaces: 2 
   semi: [2, 'always'] 
   react/jsx-indent: [2, 2] # Ensure consistent indentation in JSX

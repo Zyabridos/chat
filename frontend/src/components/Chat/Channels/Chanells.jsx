@@ -46,7 +46,6 @@ const Channels = () => {
     loadChannels();
   }, [dispatch, t, token]);
 
-  // Restore active channel from localStorage
   useEffect(() => {
     const storedChannelId = localStorage.getItem('activeChannelId');
     if (storedChannelId) {
@@ -71,46 +70,39 @@ const Channels = () => {
     }
   };
 
-  const renderManagementButton = (channel) => {
-    if (channel.removable) {
-      return (
-        <Dropdown align="end">
-          <Dropdown.Toggle variant="outline-dark" id={`dropdown-${channel.id}`}>
-            <span className="visually-hidden">{t('channels.modals.managment')}</span>
-          </Dropdown.Toggle>
-          <Dropdown.Menu>
-            <Dropdown.Item
-              as="button"
-              onClick={() =>
-                dispatch(
-                  openModal({
-                    type: 'deleteChannel',
-                    props: { channelId: channel.id, handleDeleteChannel },
-                  })
-                )
-              }
-            >
-              {t('modals.delete')}
-            </Dropdown.Item>
-            <Dropdown.Item
-              as="button"
-              onClick={() =>
-                dispatch(
-                  openModal({
-                    type: 'editChannel',
-                    props: { channelId: channel.id, channelName: channel.name },
-                  })
-                )
-              }
-            >
-              {t('modals.rename')}
-            </Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
-      );
-    }
-    return null;
-  };
+  const renderManagementButton = (channel) => (
+    channel.removable && (
+      <Dropdown align="end">
+        <Dropdown.Toggle variant="outline-dark" id={`dropdown-${channel.id}`}>
+          <span className="visually-hidden">{t('channels.modals.managment')}</span>
+        </Dropdown.Toggle>
+        <Dropdown.Menu>
+          <Dropdown.Item
+            as="button"
+            onClick={() => dispatch(
+              openModal({
+                type: 'deleteChannel',
+                props: { channelId: channel.id, handleDeleteChannel },
+              }),
+            )}
+          >
+            {t('modals.delete')}
+          </Dropdown.Item>
+          <Dropdown.Item
+            as="button"
+            onClick={() => dispatch(
+              openModal({
+                type: 'editChannel',
+                props: { channelId: channel.id, channelName: channel.name },
+              }),
+            )}
+          >
+            {t('modals.rename')}
+          </Dropdown.Item>
+        </Dropdown.Menu>
+      </Dropdown>
+    )
+  );
 
   const renderLoadingOrError = () => {
     if (loading) return <LoadingBar t={t} />;
@@ -125,14 +117,12 @@ const Channels = () => {
         <button
           type="button"
           className="p-0 text-primary btn btn-group-vertical"
-          onClick={() =>
-            dispatch(
-              openModal({
-                type: 'addChannel',
-                props: { channels, token },
-              })
-            )
-          }
+          onClick={() => dispatch(
+            openModal({
+              type: 'addChannel',
+              props: { channels, token },
+            }),
+          )}
         >
           <img
             src={addSymbol}

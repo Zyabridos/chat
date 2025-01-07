@@ -55,12 +55,11 @@ const EnterMessageForm = () => {
       const response = await axios.post(
         routes.messagesPath(),
         {
-          // пока так для тестов body: messageBody,
           body: cleanedMessage,
           channelId: activeChannel.id,
           userName,
         },
-        config
+        config,
       );
 
       dispatch(
@@ -69,7 +68,7 @@ const EnterMessageForm = () => {
           body: cleanedMessage,
           userName,
           channelId: activeChannel.id,
-        })
+        }),
       );
 
       setMessageBody(''); // If successful, empty input
