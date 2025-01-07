@@ -1,19 +1,8 @@
 /* eslint-disable no-unused-vars */
-import React, {
-  useState,
-  useEffect,
-} from 'react';
-import {
-  Formik,
-  Field,
-  Form,
-  ErrorMessage,
-} from 'formik';
+import React, { useState, useEffect } from 'react';
+import { Formik, Field, Form, ErrorMessage } from 'formik';
 import { useTranslation } from 'react-i18next';
-import {
-  useDispatch,
-  useSelector,
-} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import leoProfanity from 'leo-profanity';
 import { closeModal } from '../../../store/slices/modalSlice';
@@ -34,10 +23,9 @@ const EditChannelModal = ({ channelId }) => {
   const initialValues = { name: channelToEdit ? channelToEdit.name : '' };
   const validationSchema = createValidationChannelSchema(t);
 
-  const checkDuplicate = (channelName) =>
-    channels.some(
-      (channel) => channel.name.trim().toLowerCase() === channelName.trim().toLowerCase(),
-    );
+  const checkDuplicate = (channelName) => channels.some(
+    (channel) => channel.name.trim().toLowerCase() === channelName.trim().toLowerCase(),
+  );
 
   const handleClose = () => {
     dispatch(closeModal());
