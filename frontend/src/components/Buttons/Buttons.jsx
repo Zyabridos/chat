@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Button } from 'react-bootstrap';
 import LanguageSwitcher from '../LanguageSwitcher.jsx';
-import { useAuth } from '../../context/AuthContext.js';
+import { useAuth } from '../../contexts/authContext.jsx';
 
 export const SignupButton = () => {
   const { t } = useTranslation();
