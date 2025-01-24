@@ -1,8 +1,4 @@
 /* eslint-disable no-param-reassign */
-/* eslint-disable function-paren-newline */
-/* eslint-disable no-confusing-arrow */
-/* eslint-disable comma-dangle */
-/* eslint-disable implicit-arrow-linebreak */
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
@@ -19,17 +15,11 @@ const channelsSlice = createSlice({
     // Set the channels data in the store
     setChannels: (state, action) => {
       state.channels = action.payload;
-
-      // Only set the active channel to default if it's not already set
       if (!state.activeChannel && state.channels.length > 0) {
-        const storedChannelId = localStorage.getItem('activeChannelId');
-        const defaultChannel = storedChannelId
-          ? state.channels.find((channel) => channel.id === storedChannelId)
-          : state.channels.find((channel) => channel.name === 'general');
-
+        const defaultChannel = state.channels.find((channel) => channel.name === 'general');
         state.activeChannel = defaultChannel || state.channels[0];
       }
-    },
+},
     // Add a new channel to the 'channels' list
     addChannel: (state, action) => {
       const { name, createdBy, id } = action.payload;

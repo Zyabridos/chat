@@ -22,8 +22,8 @@ import createValidationChannelSchema from '../../../validationsSchemas/channelSc
 import { addChannelAPI } from '../../../API/channelsAPI.js';
 
 const AddChannelModal = () => {
-  const user = JSON.parse(localStorage.getItem('user'));
-  const token = user?.token;
+  const { getAuthToken } = useAuth();
+  const token = getAuthToken();
   const channels = useSelector((state) => state.channelsInfo.channels);
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -36,7 +36,7 @@ const AddChannelModal = () => {
   const checkDuplicate = (channelName) => {
     const normalizedChannelName = channelName.trim().toLowerCase();
     return channels.some(
-      (channelItem) => channelItem.name.trim().toLowerCase() === normalizedChannelName,
+      (channelItem) => channelItem.name.trim().toLowerCase() === normalizedChannelName
     );
   };
 
@@ -62,8 +62,6 @@ const AddChannelModal = () => {
       const newChannel = await addChannelAPI({ name: cleanedChannelName }, token);
 
       dispatch(setActiveChannel(newChannel.id));
-      localStorage.setItem('activeChannelId', newChannel.id);
-
       toast.success(t('toast.channelCreated'));
       handleClose();
     } catch (err) {
@@ -93,24 +91,14 @@ const AddChannelModal = () => {
             />
           </div>
           <div className="modal-body">
-            <Formik
-              initialValues={initialValues}
-              validationSchema={validationSchema}
-              onSubmit={handleAddChannel}
-            >
+            <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleAddChannel}>
               {({ isSubmitting }) => (
                 <Form>
                   <div className="mb-3">
                     <label htmlFor="name" className="form-label">
                       {t('channels.modals.labels.typeNewChannelName')}
                     </label>
-                    <Field
-                      type="text"
-                      id="name"
-                      className="form-control"
-                      name="name"
-                      placeholder={t('channels.channelNamePlaceholder')}
-                    />
+                    <Field type="text" id="name" className="form-control" name="name" placeholder={t('channels.channelNamePlaceholder')} />
                     <ErrorMessage name="name" component="div" className="text-danger" />
                     {error && <div className="text-danger mt-2">{error}</div>}
                   </div>

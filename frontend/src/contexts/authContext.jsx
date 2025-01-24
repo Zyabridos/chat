@@ -4,7 +4,6 @@ import React, {
   useState,
   useContext,
   useEffect,
-  useCallback,
 } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -33,6 +32,16 @@ const AuthProvider = ({ children }) => {
   const [serverError, setServerError] = useState(null);
   const navigate = useNavigate();
 
+  const getAuthToken = () => {
+    const { user } = getUserAndTokenFromStorage();
+    return user ? user.token : null;
+  };
+
+  const getCurrentUsername = () => {
+    const { user } = getUserAndTokenFromStorage();
+    return user ? user.username : null;
+  };
+
   useEffect(() => {
     const { user: storedUser } = getUserAndTokenFromStorage();
     if (storedUser) {
@@ -41,31 +50,27 @@ const AuthProvider = ({ children }) => {
     }
   }, [navigate]);
 
-  // recreate funcs (logIn, logOut, signUp) only when dependecies changes (navigate, t, dispatch)
-  const logIn = useCallback(
-    async (login, password, setErrorMessage, setAuthFailed) => {
-      try {
-        const response = await axios.post(routes.loginPath(), { username: login, password });
-        if (response && response.data) {
-          const { token, username } = response.data;
-          const userData = { token, username };
-          saveUserToStorage(userData);
-          setUser(userData);
-          navigate(routes.mainPage());
-        }
-        return response;
-      } catch (error) {
-        handleLoginErrors(error, t, setErrorMessage, setAuthFailed);
+  const logIn = async (login, password, setErrorMessage, setAuthFailed) => {
+    try {
+      const response = await axios.post(routes.loginPath(), { username: login, password });
+      if (response?.data) {
+        const { token, username } = response.data;
+        const userData = { token, username };
+        saveUserToStorage(userData);
+        setUser(userData);
+        navigate(routes.mainPage());
       }
-    },
-    [navigate, t],
-  );
+      return response;
+    } catch (error) {
+      handleLoginErrors(error, t, setErrorMessage, setAuthFailed);
+    }
+  };
 
-  const logOut = useCallback(() => {
+  const logOut = () => {
     removeUserFromStorage();
     setUser(null);
     navigate(routes.loginPage());
-  }, [navigate]);
+  };
 
   const signUp = async (login, password) => {
     try {
@@ -85,8 +90,21 @@ const AuthProvider = ({ children }) => {
     }
   };
 
+  const contextValue = useMemo(
+    () => ({
+      logIn,
+      logOut,
+      signUp,
+      user,
+      serverError,
+      getAuthToken,
+      getCurrentUsername,
+    }),
+    [logIn, logOut, signUp, user, serverError],
+  );
+
   return (
-    <AuthContext.Provider value={{ user, logIn, logOut, signUp, serverError }}>
+    <AuthContext.Provider value={contextValue}>
       {children}
     </AuthContext.Provider>
   );
