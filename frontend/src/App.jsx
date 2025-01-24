@@ -23,7 +23,7 @@ import { SocketProvider } from './contexts/socketContext.jsx';
 
 const rollbarConfig = {
   accessToken: import.meta.env.VITE_AUTH_TOKEN,
-  environment: 'testenv',
+  environment: import.meta.env.VITE_ENV || 'production'
 };
 
 const App = () => {

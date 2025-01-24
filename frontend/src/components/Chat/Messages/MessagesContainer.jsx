@@ -16,17 +16,14 @@ const MainWindow = () => {
 
   return (
     <div className="main-window">
-      {/* Заголовок */}
       <div className="header-wrapper">
         <Header amountOfMessages={amountOfMessages} channelName={channelName} t={t} />
       </div>
 
-      {/* Список сообщений */}
       <div className="messages-list-wrapper">
         <MessagesList />
       </div>
 
-      {/* Форма ввода */}
       <div className="message-form-wrapper">
         <EnterMessageForm />
       </div>
