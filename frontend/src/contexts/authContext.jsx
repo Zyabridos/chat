@@ -4,16 +4,12 @@ import React, {
   useState,
   useContext,
   useEffect,
-  useMemo,
-  useCallback,
 } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
 import routes from '../routes.js';
 import { handleLoginErrors, handleSignUpError } from '../utils/utils.js';
-import { logout } from '../store/slices/userSlice.js';
 import {
   getUserAndTokenFromStorage,
   saveUserToStorage,
@@ -31,75 +27,59 @@ export const useAuth = () => {
 };
 
 const AuthProvider = ({ children }) => {
-  const dispatch = useDispatch();
-  const { t } = useTranslation();
   const [user, setUser] = useState(null);
   const [serverError, setServerError] = useState(null);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   useEffect(() => {
     const { user: storedUser } = getUserAndTokenFromStorage();
     if (storedUser) {
       setUser(storedUser);
-      navigate(routes.mainPage());
     }
-  }, [navigate]);
+  }, []);
 
-  // recreate funcs (logIn, logOut, signUp) only when dependecies changes (navigate, t, dispatch)
-  const logIn = useCallback(
-    async (login, password, setErrorMessage, setAuthFailed) => {
-      try {
-        const response = await axios.post(routes.loginPath(), { username: login, password });
-        if (response && response.data) {
-          const { token, username } = response.data;
-          const userData = { token, username };
-          saveUserToStorage(userData);
-          setUser(userData);
-          navigate(routes.mainPage());
-        }
-        return response;
-      } catch (error) {
-        handleLoginErrors(error, t, setErrorMessage, setAuthFailed);
+  const logIn = async (login, password, setErrorMessage, setAuthFailed) => {
+    try {
+      const response = await axios.post(routes.loginPath(), { username: login, password });
+      if (response?.data) {
+        const { token, username } = response.data;
+        const userData = { token, username };
+        saveUserToStorage(userData);
+        setUser(userData);
+        navigate(routes.mainPage());
       }
-    },
-    [navigate, t],
-  );
+      return response;
+    } catch (error) {
+      handleLoginErrors(error, t, setErrorMessage, setAuthFailed);
+    }
+  };
 
-  const logOut = useCallback(() => {
+  const logOut = () => {
     removeUserFromStorage();
     setUser(null);
     navigate(routes.loginPage());
-  }, [navigate]);
+  };
 
-  const signUp = useCallback(
-    async (login, password) => {
-      try {
-        const response = await axios.post(routes.signupPath(), { username: login, password });
-        return response;
-      } catch (error) {
-        handleSignUpError(error, setServerError, t);
+  const signUp = async (login, password) => {
+    try {
+      const response = await axios.post(routes.signupPath(), { username: login, password });
+      if (response?.data) {
+        const { token, username } = response.data;
+        const userData = { token, username };
+        saveUserToStorage(userData);
+        setUser(userData);
+        navigate(routes.mainPage());
       }
-    },
-    [t],
-  );
-
-  // useMemo to prevent re-creating the context value on every render
-  const contextValue = useMemo(
-    () => ({
-      logIn,
-      logOut,
-      signUp,
-      user,
-      serverError,
-    }),
-    [logIn, logOut, signUp, user, serverError],
-  );
+      return response;
+    } catch (error) {
+      handleSignUpError(error, setServerError, t);
+    }
+  };
 
   return (
-    <AuthContext.Provider value={contextValue}>
+    <AuthContext.Provider value={{ user, logIn, logOut, signUp, serverError }}>
       {children}
     </AuthContext.Provider>
   );
 };
-
-export default AuthProvider;

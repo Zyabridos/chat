@@ -20,11 +20,11 @@ import ProtectedRoute from './components/ProtectedRoute.jsx';
 import forbiddenWords from './dictionary/index.js';
 import ModalManager from './components/Modals/ModalManager.jsx';
 import { SocketProvider } from './contexts/socketContext.jsx';
-import routes from './routes.js'
+import routes from './routes.js';
 
 const rollbarConfig = {
   accessToken: import.meta.env.VITE_AUTH_TOKEN,
-  environment: import.meta.env.VITE_ENV || 'production'
+  environment: import.meta.env.VITE_ENV || 'production',
 };
 
 const App = () => {
