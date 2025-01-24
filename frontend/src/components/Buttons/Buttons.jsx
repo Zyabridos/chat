@@ -1,8 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Button } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
 import LanguageSwitcher from '../LanguageSwitcher.jsx';
-import { logout } from '../../store/slices/userSlice.js';
+import { useAuth } from '../../context/AuthContext.js';
 
 export const SignupButton = () => {
   const { t } = useTranslation();
@@ -35,16 +34,11 @@ export const SendMessageButton = ({ t }) => { // eslint-disable-line
 };
 
 export const ExitButton = () => {
-  const dispatch = useDispatch();
+  const { logOut } = useAuth(); // Получаем функцию выхода из контекста авторизации
   const { t } = useTranslation();
 
-  const handleLogOut = () => {
-    dispatch(logout());
-    localStorage.removeItem('user');
-  };
-
   return (
-    <Button variant="outline-dark" type="button" onClick={handleLogOut}>
+    <Button variant="outline-dark" type="button" onClick={logOut}>
       {t('navbar.exit')}
     </Button>
   );

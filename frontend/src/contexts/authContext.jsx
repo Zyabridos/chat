@@ -68,9 +68,8 @@ const AuthProvider = ({ children }) => {
   const logOut = useCallback(() => {
     removeUserFromStorage();
     setUser(null);
-    dispatch(logout());
     navigate(routes.loginPage());
-  }, [dispatch, navigate]);
+  }, [navigate]);
 
   const signUp = useCallback(
     async (login, password) => {
