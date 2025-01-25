@@ -1,34 +1,19 @@
-/* eslint-disable no-unused-vars */
-import React, {
-  useState,
-  useEffect,
-} from 'react';
-import {
-  Formik,
-  Field,
-  Form,
-  ErrorMessage,
-} from 'formik';
+import React, { useState } from 'react';
+import { Formik, Field, Form, ErrorMessage } from 'formik';
 import { useTranslation } from 'react-i18next';
-import {
-  useDispatch,
-  useSelector,
-} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import leoProfanity from 'leo-profanity';
 import { closeModal } from '../../../store/slices/modalSlice';
-import { setActiveChannel } from '../../../store/slices/channelsSlice';
 import createValidationChannelSchema from '../../../validationsSchemas/channelSchema.js';
-import { addChannelAPI } from '../../../API/channelsAPI.js';
+import { saveActiveChannelToStorage } from '../../../store/slices/channelsSlice.js';
+import { useSocket } from '../../../contexts/socketContext.jsx';
 
 const AddChannelModal = () => {
-  const { getAuthToken } = useAuth();
-  const token = getAuthToken();
-  const channels = useSelector((state) => state.channelsInfo.channels);
+  const { createChannel } = useSocket();
   const { t } = useTranslation();
   const dispatch = useDispatch();
-
-  const [isSubmittingState, setIsSubmittingState] = useState(false);
+  const channels = useSelector((state) => state.channelsInfo.channels);
   const [error, setError] = useState(null);
 
   const validationSchema = createValidationChannelSchema(t);
@@ -50,32 +35,27 @@ const AddChannelModal = () => {
     if (checkDuplicate(values.name)) {
       setError(t('validationErrors.duplicate'));
       setSubmitting(false);
-      setIsSubmittingState(false);
       return;
     }
 
     const cleanedChannelName = leoProfanity.clean(values.name);
 
-    setIsSubmittingState(true);
-
     try {
-      const newChannel = await addChannelAPI({ name: cleanedChannelName }, token);
+      const newChannel = { name: cleanedChannelName };
+      console.log(cleanedChannelName)
+      createChannel(newChannel);
 
-      dispatch(setActiveChannel(newChannel.id));
+      dispatch(saveActiveChannelToStorage(newChannel.id));
+
       toast.success(t('toast.channelCreated'));
       handleClose();
     } catch (err) {
       console.error('Error while creating the channel:', err);
-      setError(err.response?.data?.message || t('error.addChannelFailed'));
+      setError(t('error.addChannelFailed'));
     } finally {
-      setIsSubmittingState(false);
       setSubmitting(false);
     }
   };
-
-  useEffect(() => {
-    setIsSubmittingState(false);
-  }, [channels]);
 
   return (
     <div className="modal show" style={{ display: 'block' }}>
@@ -91,14 +71,24 @@ const AddChannelModal = () => {
             />
           </div>
           <div className="modal-body">
-            <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleAddChannel}>
+            <Formik
+              initialValues={initialValues}
+              validationSchema={validationSchema}
+              onSubmit={handleAddChannel}
+            >
               {({ isSubmitting }) => (
                 <Form>
                   <div className="mb-3">
                     <label htmlFor="name" className="form-label">
                       {t('channels.modals.labels.typeNewChannelName')}
                     </label>
-                    <Field type="text" id="name" className="form-control" name="name" placeholder={t('channels.channelNamePlaceholder')} />
+                    <Field
+                      type="text"
+                      id="name"
+                      className="form-control"
+                      name="name"
+                      placeholder={t('channels.channelNamePlaceholder')}
+                    />
                     <ErrorMessage name="name" component="div" className="text-danger" />
                     {error && <div className="text-danger mt-2">{error}</div>}
                   </div>
