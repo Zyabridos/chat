@@ -9,7 +9,7 @@ This is a 3-page chat application where users can log in, sign up, and participa
 
 - **Login/Signup**: Log in using the credentials (username: admin, password: admin) or create a new account on the signup page.
 - **Channels**: Users can join different chat channels, write messages, and switch between channels.
-- **Channel Management**: Users can rename or delete channels they have created.
+- **Channel Management**: Users can rename or delete channels.
 
 # Deployed version
 [Deployed project](https://slack-chat-we18.onrender.com/login)
