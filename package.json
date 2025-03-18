@@ -2,7 +2,6 @@
   "name": "@hexlet/code",
   "version": "1.0.0",
   "description": "[![Actions Status](https://github.com/Zyabridos/fullstack-javascript-project-12/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/Zyabridos/fullstack-javascript-project-12/actions)",
-  "main": "src/main.jsx",
   "type": "module",
   "scripts": {
     "build": "npm run build --prefix frontend",

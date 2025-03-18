@@ -1,4 +1,4 @@
-nv:
+env:
   browser: true
   es2021: true
 
@@ -9,6 +9,7 @@ extends:
   - plugin:react-hooks/recommended
   - 'prettier'
   - 'plugin:prettier/recommended'
+  - eslint-config-prettier
 
 parserOptions:
   ecmaFeatures:
@@ -51,7 +52,7 @@ rules:
     - error
     - semi: true
       singleQuote: true
-      trailingComma: es5
+      trailingComma: all
       tabWidth: 2
       useTabs: false
       bracketSpacing: true

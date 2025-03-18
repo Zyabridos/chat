@@ -43,8 +43,8 @@ const App = () => {
           <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>
               <BrowserRouter>
-              <AuthProvider>
-                <SocketProvider>
+                <AuthProvider>
+                  <SocketProvider>
                     <ModalManager />
                     <Routes>
                       <Route
@@ -71,7 +71,7 @@ const App = () => {
                       pauseOnHover
                     />
                   
-                </SocketProvider>
+                  </SocketProvider>
                 </AuthProvider>
               </BrowserRouter>
             </PersistGate>

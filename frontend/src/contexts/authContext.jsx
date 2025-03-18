@@ -63,7 +63,7 @@ const AuthProvider = ({ children }) => {
         handleLoginErrors(error, t, setErrorMessage, setAuthFailed);
       }
     },
-    [navigate, t]
+    [navigate, t];
   );
 
   const logOut = useCallback(() => {
@@ -100,7 +100,7 @@ const AuthProvider = ({ children }) => {
       serverError,
       isAuthenticated,
     }),
-    [logIn, logOut, signUp, user, serverError, isAuthenticated]
+    [logIn, logOut, signUp, user, serverError, isAuthenticated];
   );
 
   return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
