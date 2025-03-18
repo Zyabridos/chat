@@ -1,13 +1,6 @@
 /* eslint-disable consistent-return */
 import axios from 'axios';
-import React, {
-  createContext,
-  useState,
-  useContext,
-  useEffect,
-  useMemo,
-  useCallback,
-} from 'react';
+import React, { createContext, useState, useContext, useEffect, useMemo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -63,7 +56,7 @@ const AuthProvider = ({ children }) => {
         handleLoginErrors(error, t, setErrorMessage, setAuthFailed);
       }
     },
-    [navigate, t];
+    [navigate, t],
   );
 
   const logOut = useCallback(() => {
@@ -74,22 +67,25 @@ const AuthProvider = ({ children }) => {
     navigate(routes.loginPage());
   }, [dispatch, navigate]);
 
-  const signUp = useCallback(async (username, password) => {
-    try {
-      const response = await axios.post(routes.signupPath(), { username, password });
-      const { token, username: registeredUsername } = response.data;
+  const signUp = useCallback(
+    async (username, password) => {
+      try {
+        const response = await axios.post(routes.signupPath(), { username, password });
+        const { token, username: registeredUsername } = response.data;
 
-      const userData = { token, username: registeredUsername };
-      saveUserToStorage(userData);
-      setUser(userData);
-      setIsAuthenticated(true);
+        const userData = { token, username: registeredUsername };
+        saveUserToStorage(userData);
+        setUser(userData);
+        setIsAuthenticated(true);
 
-      return { success: true };
-    } catch (error) {
-      handleSignUpError(error, setServerError, t);
-      return { success: false, error };
-    }
-  }, [t]);
+        return { success: true };
+      } catch (error) {
+        handleSignUpError(error, setServerError, t);
+        return { success: false, error };
+      }
+    },
+    [t],
+  );
 
   const contextValue = useMemo(
     () => ({
@@ -100,7 +96,7 @@ const AuthProvider = ({ children }) => {
       serverError,
       isAuthenticated,
     }),
-    [logIn, logOut, signUp, user, serverError, isAuthenticated];
+    [logIn, logOut, signUp, user, serverError, isAuthenticated],
   );
 
   return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;

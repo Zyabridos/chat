@@ -48,19 +48,19 @@ const App = () => {
                     <ModalManager />
                     <Routes>
                       <Route
-                        path="/"
-                        element={(
+                        path='/'
+                        element={
                           <ProtectedRoute>
                             <Chat />
                           </ProtectedRoute>
-                        )}
+                        }
                       />
-                      <Route path="/login" element={<LoginForm />} />
-                      <Route path="/signup" element={<SignUpForm />} />
-                      <Route path="*" element={<NotFound />} />
+                      <Route path='/login' element={<LoginForm />} />
+                      <Route path='/signup' element={<SignUpForm />} />
+                      <Route path='*' element={<NotFound />} />
                     </Routes>
                     <ToastContainer
-                      position="top-right"
+                      position='top-right'
                       autoClose={3000}
                       hideProgressBar={false}
                       newestOnTop={false}
@@ -70,7 +70,6 @@ const App = () => {
                       draggable
                       pauseOnHover
                     />
-                  
                   </SocketProvider>
                 </AuthProvider>
               </BrowserRouter>
