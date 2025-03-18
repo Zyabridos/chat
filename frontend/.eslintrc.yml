@@ -38,16 +38,21 @@ rules:
   no-underscore-dangle: [2, { 'allow': ['__filename', '__dirname'] }]
   react/function-component-definition: [2, { 'namedComponents': 'arrow-function' }]
   testing-library/no-debug: 0
-  react/jsx-filename-extension: [1, { 'extensions': ['.js', '.jsx'] }]
-  object-curly-newline: [2, { multiline: true, consistent: true }] # object-curly-newline
-  react/jsx-wrap-multilines: [2, { declaration: true, assignment: true, return: true, arrow: true }] # react/jsx-wrap-multilines
+  react/jsx-filename-extension: [1, { extensions: ['.js', '.jsx'] }]
+  object-curly-newline: [2, { 
+    "ObjectExpression": "always", 
+    "ImportDeclaration": { "minProperties": 2, "consistent": true },
+    "ExportDeclaration": { "minProperties": 2, "consistent": true }
+  }]
+  react/jsx-wrap-multilines: [2, { declaration: true, assignment: true, return: true, arrow: true }]
   comma-dangle: [2, { arrays: 'always-multiline', objects: 'always-multiline', imports: 'always-multiline', exports: 'always-multiline', functions: 'ignore' }]
   no-trailing-spaces: 2 
   semi: [2, 'always'] 
-  react/jsx-indent: [2, 2] # Ensure consistent indentation in JSX
-  eol-last: [2, 'always'] # Require newline at the end of files
-  implicit-arrow-linebreak: [2, 'beside'] # Control arrow function formatting
-  arrow-body-style: [2, 'as-needed'] # Enforce concise arrow functions
+  react/jsx-indent: [2, 2]
+  react/jsx-quotes: [2, "prefer-double"]
+  eol-last: [2, 'always']
+  implicit-arrow-linebreak: [2, 'beside']
+  arrow-body-style: [2, 'as-needed']
   prettier/prettier:
     - error
     - semi: true
@@ -58,5 +63,5 @@ rules:
       bracketSpacing: true
       printWidth: 100
       arrowParens: always
-      jsxSingleQuote: true
+      jsxSingleQuote: false
       proseWrap: preserve

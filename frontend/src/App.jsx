@@ -20,20 +20,17 @@ import ProtectedRoute from './components/ProtectedRoute.jsx';
 import forbiddenWords from './dictionary/index.js';
 import ModalManager from './components/Modals/ModalManager.jsx';
 import { SocketProvider } from './contexts/socketContext.jsx';
+import routes from "./routes.js";
 
 const rollbarConfig = {
   accessToken: import.meta.env.VITE_AUTH_TOKEN,
-  environment: 'testenv',
+  environment: import.meta.env.VITE_ENVIRONMENT,
 };
 
 const App = () => {
   useEffect(() => {
     leoProfanity.loadDictionary('ru');
     forbiddenWords.forEach((word) => leoProfanity.add(word));
-  }, []);
-
-  useEffect(() => {
-    document.body.classList.add('h-100', 'bg-light');
   }, []);
 
   return (
@@ -48,19 +45,19 @@ const App = () => {
                     <ModalManager />
                     <Routes>
                       <Route
-                        path='/'
-                        element={
+                        path="/"
+                        element={(
                           <ProtectedRoute>
                             <Chat />
                           </ProtectedRoute>
-                        }
+                        )}
                       />
-                      <Route path='/login' element={<LoginForm />} />
-                      <Route path='/signup' element={<SignUpForm />} />
-                      <Route path='*' element={<NotFound />} />
+                      <Route path={routes.loginPage()} element={<LoginForm />} />
+                      <Route path={routes.signupPage()} element={<SignUpForm />} />
+                      <Route path="*" element={<NotFound />} />
                     </Routes>
                     <ToastContainer
-                      position='top-right'
+                      position="top-right"
                       autoClose={3000}
                       hideProgressBar={false}
                       newestOnTop={false}
@@ -70,6 +67,7 @@ const App = () => {
                       draggable
                       pauseOnHover
                     />
+                  
                   </SocketProvider>
                 </AuthProvider>
               </BrowserRouter>
