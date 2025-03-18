@@ -1,4 +1,4 @@
-env:
+nv:
   browser: true
   es2021: true
 
@@ -51,7 +51,7 @@ rules:
     - error
     - semi: true
       singleQuote: true
-      trailingComma: always-multiline
+      trailingComma: es5
       tabWidth: 2
       useTabs: false
       bracketSpacing: true

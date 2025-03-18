@@ -4,54 +4,67 @@ import React, {
   useEffect,
   useMemo,
   useCallback,
+  useRef,
 } from 'react';
 import { useDispatch } from 'react-redux';
 import { io } from 'socket.io-client';
 import { addMessage } from '../store/slices/messagesSlice.js';
 import { addChannel } from '../store/slices/channelsSlice.js';
+import { AuthContext } from './authContext.jsx';
 
 const SocketContext = createContext(null);
 
 export const SocketProvider = ({ children }) => {
   const dispatch = useDispatch();
-  const socket = io(window.location.origin, { transports: ['websocket'] });
+  const authContext = useContext(AuthContext);
+
+  const { isAuthenticated } = authContext;
+  const socketRef = useRef(null);
 
   useEffect(() => {
-    const handleNewMessage = (message) => {
-      dispatch(addMessage(message));
-    };
+    if (isAuthenticated && !socketRef.current) {
+      socketRef.current = io(window.location.origin, { transports: ['websocket'] });
 
-    const handleNewChannel = (channel) => {
-      dispatch(addChannel(channel));
-    };
+      const handleNewMessage = (message) => {
+        dispatch(addMessage(message));
+      };
 
-    socket.on('newMessage', handleNewMessage);
-    socket.on('newChannel', handleNewChannel);
+      const handleNewChannel = (channel) => {
+        dispatch(addChannel(channel));
+      };
 
-    // Cleanup after unmounting
+      socketRef.current.on('newMessage', handleNewMessage);
+      socketRef.current.on('newChannel', handleNewChannel);
+    }
+
     return () => {
-      socket.off('newMessage', handleNewMessage);
-      socket.off('newChannel', handleNewChannel);
-      socket.disconnect();
+      if (socketRef.current) {
+        socketRef.current.off('newMessage');
+        socketRef.current.off('newChannel');
+        socketRef.current.disconnect();
+        socketRef.current = null;
+      }
     };
-  }, [dispatch, socket]);
+  }, [dispatch, isAuthenticated]);
 
-  // recreate funcs (sendMessage, createChannel) only when socket changes
   const sendMessage = useCallback(
     (message) => {
-      socket.emit('newMessage', message);
+      if (socketRef.current) {
+        socketRef.current.emit('newMessage', message);
+      }
     },
-    [socket],
+    [],
   );
 
   const createChannel = useCallback(
     (channel) => {
-      socket.emit('newChannel', channel);
+      if (socketRef.current) {
+        socketRef.current.emit('newChannel', channel);
+      }
     },
-    [socket],
+    [],
   );
 
-  // useMemo to prevent re-creating the context value on every render
   const value = useMemo(
     () => ({
       sendMessage,

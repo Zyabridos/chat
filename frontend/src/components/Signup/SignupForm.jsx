@@ -1,18 +1,15 @@
-import React, {
-  useContext,
-  useState,
-} from 'react';
 import { useFormik } from 'formik';
+import leoProfanity from 'leo-profanity';
+import React, { useContext, useState } from 'react';
 import { Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import leoProfanity from 'leo-profanity';
 import { AuthContext } from '../../contexts/authContext.jsx';
-import Navbar from '../Navbar.jsx';
-import { SignupButton } from '../Buttons/Buttons.jsx';
-import { SugnupPicture } from '../Attachments.jsx';
-import createValidationSignupSchema from '../../validationsSchemas/signupSchema.js';
 import routes from '../../routes.js';
+import createValidationSignupSchema from '../../validationsSchemas/signupSchema.js';
+import { SugnupPicture } from '../Attachments.jsx';
+import { SignupButton } from '../Buttons/Buttons.jsx';
+import Navbar from '../Navbar.jsx';
 
 const SignUpForm = () => {
   const { t } = useTranslation();
@@ -36,18 +33,15 @@ const SignUpForm = () => {
         return;
       }
 
-      try {
-        const response = await signUp(values.username, values.password);
-        if (response && response.data) {
-          const { token, username } = response.data;
-          localStorage.setItem('user', JSON.stringify({ token, username }));
-          navigate(routes.mainPage());
-        }
-      } catch (error) {
+      const result = await signUp(values.username, values.password);
+
+      if (result.success) {
+        navigate(routes.mainPage());
+      } else {
         setFieldError('username', t('signup.errors.serverError'));
-      } finally {
-        setSubmitting(false);
       }
+
+      setSubmitting(false);
     },
   });
 
@@ -129,9 +123,7 @@ const SignUpForm = () => {
                           {formik.errors.confirmPassword}
                         </Form.Control.Feedback>
                       </Form.Group>
-                      {serverError && (
-                        <div className="text-danger mt-2">{serverError}</div>
-                      )}
+                      {serverError && <div className="text-danger mt-2">{serverError}</div>}
                       <Form.Group className="mt-3">
                         <div className="d-grid">
                           <SignupButton disabled={formik.isSubmitting} />

@@ -1,4 +1,5 @@
 /* eslint-disable consistent-return */
+import axios from 'axios';
 import React, {
   createContext,
   useState,
@@ -7,21 +8,19 @@ import React, {
   useMemo,
   useCallback,
 } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import routes from '../routes.js';
-import { handleLoginErrors, handleSignUpError } from '../utils/utils.js';
 import { logout } from '../store/slices/userSlice.js';
 import {
   getUserAndTokenFromStorage,
   saveUserToStorage,
   removeUserFromStorage,
 } from '../utils/storage.js';
+import { handleLoginErrors, handleSignUpError } from '../utils/utils.js';
 
 export const AuthContext = createContext();
-
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
@@ -33,19 +32,20 @@ export const useAuth = () => {
 const AuthProvider = ({ children }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [serverError, setServerError] = useState(null);
-  const navigate = useNavigate();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     const { user: storedUser } = getUserAndTokenFromStorage();
     if (storedUser) {
       setUser(storedUser);
+      setIsAuthenticated(true);
       navigate(routes.mainPage());
     }
   }, [navigate]);
 
-  // recreate funcs (logIn, logOut, signUp) only when dependecies changes (navigate, t, dispatch)
   const logIn = useCallback(
     async (login, password, setErrorMessage, setAuthFailed) => {
       try {
@@ -55,6 +55,7 @@ const AuthProvider = ({ children }) => {
           const userData = { token, username };
           saveUserToStorage(userData);
           setUser(userData);
+          setIsAuthenticated(true);
           navigate(routes.mainPage());
         }
         return response;
@@ -62,29 +63,34 @@ const AuthProvider = ({ children }) => {
         handleLoginErrors(error, t, setErrorMessage, setAuthFailed);
       }
     },
-    [navigate, t],
+    [navigate, t]
   );
 
   const logOut = useCallback(() => {
     removeUserFromStorage();
     setUser(null);
+    setIsAuthenticated(false);
     dispatch(logout());
     navigate(routes.loginPage());
   }, [dispatch, navigate]);
 
-  const signUp = useCallback(
-    async (login, password) => {
-      try {
-        const response = await axios.post(routes.signupPath(), { username: login, password });
-        return response;
-      } catch (error) {
-        handleSignUpError(error, setServerError, t);
-      }
-    },
-    [t],
-  );
+  const signUp = useCallback(async (username, password) => {
+    try {
+      const response = await axios.post(routes.signupPath(), { username, password });
+      const { token, username: registeredUsername } = response.data;
 
-  // useMemo to prevent re-creating the context value on every render
+      const userData = { token, username: registeredUsername };
+      saveUserToStorage(userData);
+      setUser(userData);
+      setIsAuthenticated(true);
+
+      return { success: true };
+    } catch (error) {
+      handleSignUpError(error, setServerError, t);
+      return { success: false, error };
+    }
+  }, [t]);
+
   const contextValue = useMemo(
     () => ({
       logIn,
@@ -92,15 +98,12 @@ const AuthProvider = ({ children }) => {
       signUp,
       user,
       serverError,
+      isAuthenticated,
     }),
-    [logIn, logOut, signUp, user, serverError],
+    [logIn, logOut, signUp, user, serverError, isAuthenticated]
   );
 
-  return (
-    <AuthContext.Provider value={contextValue}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
 };
 
 export default AuthProvider;
