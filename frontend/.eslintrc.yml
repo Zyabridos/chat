@@ -23,6 +23,7 @@ plugins:
   - prettier
 
 rules:
+  indent: [2, 2]
   import/extensions: 0
   import/no-unresolved: 0
   react/prop-types: 0

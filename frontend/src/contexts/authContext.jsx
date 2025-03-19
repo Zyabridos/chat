@@ -68,7 +68,7 @@ const AuthProvider = ({ children }) => {
     removeUserFromStorage();
     setUser(null);
     setIsAuthenticated(false);
-    navigate(routes.loginPage()); // ❌ Убрали `dispatch(logout())`
+    navigate(routes.loginPage());
   }, [navigate]);
 
   const signUp = useCallback(
