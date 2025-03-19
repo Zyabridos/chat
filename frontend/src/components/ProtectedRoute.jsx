@@ -1,22 +1,12 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useAuth } from '../contexts/authContext.jsx';
 import routes from '../routes.js';
-import { login } from '../store/slices/userSlice.js';
-import { getUserAndTokenFromStorage } from '../utils/storage.js';
 
 const ProtectedRoute = ({ children }) => {
-  const dispatch = useDispatch();
-  const { token } = useSelector((state) => state.user);
+  const { isAuthenticated } = useAuth();
 
-  useEffect(() => {
-    const { user } = getUserAndTokenFromStorage();
-    if (user) {
-      dispatch(login(user));
-    }
-  }, [dispatch]);
-
-  if (!token) {
+  if (!isAuthenticated) {
     return <Navigate to={routes.loginPage()} replace />;
   }
 

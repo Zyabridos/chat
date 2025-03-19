@@ -1,11 +1,11 @@
 /* eslint-disable consistent-return */
 import axios from 'axios';
-import React, { createContext, useState, useContext, useEffect, useMemo, useCallback } from 'react';
+import React, {
+ createContext, useState, useContext, useEffect, useMemo, useCallback 
+} from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import routes from '../routes.js';
-import { logout } from '../store/slices/userSlice.js';
 import {
   getUserAndTokenFromStorage,
   saveUserToStorage,
@@ -23,7 +23,6 @@ export const useAuth = () => {
 };
 
 const AuthProvider = ({ children }) => {
-  const dispatch = useDispatch();
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
@@ -42,10 +41,16 @@ const AuthProvider = ({ children }) => {
   const logIn = useCallback(
     async (login, password, setErrorMessage, setAuthFailed) => {
       try {
-        const response = await axios.post(routes.loginPath(), { username: login, password });
+        const response = await axios.post(routes.loginPath(), {
+          username: login,
+          password,
+        });
         if (response && response.data) {
           const { token, username } = response.data;
-          const userData = { token, username };
+          const userData = {
+            token,
+            username,
+          };
           saveUserToStorage(userData);
           setUser(userData);
           setIsAuthenticated(true);
@@ -63,25 +68,35 @@ const AuthProvider = ({ children }) => {
     removeUserFromStorage();
     setUser(null);
     setIsAuthenticated(false);
-    dispatch(logout());
-    navigate(routes.loginPage());
-  }, [dispatch, navigate]);
+    navigate(routes.loginPage()); // ❌ Убрали `dispatch(logout())`
+  }, [navigate]);
 
   const signUp = useCallback(
     async (username, password) => {
       try {
-        const response = await axios.post(routes.signupPath(), { username, password });
+        const response = await axios.post(routes.signupPath(), {
+          username,
+          password,
+        });
         const { token, username: registeredUsername } = response.data;
 
-        const userData = { token, username: registeredUsername };
+        const userData = {
+          token,
+          username: registeredUsername,
+        };
         saveUserToStorage(userData);
         setUser(userData);
         setIsAuthenticated(true);
 
-        return { success: true };
+        return {
+          success: true,
+        };
       } catch (error) {
         handleSignUpError(error, setServerError, t);
-        return { success: false, error };
+        return {
+          success: false,
+          error,
+        };
       }
     },
     [t],

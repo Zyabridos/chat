@@ -20,7 +20,7 @@ import ProtectedRoute from './components/ProtectedRoute.jsx';
 import forbiddenWords from './dictionary/index.js';
 import ModalManager from './components/Modals/ModalManager.jsx';
 import { SocketProvider } from './contexts/socketContext.jsx';
-import routes from "./routes.js";
+import routes from './routes.js';
 
 const rollbarConfig = {
   accessToken: import.meta.env.VITE_AUTH_TOKEN,
@@ -46,11 +46,11 @@ const App = () => {
                     <Routes>
                       <Route
                         path="/"
-                        element={(
+                        element={
                           <ProtectedRoute>
                             <Chat />
                           </ProtectedRoute>
-                        )}
+                        }
                       />
                       <Route path={routes.loginPage()} element={<LoginForm />} />
                       <Route path={routes.signupPage()} element={<SignUpForm />} />
@@ -67,7 +67,6 @@ const App = () => {
                       draggable
                       pauseOnHover
                     />
-                  
                   </SocketProvider>
                 </AuthProvider>
               </BrowserRouter>
