@@ -1,7 +1,7 @@
 /* eslint-disable consistent-return */
 import axios from 'axios';
 import React, {
- createContext, useState, useContext, useEffect, useMemo, useCallback 
+ createContext, useState, useContext, useEffect, useMemo 
 } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -38,52 +38,52 @@ const AuthProvider = ({ children }) => {
     }
   }, [navigate]);
 
-  const logIn = useCallback(
-    async (login, password, setErrorMessage, setAuthFailed) => {
-      try {
-        const response = await axios.post(routes.loginPath(), {
-          username: login,
-          password,
-        });
-        if (response && response.data) {
-          const { token, username } = response.data;
-          const userData = {
-            token,
-            username,
-          };
-          saveUserToStorage(userData);
-          setUser(userData);
-          setIsAuthenticated(true);
-          navigate(routes.mainPage());
-        }
-        return response;
-      } catch (error) {
-        handleLoginErrors(error, t, setErrorMessage, setAuthFailed);
-      }
-    },
-    [navigate, t],
-  );
+  const logIn = async (login, password, setErrorMessage, setAuthFailed) => {
+    try {
+      const response = await axios.post(routes.loginPath(), {
+        username: login,
+        password,
+      });
 
-  const logOut = useCallback(() => {
+      if (response && response.data) {
+        const { token, username } = response.data;
+        const userData = {
+          token,
+          username,
+        };
+
+        saveUserToStorage(userData);
+        setUser(userData);
+        setIsAuthenticated(true);
+        navigate(routes.mainPage());
+      }
+      return response;
+    } catch (error) {
+      handleLoginErrors(error, t, setErrorMessage, setAuthFailed);
+    }
+  };
+
+  const logOut = () => {
     removeUserFromStorage();
     setUser(null);
     setIsAuthenticated(false);
     navigate(routes.loginPage());
-  }, [navigate]);
+  };
 
-  const signUp = useCallback(
-    async (username, password) => {
-      try {
-        const response = await axios.post(routes.signupPath(), {
-          username,
-          password,
-        });
+  const signUp = async (username, password) => {
+    try {
+      const response = await axios.post(routes.signupPath(), {
+        username,
+        password,
+      });
+
+      if (response && response.data) {
         const { token, username: registeredUsername } = response.data;
-
         const userData = {
           token,
           username: registeredUsername,
         };
+
         saveUserToStorage(userData);
         setUser(userData);
         setIsAuthenticated(true);
@@ -91,16 +91,15 @@ const AuthProvider = ({ children }) => {
         return {
           success: true,
         };
-      } catch (error) {
-        handleSignUpError(error, setServerError, t);
-        return {
-          success: false,
-          error,
-        };
       }
-    },
-    [t],
-  );
+    } catch (error) {
+      handleSignUpError(error, setServerError, t);
+      return {
+        success: false,
+        error,
+      };
+    }
+  };
 
   const contextValue = useMemo(
     () => ({
