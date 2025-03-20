@@ -81,9 +81,9 @@ const channelsSlice = createSlice({
       state.channels = state.channels.map((channel) =>
         channel.id === updatedChannel.id
           ? {
-              ...channel,
-              name: updatedChannel.name,
-            }
+            ...channel,
+            name: updatedChannel.name,
+          }
           : channel,
       );
     },
