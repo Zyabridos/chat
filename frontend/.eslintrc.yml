@@ -24,6 +24,7 @@ plugins:
 
 rules:
   indent: [2, 2]
+  react-hooks/exhaustive-deps: ["warn", { "additionalHooks": "(useMemo|useCallback)" }]
   import/extensions: 0
   import/no-unresolved: 0
   react/prop-types: 0

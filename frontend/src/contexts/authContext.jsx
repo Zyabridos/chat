@@ -1,7 +1,7 @@
 /* eslint-disable consistent-return */
 import axios from 'axios';
 import React, {
- createContext, useState, useContext, useEffect, useMemo 
+ createContext, useState, useContext, useEffect 
 } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -101,19 +101,20 @@ const AuthProvider = ({ children }) => {
     }
   };
 
-  const contextValue = useMemo(
-    () => ({
-      logIn,
-      logOut,
-      signUp,
-      user,
-      serverError,
-      isAuthenticated,
-    }),
-    [logIn, logOut, signUp, user, serverError, isAuthenticated],
+  return (
+    <AuthContext.Provider
+      value={{
+        logIn,
+        logOut,
+        signUp,
+        user,
+        serverError,
+        isAuthenticated,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
   );
-
-  return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
 };
 
 export default AuthProvider;
