@@ -65,7 +65,7 @@ To start the built app, run:
 make start
 ```
 
-This command will launch the app. By default, it should be accessible at localhost:5001. If you cannot access the app at this address, check the terminal output for the correct URL or any errors related to the server startup.
+This command will launch the app. By default, it should be accessible at localhost:3000. If you cannot access the app at this address, check the terminal output for the correct URL or any errors related to the server startup.
 
 
 ## Summary of Makefile Commands
