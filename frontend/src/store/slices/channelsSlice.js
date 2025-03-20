@@ -6,21 +6,19 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  channels: [], // Stores the list of channels
-  activeChannel: null, // Tracks the currently active channel
-  loading: false, // Indicates if channels data is being loaded
-  error: null, // Stores any error that occurs during channel operations
+  channels: [],
+  activeChannel: null,
+  loading: false,
+  error: null,
 };
 
 const channelsSlice = createSlice({
   name: 'channels',
   initialState,
   reducers: {
-    // Set the channels data in the store
     setChannels: (state, action) => {
       state.channels = action.payload;
 
-      // Only set the active channel to default if it's not already set
       if (!state.activeChannel && state.channels.length > 0) {
         const storedChannelId = localStorage.getItem('activeChannelId');
         const defaultChannel = storedChannelId
@@ -30,24 +28,21 @@ const channelsSlice = createSlice({
         state.activeChannel = defaultChannel || state.channels[0];
       }
     },
-    // Add a new channel to the 'channels' list
     addChannel: (state, action) => {
       const { name, createdBy, id } = action.payload;
       const currentUsername = JSON.parse(localStorage.getItem('user')).username;
 
       const formattedName = name.trim().toLowerCase();
       const isDuplicate = state.channels.some(
-        (channel) => channel.name.trim().toLowerCase() === formattedName
+        (channel) => channel.name.trim().toLowerCase() === formattedName,
       );
 
       if (isDuplicate) {
         return;
       }
 
-      // If not a duplacate, add the channel
       state.channels.push(action.payload);
 
-      // Set channel as an active for a person that has created channel
       if (createdBy === currentUsername) {
         state.activeChannel = action.payload;
         localStorage.setItem('activeChannelId', id);
@@ -56,7 +51,6 @@ const channelsSlice = createSlice({
     removeChannel: (state, action) => {
       const channelId = action.payload;
       state.channels = state.channels.filter((channel) => channel.id !== channelId);
-      // If the active channel was deleted, set the first channel on the list as active (general)
       if (state.activeChannel?.id === channelId) {
         state.activeChannel = state.channels[0] || null;
       }
@@ -64,24 +58,33 @@ const channelsSlice = createSlice({
     setError: (state, action) => {
       state.error = action.payload;
     },
-    // Set the loading state (indicating if data is being fetched)
+
     setLoading: (state, action) => {
       state.loading = action.payload;
     },
-    // Set the currently active channel
+
     setActiveChannel: (state, action) => {
       const activeChannel = state.channels.find((channel) => channel.id === action.payload);
       state.activeChannel = activeChannel || state.channels[0];
+
+      if (state.activeChannel) {
+        localStorage.setItem('activeChannelId', state.activeChannel.id);
+      }
     },
     updateChannel: (state, action) => {
       const updatedChannel = action.payload;
       if (!updatedChannel || !updatedChannel.id) {
         console.error('Invalid channel data:', updatedChannel);
-        return; // Do nothing if channel data is invalid
+        return;
       }
 
       state.channels = state.channels.map((channel) =>
-        channel.id === updatedChannel.id ? { ...channel, name: updatedChannel.name } : channel
+        channel.id === updatedChannel.id
+          ? {
+              ...channel,
+              name: updatedChannel.name,
+            }
+          : channel,
       );
     },
   },

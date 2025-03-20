@@ -62,7 +62,6 @@ const AddChannelModal = () => {
       const newChannel = await addChannelAPI({ name: cleanedChannelName }, token);
 
       dispatch(setActiveChannel(newChannel.id));
-      localStorage.setItem('activeChannelId', newChannel.id);
 
       toast.success(t('toast.channelCreated'));
       handleClose();
