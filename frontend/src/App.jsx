@@ -1,4 +1,3 @@
-import { createRoot } from 'react-dom/client';
 import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
@@ -47,11 +46,11 @@ const App = () => {
                     <Routes>
                       <Route
                         path="/"
-                        element={
+                        element={(
                           <ProtectedRoute>
                             <Chat />
                           </ProtectedRoute>
-                        }
+                        )}
                       />
                       <Route path={routes.loginPage()} element={<LoginForm />} />
                       <Route path={routes.signupPage()} element={<SignUpForm />} />

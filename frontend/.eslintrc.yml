@@ -9,7 +9,6 @@ extends:
   - plugin:react-hooks/recommended
   - 'prettier'
   - 'plugin:prettier/recommended'
-  - eslint-config-prettier
 
 parserOptions:
   ecmaFeatures:
@@ -24,6 +23,14 @@ plugins:
 
 rules:
   indent: [2, 2]
+  no-trailing-spaces: [2]
+  comma-dangle: [2, { 
+    arrays: 'always-multiline', 
+    objects: 'always-multiline', 
+    imports: 'always-multiline', 
+    exports: 'always-multiline', 
+    functions: 'always-multiline' 
+  }]
   react-hooks/exhaustive-deps: ["warn", { "additionalHooks": "(useMemo|useCallback)" }]
   import/extensions: 0
   import/no-unresolved: 0
@@ -47,9 +54,7 @@ rules:
     "ExportDeclaration": { "minProperties": 2, "consistent": true }
   }]
   react/jsx-wrap-multilines: [2, { declaration: true, assignment: true, return: true, arrow: true }]
-  comma-dangle: [2, { arrays: 'always-multiline', objects: 'always-multiline', imports: 'always-multiline', exports: 'always-multiline', functions: 'ignore' }]
-  no-trailing-spaces: 2 
-  semi: [2, 'always'] 
+  semi: [2, 'always']
   react/jsx-indent: [2, 2]
   react/jsx-quotes: [2, "prefer-double"]
   eol-last: [2, 'always']
