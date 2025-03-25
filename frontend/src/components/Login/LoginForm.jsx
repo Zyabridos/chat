@@ -1,7 +1,5 @@
 import React, { useRef, useState, useContext } from 'react';
-import {
-  Form,
-} from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { AuthContext } from '../../contexts/authContext.jsx';
@@ -21,15 +19,10 @@ const LoginForm = () => {
   const validationSchema = createValidationLoginSchema(t);
 
   const handleSubmit = async (formikValues) => {
-    try {
-      await logIn(
-        formikValues.username,
-        formikValues.password,
-        setErrorMessage,
-        setAuthFailed,
-      );
-    } catch (error) {
-      console.error('Login failed:', error);
+    const result = await logIn(formikValues.username, formikValues.password);
+    if (!result.success) {
+      setAuthFailed(true);
+      setErrorMessage(result.error);
     }
   };
 
@@ -43,12 +36,12 @@ const LoginForm = () => {
   });
 
   return (
-    <div className="h-100">
-      <div className="h-100" id="chat">
-        <Navbar />
-        <div className="container-fluid h-100">
-          <div className="row justify-content-center align-content-center h-100">
-            <div className="col-12 col-md-8 col-xxl-6">
+    <div className="d-flex flex-column vh-100">
+      <Navbar />
+      <div className="flex-grow-1 d-flex align-items-center justify-content-center">
+        <div className="container">
+          <div className="row justify-content-center">
+            <div className="col-12 col-md-8 col-xxl-7">
               <div className="card shadow-sm">
                 <div
                   className="card-body row"

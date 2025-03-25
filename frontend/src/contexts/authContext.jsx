@@ -64,12 +64,17 @@ const AuthProvider = ({ children }) => {
         success: true,
       };
     } catch (error) {
-      const message = error?.response?.data?.message || t('auth.loginError');
+      let message;
+      if (error?.response?.status === 401) {
+        message = t('login.wrongEmailOrPassword');
+      } else {
+        message = t('auth.loginError');
+      }
+
       setServerError(message);
-      toast.error(message);
       return {
         success: false,
-        error,
+        error: message,
       };
     }
   };
