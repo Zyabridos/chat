@@ -12,7 +12,7 @@ This is a 3-page chat application where users can log in, sign up, and participa
 - **Channel Management**: Users can rename or delete channels they have created.
 
 # Deployed version
-[Deployed project](https://slack-chat-we18.onrender.com/login)
+[Deployed project](https://slack-chat-jade.vercel.app)
 Login: admin, password: admin. Or alternativelly you can Sign in by creating an account
 
 # Project Setup
