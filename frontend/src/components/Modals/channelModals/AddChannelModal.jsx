@@ -20,6 +20,7 @@ import { closeModal } from '../../../store/slices/modalSlice';
 import { setActiveChannel } from '../../../store/slices/channelsSlice';
 import createValidationChannelSchema from '../../../validationsSchemas/channelSchema.js';
 import { addChannelAPI } from '../../../API/channelsAPI.js';
+import { useSocket } from '../../../contexts/socketContext.jsx';
 
 const AddChannelModal = () => {
   const user = JSON.parse(localStorage.getItem('user'));
@@ -27,6 +28,7 @@ const AddChannelModal = () => {
   const channels = useSelector((state) => state.channelsInfo.channels);
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const { createChannel } = useSocket();
 
   const [isSubmittingState, setIsSubmittingState] = useState(false);
   const [error, setError] = useState(null);
@@ -60,6 +62,8 @@ const AddChannelModal = () => {
 
     try {
       const newChannel = await addChannelAPI({ name: cleanedChannelName }, token);
+
+      createChannel(newChannel);
 
       dispatch(setActiveChannel(newChannel.id));
 

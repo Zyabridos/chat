@@ -3,11 +3,10 @@ import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import rootReducer from './slices';
 
-// Config for redux-persist
 const persistConfig = {
   key: 'root',
-  storage, // (localStorage)
-  whitelist: ['user'], // Set which parts of the state to keep (for example, only user)
+  storage,
+  whitelist: ['user'],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

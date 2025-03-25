@@ -16,7 +16,7 @@ export default async (token) => {
     return response.data;
   } catch (err) {
     console.error('Error fetching channels:', err);
-    throw err; // Re-throw the error for handling it in the component
+    throw err;
   }
 };
 

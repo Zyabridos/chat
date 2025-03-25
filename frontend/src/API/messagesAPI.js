@@ -20,6 +20,6 @@ export default async (channelId, token) => {
     return response.data;
   } catch (error) {
     console.error('Error fetching messages:', error);
-    throw error; // Re-throw the error for the calling code to handle.
+    throw error;
   }
 };

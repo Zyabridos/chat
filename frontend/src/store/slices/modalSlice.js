@@ -3,8 +3,8 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   isOpen: false,
-  type: null, // addChannel, editChannel, deleteChannel etc.
-  props: {}, // xtra props
+  type: null,
+  props: {},
 };
 
 const modalSlice = createSlice({
