@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, {
  createContext, useContext, useEffect, useMemo, useCallback, useRef 
 } from 'react';

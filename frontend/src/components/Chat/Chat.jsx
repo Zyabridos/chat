@@ -4,9 +4,9 @@ import Navbar from '../Navbar.jsx';
 import Channels from './Channels/Chanells.jsx';
 
 const Chat = () => (
-  <>
+  <div className="d-flex flex-column vh-100">
     <Navbar />
-    <div className="d-flex h-100 overflow-hidden">
+    <div className="flex-grow-1 d-flex overflow-hidden">
       <div className="col-12 col-md-3 col-lg-2 border-end px-0 bg-light d-flex flex-column">
         <Channels />
       </div>
@@ -14,7 +14,7 @@ const Chat = () => (
         <MessagesContainer />
       </div>
     </div>
-  </>
+  </div>
 );
 
 export default Chat;

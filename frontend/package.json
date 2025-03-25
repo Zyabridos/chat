@@ -47,11 +47,12 @@
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-functional": "^6.6.3",
-    "eslint-plugin-prettier": "^5.2.3",
+    "eslint-plugin-prettier": "^5.2.4",
     "eslint-plugin-react": "^7.37.4",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.14",
-    "globals": "^15.13.0"
+    "globals": "^15.13.0",
+    "prettier": "^3.5.3"
   },
   "engines": {
     "node": ">=18.18.0 <=20.18.1"

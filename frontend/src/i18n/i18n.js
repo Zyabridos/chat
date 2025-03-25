@@ -4,6 +4,8 @@ import no from './locales/no/index.js';
 import ru from './locales/ru/index.js';
 import en from './locales/en/index.js';
 
+const savedLanguage = localStorage.getItem('i18nextLng') || 'ru';
+
 i18n.use(initReactI18next).init({
   resources: {
     ru: {
@@ -16,8 +18,8 @@ i18n.use(initReactI18next).init({
       translation: no,
     },
   },
-  lng: 'ru',
-  fallbackLng: 'en', // Язык по умолчанию в случае ошибки
+  lng: savedLanguage,
+  fallbackLng: 'en',
   interpolation: {
     escapeValue: false,
   },

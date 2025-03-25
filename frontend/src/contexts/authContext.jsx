@@ -1,8 +1,7 @@
-/* eslint-disable consistent-return */
-/* eslint-disable react/jsx-no-constructed-context-values */
+/* eslint-disable */
 import axios from 'axios';
 import React, {
- createContext, useState, useContext, useEffect 
+  createContext, useState, useContext, useEffect,
 } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';

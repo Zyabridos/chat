@@ -22,7 +22,7 @@ const init = async () => {
           </BrowserRouter>
         </I18nextProvider>
       </Provider>
-    </React.StrictMode>
+    </React.StrictMode>,
   );
 };
 
