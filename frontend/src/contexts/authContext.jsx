@@ -2,19 +2,20 @@
 /* eslint-disable react/jsx-no-constructed-context-values */
 import axios from 'axios';
 import React, {
-  createContext, useState, useContext, useEffect,
+ createContext, useState, useContext, useEffect 
 } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import routes from '../routes.js';
 import {
   getUserAndTokenFromStorage,
   saveUserToStorage,
   removeUserFromStorage,
 } from '../utils/storage.js';
-import { handleLoginErrors, handleSignUpError } from '../utils/utils.js';
 
 export const AuthContext = createContext();
+
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
@@ -39,28 +40,37 @@ const AuthProvider = ({ children }) => {
     }
   }, [navigate]);
 
-  const logIn = async (login, password, setErrorMessage, setAuthFailed) => {
+  const logIn = async (login, password) => {
     try {
       const response = await axios.post(routes.loginPath(), {
         username: login,
         password,
       });
 
-      if (response && response.data) {
-        const { token, username } = response.data;
-        const userData = {
-          token,
-          username,
-        };
+      const { token, username } = response.data;
+      const userData = {
+        token,
+        username,
+      };
 
-        saveUserToStorage(userData);
-        setUser(userData);
-        setIsAuthenticated(true);
-        navigate(routes.mainPage());
-      }
-      return response;
+      saveUserToStorage(userData);
+      setUser(userData);
+      setIsAuthenticated(true);
+      setServerError(null);
+      navigate(routes.mainPage());
+      toast.success(t('auth.loginSuccess'));
+
+      return {
+        success: true,
+      };
     } catch (error) {
-      handleLoginErrors(error, t, setErrorMessage, setAuthFailed);
+      const message = error?.response?.data?.message || t('auth.loginError');
+      setServerError(message);
+      toast.error(message);
+      return {
+        success: false,
+        error,
+      };
     }
   };
 
@@ -69,6 +79,7 @@ const AuthProvider = ({ children }) => {
     setUser(null);
     setIsAuthenticated(false);
     navigate(routes.loginPage());
+    toast.info(t('auth.logoutSuccess'));
   };
 
   const signUp = async (username, password) => {
@@ -78,23 +89,26 @@ const AuthProvider = ({ children }) => {
         password,
       });
 
-      if (response && response.data) {
-        const { token, username: registeredUsername } = response.data;
-        const userData = {
-          token,
-          username: registeredUsername,
-        };
+      const { token, username: registeredUsername } = response.data;
+      const userData = {
+        token,
+        username: registeredUsername,
+      };
 
-        saveUserToStorage(userData);
-        setUser(userData);
-        setIsAuthenticated(true);
+      saveUserToStorage(userData);
+      setUser(userData);
+      setIsAuthenticated(true);
+      setServerError(null);
+      navigate(routes.mainPage());
+      toast.success(t('auth.registerSuccess'));
 
-        return {
-          success: true,
-        };
-      }
+      return {
+        success: true,
+      };
     } catch (error) {
-      handleSignUpError(error, setServerError, t);
+      const message = error?.response?.data?.message || t('auth.registerError');
+      setServerError(message);
+      toast.error(message);
       return {
         success: false,
         error,
