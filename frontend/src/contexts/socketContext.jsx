@@ -1,10 +1,5 @@
 import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useCallback,
-  useRef,
+ createContext, useContext, useEffect, useMemo, useCallback, useRef 
 } from 'react';
 import { useDispatch } from 'react-redux';
 import { io } from 'socket.io-client';
@@ -23,7 +18,9 @@ export const SocketProvider = ({ children }) => {
 
   useEffect(() => {
     if (isAuthenticated && !socketRef.current) {
-      socketRef.current = io(window.location.origin, { transports: ['websocket'] });
+      socketRef.current = io(window.location.origin, {
+        transports: ['websocket'],
+      });
 
       const handleNewMessage = (message) => {
         dispatch(addMessage(message));
@@ -47,23 +44,17 @@ export const SocketProvider = ({ children }) => {
     };
   }, [dispatch, isAuthenticated]);
 
-  const sendMessage = useCallback(
-    (message) => {
-      if (socketRef.current) {
-        socketRef.current.emit('newMessage', message);
-      }
-    },
-    [],
-  );
+  const sendMessage = useCallback((message) => {
+    if (socketRef.current) {
+      socketRef.current.emit('newMessage', message);
+    }
+  }, []);
 
-  const createChannel = useCallback(
-    (channel) => {
-      if (socketRef.current) {
-        socketRef.current.emit('newChannel', channel);
-      }
-    },
-    [],
-  );
+  const createChannel = useCallback((channel) => {
+    if (socketRef.current) {
+      socketRef.current.emit('newChannel', channel);
+    }
+  }, []);
 
   const value = useMemo(
     () => ({
@@ -79,7 +70,9 @@ export const SocketProvider = ({ children }) => {
 export const useSocket = () => {
   const context = useContext(SocketContext);
   if (!context) {
-    throw new Error('useSocket must be used within a SocketProvider - check where it is defined in App.jsx');
+    throw new Error(
+      'useSocket must be used within a SocketProvider - check where it is defined in App.jsx',
+    );
   }
   return context;
 };

@@ -1,0 +1,14 @@
+{
+  "notFound": {
+    "title": "Siden ble ikke funnet",
+    "message": "Men du kan gå til",
+    "linkText": "hovedsiden"
+  },
+  "loading": {
+    "loadingChannels": "Laster kanaler..."
+  },
+  "navbar": {
+    "chatname": "Hexlet Chat",
+    "exit": "Logg ut"
+  }
+}

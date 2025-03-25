@@ -1,0 +1,35 @@
+{
+  "channels": {
+    "title": "Channels",
+    "channelNamePlaceholder": "Enter channel name",
+    "addNewChannel": "Add channel",
+    "cancel": "Cancel",
+    "add": "Add",
+    "send": "Send",
+    "modals": {
+      "titles": {
+        "renameChannel": "Rename channel",
+        "addChannel": "Add channel",
+        "deleteChannel": "Delete channel"
+      },
+      "placeholders": {
+        "typeChannelName": "Enter channel name"
+      },
+      "labels": {
+        "typeNewChannelName": "Channel name",
+        "rename": "Edit channel name"
+      },
+      "confirmDeletingChannel": "Are you sure you want to delete the channel?",
+      "managment": "Channel management"
+    }
+  },
+  "channelsForm": {
+    "newMessage": "New message",
+    "enterMessage": "Enter message...",
+    "noMessages": "There are no messages on this channel yet"
+  },
+  "channelsHeader": {
+    "channelName": "# {{channelName}}",
+    "messageCount": "Messages on this channel: {{count}}"
+  }
+}

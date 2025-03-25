@@ -1,0 +1,10 @@
+{
+  "toast": {
+    "channelCreated": "Kanal opprettet",
+    "channelRenamed": "Kanalnavn endret",
+    "channelDeleted": "Kanal slettet",
+    "logoutSuccess": "Du har logget ut",
+    "registerSuccess": "Du er registrert",
+    "loginSuccess": "Du har logget inn"
+  }
+}

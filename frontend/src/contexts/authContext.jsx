@@ -58,7 +58,7 @@ const AuthProvider = ({ children }) => {
       setIsAuthenticated(true);
       setServerError(null);
       navigate(routes.mainPage());
-      toast.success(t('auth.loginSuccess'));
+      toast.success(t('toast.loginSuccess'));
 
       return {
         success: true,
@@ -79,7 +79,7 @@ const AuthProvider = ({ children }) => {
     setUser(null);
     setIsAuthenticated(false);
     navigate(routes.loginPage());
-    toast.info(t('auth.logoutSuccess'));
+    toast.info(t('toast.logoutSuccess'));
   };
 
   const signUp = async (username, password) => {
@@ -100,7 +100,7 @@ const AuthProvider = ({ children }) => {
       setIsAuthenticated(true);
       setServerError(null);
       navigate(routes.mainPage());
-      toast.success(t('auth.registerSuccess'));
+      toast.success(t('toast.registerSuccess'));
 
       return {
         success: true,

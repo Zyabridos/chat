@@ -1,0 +1,14 @@
+{
+  "notFound": {
+    "title": "Page not found",
+    "message": "But you can go to the",
+    "linkText": "main page"
+  },
+  "loading": {
+    "loadingChannels": "Loading channels..."
+  },
+  "navbar": {
+    "chatname": "Hexlet Chat",
+    "exit": "Logout"
+  }
+}

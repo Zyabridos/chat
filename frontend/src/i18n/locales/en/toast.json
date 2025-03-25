@@ -1,0 +1,10 @@
+{
+  "toast": {
+    "channelCreated": "Channel created",
+    "channelRenamed": "Channel renamed",
+    "channelDeleted": "Channel deleted",
+    "logoutSuccess": "Successfully logged out",
+    "registerSuccess": "User registered successfully",
+    "loginSuccess": "You have successfully logged in"
+  }
+}

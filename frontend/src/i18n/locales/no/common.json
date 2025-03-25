@@ -1,0 +1,12 @@
+{
+  "language": {
+    "changeToEnglish": "Bytt til engelsk",
+    "changeToRussian": "Bytt til russisk"
+  },
+  "modals": {
+    "delete": "Slett",
+    "rename": "Gi nytt navn",
+    "add": "Send",
+    "cancel": "Avbryt"
+  }
+}

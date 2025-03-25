@@ -1,0 +1,12 @@
+{
+  "language": {
+    "changeToEnglish": "Switch to English",
+    "changeToRussian": "Switch to Russian"
+  },
+  "modals": {
+    "delete": "Delete",
+    "rename": "Rename",
+    "add": "Send",
+    "cancel": "Cancel"
+  }
+}

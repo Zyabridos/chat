@@ -1,0 +1,10 @@
+{
+  "toast": {
+    "channelCreated": "Канал создан",
+    "channelRenamed": "Канал переименован",
+    "channelDeleted": "Канал удалён",
+    "logoutSuccess": "Вы успешно вышли из системы",
+    "registerSuccess": "Регистрация прошла успешно",
+    "loginSuccess": "Вы успешно вошли в систему"
+  }
+}

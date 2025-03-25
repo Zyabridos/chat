@@ -1,0 +1,35 @@
+{
+  "channels": {
+    "title": "Каналы",
+    "channelNamePlaceholder": "Введите название канала",
+    "addNewChannel": "Добавить канал",
+    "cancel": "Отменить",
+    "add": "Добавить",
+    "send": "Отправить",
+    "modals": {
+      "titles": {
+        "renameChannel": "Переименовать канал",
+        "addChannel": "Добавить канал",
+        "deleteChannel": "Удалить канал"
+      },
+      "placeholders": {
+        "typeChannelName": "Введите название канала"
+      },
+      "labels": {
+        "typeNewChannelName": "Имя канала",
+        "rename": "Отредактируйте название канала"
+      },
+      "confirmDeletingChannel": "Вы действительно хотите удалить канал?",
+      "managment": "Управление каналом"
+    }
+  },
+  "channelsForm": {
+    "newMessage": "Новое сообщение",
+    "enterMessage": "Введите сообщение...",
+    "noMessages": "На этом канале пока нет сообщений"
+  },
+  "channelsHeader": {
+    "channelName": "# {{channelName}}",
+    "messageCount": "Количество сообщений на этом канале: {{count}}"
+  }
+}

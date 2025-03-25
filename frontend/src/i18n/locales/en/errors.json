@@ -1,0 +1,39 @@
+{
+  "error": {
+    "tokenNotFound": "Token not found. Please log in again.",
+    "fetchChannels": "Error loading channels",
+    "addChannel": "Error adding channel",
+    "editChannelFailed": "Error renaming channel"
+  },
+  "validationErrors": {
+    "min3": "Minimum 3 characters",
+    "min6": "At least 6 characters",
+    "max20": "Maximum 20 characters",
+    "required": "Required field",
+    "from3To20": "From 3 to 20 characters",
+    "mismatchPasswords": "Passwords must match",
+    "passwordSymbol": "Password must contain at least one symbol",
+    "passwordUppercase": "Password must contain at least one uppercase letter",
+    "passwordLowercase": "Password must contain at least one lowercase letter",
+    "channelAlreadyExists": "Channel with this name already exists",
+    "duplicate": "Must be unique"
+  },
+  "networkErrors": {
+    "generalError": "Error sending message. Please try again.",
+    "badRequest": "Bad request. Check your data and try again.",
+    "unauthorized": "Incorrect username or password",
+    "serverError": "Server error. Try again later.",
+    "error": "Error",
+    "connectionError": "Connection error",
+    "unknownError": "An error occurred",
+    "unknown": "Unknown error"
+  },
+  "channelsFormErrors": {
+    "tokenNotFound": "Token not found. Please log in again.",
+    "emptyMessage": "Message cannot be empty.",
+    "connectionError": "Connection error. Check your internet connection.",
+    "unknownError": "An error occurred. Please try again.",
+    "profanityDetected": "Channel name contains inappropriate words. Please choose a different one.",
+    "emptyChannelName": "Channel name cannot be empty"
+  }
+}

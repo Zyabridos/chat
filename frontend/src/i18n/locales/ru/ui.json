@@ -1,0 +1,14 @@
+{
+  "notFound": {
+    "title": "Страница не найдена",
+    "message": "Но вы можете перейти на",
+    "linkText": "главную страницу"
+  },
+  "loading": {
+    "loadingChannels": "Загрузка каналов..."
+  },
+  "navbar": {
+    "chatname": "Hexlet Chat",
+    "exit": "Выход"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "channels": {
+    "title": "Kanaler",
+    "channelNamePlaceholder": "Skriv inn kanalnavn",
+    "addNewChannel": "Legg til kanal",
+    "cancel": "Avbryt",
+    "add": "Legg til",
+    "send": "Send",
+    "modals": {
+      "titles": {
+        "renameChannel": "Gi nytt navn til kanal",
+        "addChannel": "Legg til kanal",
+        "deleteChannel": "Slett kanal"
+      },
+      "placeholders": {
+        "typeChannelName": "Skriv inn kanalnavn"
+      },
+      "labels": {
+        "typeNewChannelName": "Kanalnavn",
+        "rename": "Rediger kanalnavn"
+      },
+      "confirmDeletingChannel": "Er du sikker på at du vil slette kanalen?",
+      "managment": "Kanaladministrasjon"
+    }
+  },
+  "channelsForm": {
+    "newMessage": "Ny melding",
+    "enterMessage": "Skriv inn melding...",
+    "noMessages": "Det er ingen meldinger på denne kanalen ennå"
+  },
+  "channelsHeader": {
+    "channelName": "# {{channelName}}",
+    "messageCount": "Antall meldinger i denne kanalen: {{count}}"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "validationErrors": {
+    "min3": "Minst 3 tegn",
+    "min6": "Minst 6 tegn",
+    "max20": "Maksimalt 20 tegn",
+    "required": "Feltet er påkrevd",
+    "from3To20": "Fra 3 til 20 tegn",
+    "mismatchPasswords": "Passordene må samsvare",
+    "passwordSymbol": "Passordet må inneholde minst ett tegn",
+    "passwordUppercase": "Passordet må inneholde minst én stor bokstav",
+    "passwordLowercase": "Passordet må inneholde minst én liten bokstav",
+    "channelAlreadyExists": "En kanal med dette navnet finnes allerede",
+    "duplicate": "Må være unikt"
+  },
+  "networkErrors": {
+    "generalError": "Feil ved sending av melding. Prøv igjen.",
+    "badRequest": "Ugyldig forespørsel. Sjekk dataene og prøv igjen.",
+    "unauthorized": "Feil brukernavn eller passord",
+    "serverError": "Serverfeil. Prøv igjen senere.",
+    "error": "Feil",
+    "connectionError": "Tilkoblingsfeil",
+    "unknownError": "En feil har oppstått",
+    "unknown": "Ukjent feil"
+  },
+  "error": {
+    "tokenNotFound": "Token ikke funnet. Vennligst logg inn på nytt.",
+    "fetchChannels": "Feil ved innlasting av kanaler",
+    "addChannel": "Feil ved opprettelse av kanal",
+    "editChannelFailed": "Feil ved endring av kanal"
+  },
+  "channelsFormErrors": {
+    "tokenNotFound": "Token ikke funnet. Vennligst logg inn på nytt.",
+    "emptyMessage": "Meldingen kan ikke være tom.",
+    "connectionError": "Tilkoblingsfeil. Sjekk internettforbindelsen din.",
+    "unknownError": "En feil har oppstått. Prøv igjen.",
+    "profanityDetected": "Kanalnavnet inneholder upassende ord. Vennligst velg et annet navn.",
+    "emptyChannelName": "Kanalnavnet kan ikke være tomt"
+  }
+}
