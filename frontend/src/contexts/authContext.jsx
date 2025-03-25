@@ -106,9 +106,17 @@ const AuthProvider = ({ children }) => {
         success: true,
       };
     } catch (error) {
-      const message = error?.response?.data?.message || t('auth.registerError');
+      let message;
+
+      if (error.response?.status === 409) {
+        message = t('signup.errors.alreadyExists');
+      } else {
+        message = t('signup.errors.unknown');
+      }
+
       setServerError(message);
       toast.error(message);
+
       return {
         success: false,
         error,

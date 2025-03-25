@@ -37,8 +37,6 @@ const SignUpForm = () => {
 
       if (result.success) {
         navigate(routes.mainPage());
-      } else {
-        setFieldError('username', t('signup.errors.serverError'));
       }
 
       setSubmitting(false);
