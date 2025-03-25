@@ -25,6 +25,7 @@ Make sure you have the following installed:
 
 - [Node.js](https://nodejs.org/) (with npm)
 - [Make](https://www.gnu.org/software/make/)
+- [Docker](https://www.docker.com/) (for containerized setup)
 
 ## Installation
 
@@ -76,3 +77,30 @@ This command will launch the app. By default, it should be accessible at localho
 | `make develop`        | Runs both the frontend and backend simultaneously. |
 | `make build`          | Builds the frontend for production.                |
 | `make start`          | Starts the built application.                      |
+
+## Docker Usage
+You can also run the app inside a Docker container. This is especially useful for testing or deploying in a consistent environment.
+
+### Build Docker Image
+```bash
+make docker-build
+```
+This builds the Docker image and tags it as chat-frontend.
+
+### Start Docker Container
+```bash
+make docker-start
+```
+Runs the container and exposes the app on [http://localhost:3000](http://localhost:3000)
+
+### Stop Docker Container
+```bash
+make docker-stop
+```
+Stops and removes the container.
+
+### Clean Up Docker Resources
+```bash
+make docker-clean
+```
+Stops and removes the container and image, and prunes volumes.

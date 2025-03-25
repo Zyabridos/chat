@@ -25,26 +25,17 @@ lint:
 # Docker-comands
 
 docker-build:
-	docker build -t my-app .
-
-docker-install:
-	docker run --rm -v $(PWD):/app -w /app node:20 npm ci
+	docker build -t chat-frontend .
 
 docker-start:
-	docker run -d -p 3000:3000 --name my-app my-app
-
-docker-start-frontend:
-	docker run -d -p 5173:5173 --name my-frontend my-frontend
+	docker run -d -p 3000:3000 --name chat-frontend chat-frontend
 
 docker-stop:
-	docker stop my-app || true
-	docker rm my-app || true
+	docker stop chat-frontend || true
+	docker rm chat-frontend || true
 
 docker-clean:
-	docker stop my-app || true
-	docker rm my-app || true
-	docker rmi my-app || true
+	docker stop chat-frontend
+	docker rm chat-frontend
+	docker rmi chat-frontend
 	docker volume prune -f
-
-docker-lint:
-	docker run --rm -v $(PWD):/app -w /app node:20 npx eslint .
