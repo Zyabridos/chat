@@ -11,10 +11,6 @@ This is a 3-page chat application where users can log in, sign up, and participa
 - **Channels**: Users can join different chat channels, write messages, and switch between channels.
 - **Channel Management**: Users can rename or delete channels they have created.
 
-# Deployed version
-[Deployed project](https://slack-chat-jade.vercel.app)
-Login: admin, password: admin. Or alternativelly you can Sign in by creating an account
-
 # Project Setup
 
 This project uses a `Makefile` to simplify common development tasks. Below are the steps for installation, development, and building the project.
@@ -24,7 +20,7 @@ This project uses a `Makefile` to simplify common development tasks. Below are t
 Make sure you have the following installed:
 
 - [Node.js](https://nodejs.org/) (with npm)
-- [Make](https://www.gnu.org/software/make/)
+- [Make](https://www.gnu.org/software/make/) (for make commands)
 - [Docker](https://www.docker.com/) (for containerized setup)
 
 ## Installation
